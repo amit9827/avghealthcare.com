@@ -2,7 +2,7 @@
     <div>
       <Navbar />
       <Header />
-      <main class="p-4">
+      <main class="p-0 bg-white">
         <slot />
       </main>
       <Footer />

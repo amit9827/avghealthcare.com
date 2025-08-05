@@ -1,10 +1,12 @@
 <template>
-    <header class="p-4 bg-blue-600 text-white">
-      <h1>AVG Healthcare</h1>
-    </header>
+    <header >
+     </header>
   </template>
 
-  <script setup></script>
+  <script setup>
+
+
+</script>
 
   <style scoped>
   header {

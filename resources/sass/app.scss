@@ -6,3 +6,30 @@
 
 // Bootstrap
 @import 'bootstrap/scss/bootstrap';
+
+
+
+ #top-header  {
+    background: rgb(110, 128, 154);
+    box-shadow: rgb(110, 128, 154) 0px 0px 0px 100vmax;
+    overflow: hidden;
+}
+
+body{
+    background-color: #ccc ;
+}
+
+.text-gray{
+    color:gray;
+}
+
+.banner{
+    max-width:100%;
+    overflow: hidden;
+  }
+
+.home_banner{
+    max-width: 100%;
+    width:100%;
+    margin: 15px auto;
+}
