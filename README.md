@@ -75,3 +75,5 @@ composer require tightenco/ziggy
 npm install ziggy-js
 
 route('user.show', { id: 5 }) // generates /user/5
+
+git reset --hard origin/main

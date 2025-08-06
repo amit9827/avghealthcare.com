@@ -5,6 +5,7 @@
  */
 
 import './bootstrap';
+import 'admin-lte/dist/js/adminlte.min.js';
 
 
 import { createApp } from 'vue'
@@ -16,3 +17,4 @@ const app = createApp(App)
 app.use(router)
 app.use(createHead())
 app.mount('#app')
+
