@@ -2,6 +2,26 @@
 
 return [
 
+
+    'auth_classes' => [
+        'card' => 'card-outline card-primary',
+        'body' => '',
+        'footer' => '',
+        'icon' => '',
+        'btn' => 'btn-flat btn-primary',
+    ],
+
+
+
+    'route_url' => [
+        'login' => 'login',
+        'register' => 'register',
+        'logout' => 'logout',
+        'password_reset' => 'password.request',
+        'password_email' => 'password.email',
+        'password_update' => 'password.update',
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Title
@@ -14,7 +34,7 @@ return [
     |
     */
 
-    'title' => 'Admin',
+    'title' => 'AdminLTE WTI',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -63,7 +83,7 @@ return [
     |
     */
 
-    'logo' => '<b>Admin</b> WTI',
+    'logo' => '<b>Admin</b>WTI',
     'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
@@ -256,14 +276,14 @@ return [
     |
     */
 
-    'use_route_url' => false,
-    'dashboard_url' => 'admin',
+    'use_route_url' => true,
+    'dashboard_url' => 'admin.dashboard',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
     'password_reset_url' => 'password/reset',
     'password_email_url' => 'password/email',
-    'profile_url' => true,
+    'profile_url' => false,
     'disable_darkmode_routes' => false,
 
     /*
@@ -316,13 +336,12 @@ return [
             'text' => 'search',
         ],
         [
-            'text' => 'site',
-            'url' => '/',
-            'target' => '_blank',
-
+            'text' => 'blog',
+            'url' => 'admin/blog',
+            'can' => 'manage-blog',
         ],
         [
-            'text' => 'pages1',
+            'text' => 'pages',
             'url' => 'admin/pages',
             'icon' => 'far fa-fw fa-file',
             'label' => 4,

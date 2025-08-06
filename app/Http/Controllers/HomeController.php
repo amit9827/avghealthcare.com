@@ -13,7 +13,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+
     }
 
     /**
@@ -24,5 +24,13 @@ class HomeController extends Controller
     public function index()
     {
         return view('home');
+    }
+
+    public function admin(Request $request){
+      // return $path = url('/')."/admin/dashboard";
+        //return redirect($path);
+        $path=route('login');
+
+        return redirect($path)->with('status', 'Welcome to the admin panel!');
     }
 }

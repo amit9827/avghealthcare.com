@@ -159,8 +159,8 @@ class FrontendController extends Controller
                 'submenu' => [],
             ],
             [
-                'title' => 'Contact',
-                'url' => '/contact',
+                'title' => 'Admin',
+                'url' => '/admin',
                 'submenu' => [],
             ],
         ];
