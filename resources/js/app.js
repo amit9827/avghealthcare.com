@@ -5,7 +5,7 @@
  */
 
 import './bootstrap';
-import 'admin-lte/dist/js/adminlte.min.js';
+
 
 
 import { createApp } from 'vue'

@@ -1,5 +1,5 @@
 <template>
-    <div class="banner">
+    <div class="banner mb-3">
       <img :src="src" :alt="alt" class="home_banner" />
     </div>
   </template>

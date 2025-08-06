@@ -1,12 +1,12 @@
 <template>
 
 
-        <div class="text-center text-white p-2" id="top-header">
+        <div class="text-center text-white p-2 bg-top-header" id="top-header">
             <div class="container">
 
                 <div class="row">
                     <div class="col-md-4 text-start d-none d-md-block ">Earn Cash on Every Order</div>
-                    <div class="col-md-4 ">Official Website</div>
+                    <div class="col-md-4 ">From Herbal Remedies to Wellness Solutions</div>
                     <div class="col-md-4 text-end d-none d-md-block">100% Quality Assurance</div>
                 </div>
             </div>
@@ -17,7 +17,7 @@
             <div class="container">
                 <nav class="navbar navbar-light  border-bottom ">
                 <div class="container-fluid justify-between ">
-                    <RouterLink class="navbar-brand fw-bold" to="/"><img src="/assets/logo.png" class="main_logo"></RouterLink>
+                    <RouterLink class="navbar-brand fw-bold" to="/"><img :src="main_logo" class="main_logo"></RouterLink>
 
                     <button class="btn d-lg-none" @click="toggleMobileMenu">
                     <i class="bi bi-list fs-2"></i>
@@ -61,7 +61,7 @@
 
                     <div class=" d-none d-md-block ">
                     <input class="peer w-full me-3" placeholder="Search for " autocomplete="off" type="text" value="" name="searchField">
-                    <a href="" class="text-gray p-2" ><i class="fa-solid fa-user"></i></a>
+                    <a href="" class="text-gray p-2" ><i class="fa-solid fa-user text-gray "></i></a>
                     <a href="" class="text-gray p-2" ><i class="fa-solid fa-basket-shopping"></i></a>
 
                     </div>
@@ -126,6 +126,7 @@ export default {
       menu: [],
       mobileOpen: false,
       activeSubmenu: null,
+      main_logo :  window.base_url + "/assets/logo.svg",
     }
   },
   methods: {
@@ -141,6 +142,8 @@ export default {
     try {
       const response = await axios.get(route('menu'))
       this.menu = response.data
+
+      this.menu = response.data.menu_products || []
     } catch (error) {
       console.error('Menu fetch failed:', error)
     }
@@ -179,5 +182,12 @@ body{
     height:60px;
 }
 
+a.text-gray{
+    color:#005718;
+}
+
+.bg-top-header{
+    background-color: #5c7775;
+}
 
 </style>

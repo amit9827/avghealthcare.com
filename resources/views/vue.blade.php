@@ -23,12 +23,14 @@ crossorigin="anonymous"
 referrerpolicy="no-referrer"
 />
 
+<script>
+    window.base_url = "{{ url('/') }}";
+</script>
 
     </head>
-    <body  >
+    <body>
 
         <div id="app">
-
         </div>
     </body>
 </html>
