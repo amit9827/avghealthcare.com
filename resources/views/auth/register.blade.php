@@ -61,7 +61,7 @@
 
 @section('auth_footer')
     <p class="my-0">
-        <a href="{{ route('admin.login') }}">
+        <a href="{{ route('login') }}">
             {{ __('I already have a membership') }}
         </a>
     </p>

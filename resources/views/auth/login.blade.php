@@ -53,17 +53,17 @@
 @endsection
 
 @section('auth_footer')
-    @if (Route::has('admin.password.request'))
+    @if (Route::has('password.request'))
         <p class="my-0">
-            <a href="{{ route('admin.password.request') }}">
+            <a href="{{ route('password.request') }}">
                 {{ __('I forgot my password') }}
             </a>
         </p>
     @endif
 
-    @if (Route::has('admin.register'))
+    @if (Route::has('register'))
         <p class="my-0">
-            <a href="{{ route('admin.register') }}" class="text-center">
+            <a href="{{ route('register') }}" class="text-center">
                 {{ __('Register a new membership') }}
             </a>
         </p>

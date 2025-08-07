@@ -9,4 +9,9 @@ class DashboardController extends Controller
     {
         return view('admin.dashboard');
     }
+
+    public function posts()
+    {
+        return view('admin.posts');
+    }
 }

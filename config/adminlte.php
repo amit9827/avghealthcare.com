@@ -336,17 +336,111 @@ return [
             'text' => 'search',
         ],
         [
-            'text' => 'blog',
-            'url' => 'admin/blog',
-            'can' => 'manage-blog',
+            'text' => 'Posts',
+            'url' => 'admin/posts',
+
+        ],
+
+        [
+            'text' => 'Media',
+            'url' => 'admin/media',
+
         ],
         [
-            'text' => 'pages',
+            'text' => 'Pages',
             'url' => 'admin/pages',
             'icon' => 'far fa-fw fa-file',
             'label' => 4,
             'label_color' => 'success',
         ],
+
+        [
+            'text' => 'Inquiries',
+            'url' => 'admin/inquiries',
+            'icon' => 'far fa-fw fa-file',
+            'label' => 4,
+            'label_color' => 'success',
+        ],
+
+        [
+            'text' => 'eCommerce',
+            'url' => 'admin/ecommerce',
+            'icon' => 'far fa-fw fa-file',
+            'label' => 4,
+            'label_color' => 'success',
+        ],
+
+        [
+            'text' => 'Products',
+            'url' => 'admin/products',
+            'icon' => 'far fa-fw fa-file',
+            'label' => 4,
+            'label_color' => 'success',
+        ],
+
+        [
+            'text' => 'Payments',
+            'url' => 'admin/payments',
+            'icon' => 'far fa-fw fa-file',
+            'label' => 4,
+            'label_color' => 'success',
+        ],
+
+        [
+            'text' => 'Analytics',
+            'url' => 'admin/analytics',
+            'icon' => 'far fa-fw fa-file',
+            'label' => 4,
+            'label_color' => 'success',
+        ],
+
+        [
+            'text' => 'Marketing',
+            'url' => 'admin/marketing',
+            'icon' => 'far fa-fw fa-file',
+            'label' => 4,
+            'label_color' => 'success',
+        ],
+
+        [
+            'text' => 'Appearance',
+            'url' => 'admin/appearance',
+            'icon' => 'far fa-fw fa-file',
+            'label' => 4,
+            'label_color' => 'success',
+        ],
+
+        [
+            'text' => 'Users',
+            'url' => 'admin/users',
+            'icon' => 'far fa-fw fa-file',
+            'label' => 4,
+            'label_color' => 'success',
+        ],
+
+        [
+            'text' => 'Tools',
+            'url' => 'admin/tools',
+            'icon' => 'far fa-fw fa-file',
+            'label' => 4,
+            'label_color' => 'success',
+        ],
+
+
+        [
+            'text' => 'Settings',
+            'url' => 'admin/settings',
+            'icon' => 'far fa-fw fa-file',
+            'label' => 4,
+            'label_color' => 'success',
+        ],
+
+
+
+
+
+
+
         ['header' => 'account_settings'],
         [
             'text' => 'profile',
@@ -411,6 +505,7 @@ return [
             'text' => 'information',
             'icon_color' => 'cyan',
             'url' => '#',
+            'can' => 'manage-blog',
         ],
     ],
 
