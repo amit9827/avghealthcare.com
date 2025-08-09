@@ -26,7 +26,7 @@
                         class="nav-item "
                     >
                         <RouterLink
-                        v-if="!item.submenu?.length"
+                        v-if="item.url"
                         class="nav-link"
                         :to="item.url"
                         >
@@ -64,7 +64,7 @@
                         class="nav-item "
                         >
                         <RouterLink
-                        v-if="!item.submenu?.length"
+                        v-if="item.url"
                         class="nav-link"
                         :to="item.url"
                         >
@@ -102,7 +102,7 @@
                             class="nav-item "
                             >
                             <RouterLink
-                            v-if="!item.submenu?.length"
+                            v-if="item.url"
                             class="nav-link"
                             :to="item.url"
                             >

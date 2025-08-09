@@ -25,7 +25,7 @@ class FrontendController extends Controller
 
             [
                 'title' => 'Diabetes care',
-                'url' => '/products',
+                'url' => '/category/diabetic-care',
                 'submenu' => [
                     ['title' => 'Pharma', 'url' => '/products/pharma'],
                     ['title' => 'Healthcare', 'url' => '/products/healthcare'],
@@ -62,7 +62,7 @@ class FrontendController extends Controller
             ],
             [
                 'title' => 'Contact',
-                'url' => '/contact',
+                'url' => '/contact1',
                 'submenu' => [],
             ],
         ];
@@ -160,7 +160,7 @@ class FrontendController extends Controller
             ],
             [
                 'title' => 'Admin',
-                'url' => '/admin',
+                'url' => '/go/admin',
                 'submenu' => [],
             ],
         ];
@@ -170,5 +170,41 @@ class FrontendController extends Controller
         $menu['menu_quick_links']=$menu_quick_links;
 
         return response()->json($menu);
+    }
+
+    public function category(Request $request, $category_slug){
+
+
+        $category = [
+            'title' => 'Bath Body',
+        ];
+
+        $subcategories =   [
+
+            [
+                'title' => 'Bath Wash',
+                'url' => "/category/$category_slug/bath-body",
+                'submenu' => [],
+            ],
+
+            [
+                'title' => 'Bath Wash',
+                'url' => "/category/$category_slug/bath-wash",
+                'submenu' => [],
+            ],
+
+            [
+                'title' => 'Bath Lotion',
+                'url' => "/category/$category_slug/bath-Lotion",
+                'submenu' => [],
+            ],
+
+
+        ];
+
+        $data['subcategories'] = $subcategories;
+        $data['category'] = $category;
+
+        return response()->json($data);
     }
 }

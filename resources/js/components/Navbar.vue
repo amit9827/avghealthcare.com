@@ -31,7 +31,7 @@
                         class="nav-item dropdown"
                     >
                         <RouterLink
-                        v-if="!item.submenu?.length"
+                        v-if="item.url.length"
                         class="nav-link"
                         :to="item.url"
                         >
@@ -144,6 +144,7 @@ export default {
       this.menu = response.data
 
       this.menu = response.data.menu_products || []
+      console.log(response.data.menu_products)
     } catch (error) {
       console.error('Menu fetch failed:', error)
     }
