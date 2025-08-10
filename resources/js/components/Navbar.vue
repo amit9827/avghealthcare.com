@@ -61,8 +61,11 @@
 
                     <div class=" d-none d-md-block ">
                     <input class="peer w-full me-3" placeholder="Search for " autocomplete="off" type="text" value="" name="searchField">
-                    <a href="" class="text-gray p-2" ><i class="fa-solid fa-user text-gray "></i></a>
-                    <a href="" class="text-gray p-2" ><i class="fa-solid fa-basket-shopping"></i></a>
+                    <a href="#" class="text-gray p-2" ><i class="fa-solid fa-user text-gray "></i></a>
+
+                    <RouterLink class="text-gray p-2" :to="cart">
+                     <i class="fa-solid fa-basket-shopping"></i></RouterLink>
+
 
                     </div>
 
@@ -127,6 +130,8 @@ export default {
       mobileOpen: false,
       activeSubmenu: null,
       main_logo :  window.base_url + "/assets/logo.svg",
+      cart: '/cart'  // or { name: 'cart' }
+
     }
   },
   methods: {

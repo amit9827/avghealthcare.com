@@ -1,6 +1,6 @@
 <template>
     <div
-      v-if="show"
+      v-if="show && itemCount > 0"
       class="position-fixed bottom-0 start-50 translate-middle-x w-100 bg-white shadow p-3 z-index-sticky d-flex justify-content-between align-items-center"
       style="max-width: 500px; border-radius: 0.5rem;"
     >
@@ -16,24 +16,38 @@
   </template>
 
   <script>
+  import { computed } from 'vue'
   import { RouterLink } from 'vue-router'
+  import { cartStore } from '../cartStore' // adjust path as needed
 
   export default {
     name: 'FloatingCart',
     components: { RouterLink },
     props: {
-      itemCount: {
-        type: Number,
-        required: true,
-      },
-      total: {
-        type: Number,
-        required: true,
-      },
       show: {
         type: Boolean,
         default: true,
       },
+    },
+    setup(props) {
+      // Compute total item count from cartStore.items
+      const itemCount = computed(() =>
+        cartStore.items.reduce((acc, item) => acc + item.quantity, 0)
+      )
+
+      // Compute total price assuming product has price property
+      const total = computed(() =>
+        cartStore.items.reduce(
+          (acc, item) => acc + item.product.price * item.quantity,
+          0
+        )
+      )
+
+      return {
+        itemCount,
+        total,
+        show: props.show,
+      }
     },
   }
   </script>

@@ -10,21 +10,44 @@
             <div class="col-md-10">
 
         <div v-if="subcategories.length">
-      <ul class="nav nav-pills gap-2 flex-nowrap" role="tablist">
+            <ul class="nav nav-pills gap-2 flex-nowrap" role="tablist">
 
-        <li class="nav-item" role="presentation">
-    <button class="nav-link rounded-pill border px-3 py-1 text-capitalize" id="tab-all" data-bs-toggle="tab" data-bs-target="#panel-all" type="button" role="tab">All</button>
-  </li>
+                <li class="nav-item" role="presentation">
+                <button class="nav-link rounded-pill border px-3 py-1 text-capitalize" id="tab-all" data-bs-toggle="tab" data-bs-target="#panel-all" type="button" role="tab">All</button>
+                </li>
 
-        <div v-for="subcategory in subcategories" :key="subcategory.id">
-  <li class="nav-item" role="presentation">
-    <button class="nav-link rounded-pill border px-3 py-1 text-capitalize" id="tab-all" data-bs-toggle="tab" data-bs-target="#panel-all" type="button" role="tab">{{ subcategory.title }}</button>
-  </li>
+                <div v-for="subcategory in subcategories" :key="subcategory.id">
+                <li class="nav-item" role="presentation">
+                <button class="nav-link rounded-pill border px-3 py-1 text-capitalize" id="tab-all" data-bs-toggle="tab" data-bs-target="#panel-all" type="button" role="tab">{{ subcategory.title }}</button>
+                </li>
+                </div>
+
+            </ul>
+        </div>
+
+
+
+
+</div>
 </div>
 
-</ul>
+<div class="row">
+
+    <div class="col-md-12 text-end">
+    <label for="sorty_by">Sort By </label>
+    <select name="sort_by" id="sort_by">
+        <option value="">Sort by</option>
+    </select>
 </div>
-</div>
+    <div class="rol-md-12">
+
+          <!-- Passing props to Products component -->
+          <Products
+
+          :products = "products"
+
+         />
+    </div>
 </div>
 
 
@@ -35,21 +58,30 @@
   <script>
   import DefaultLayout from '../layouts/DefaultLayout.vue'
   import HomeBanner from '../components/HomeBanner.vue'
+  import Products from '../components/Products.vue'
+
   import { useHead } from '@vueuse/head'
   import axios from 'axios'
   import { route } from 'ziggy-js'
 
+
   export default {
     name: "Category",
     props: ['slug'],
+
     components: {
       HomeBanner,
-      DefaultLayout
+      DefaultLayout,
+      Products
     },
+
     data() {
       return {
         subcategories: [],
-        category:[]
+        category:[],
+        subcategory:'',
+        products:[],
+
       }
     },
 
@@ -67,13 +99,13 @@
 
       const url =  route('category', { category_slug: this.slug})
 
+
       axios.get(url)
         .then(res => {
           this.subcategories = res.data.subcategories
           this.category = res.data.category
-
-
-          console.log(res.data)
+          this.products = res.data.products
+          console.log( this.products )
 
         })
     }
@@ -99,5 +131,8 @@
     font-size:18px;
 }
 
+#sort_by{
+    margin : 10px 20px;
+}
 
   </style>

@@ -108,8 +108,8 @@ class FrontendController extends Controller
                 'submenu' => [],
             ],
             [
-                'title' => 'Contact',
-                'url' => '/contact',
+                'title' => 'Cart',
+                'url' => '/cart',
                 'submenu' => [],
             ],
         ];
@@ -177,6 +177,7 @@ class FrontendController extends Controller
 
         $category = [
             'title' => 'Bath Body',
+            'slug' => $category_slug,
         ];
 
         $subcategories =   [
@@ -202,8 +203,141 @@ class FrontendController extends Controller
 
         ];
 
+        $products = [
+            [
+                'id' => 1,
+                'title' => "Shea Butter And Cocoa Butter With Lactic Acid Bodu Lotion - 400ml",
+                'category' => "Bath Body",
+                'subcategory' => "Hair Fall, Weak & Damaged Hair",
+
+                'category_2' => "Bath Body",
+                'subcategory_2' => "Hair Fall, Weak & Damaged Hair",
+
+                'category_3' => "Bath Body",
+                'subcategory_3' => "Hair Fall, Weak & Damaged Hair",
+
+                'category_4' => "Bath Body",
+                'subcategory_4' => "Hair Fall, Weak & Damaged Hair",
+
+                'category_5' => "Bath Body",
+                'subcategory_5' => "Hair Fall, Weak & Damaged Hair",
+
+                'tags' => "Retain Hydration,Repair Damage Skin, Boost Collagen",
+                'benefits' => "Retain Hydration,Repair Damage Skin, Boost Collagen",
+
+                'price' => "399.00",
+                'currency' => "INR",
+                'stock_quantity' => 10,
+                'rating' => 4.50,
+                'reviews' => 144,
+                'path' => 'products\1.jpg',
+
+
+            ],
+
+            [
+                'id' => 2,
+                'title' => "Shea Butter And Cocoa Butter With Lactic Acid Bodu Lotion - 400ml",
+                'category' => "Bath Body",
+                'subcategory' => "Hair Fall, Weak & Damaged Hair",
+
+                'category_2' => "Bath Body",
+                'subcategory_2' => "Hair Fall, Weak & Damaged Hair",
+
+                'category_3' => "Bath Body",
+                'subcategory_3' => "Hair Fall, Weak & Damaged Hair",
+
+                'category_4' => "Bath Body",
+                'subcategory_4' => "Hair Fall, Weak & Damaged Hair",
+
+                'category_5' => "Bath Body",
+                'subcategory_5' => "Hair Fall, Weak & Damaged Hair",
+
+                'tags' => "Retain Hydration,Repair Damage Skin, Boost Collagen",
+                'benefits' => "Retain Hydration,Repair Damage Skin, Boost Collagen",
+
+
+                'price' => "399.00",
+                'currency' => "INR",
+                'stock_quantity' => 10,
+                'rating' => 4.50,
+                'reviews' => 144,
+                'path' => 'products\1.jpg',
+
+
+            ],
+            [
+                'id' => 3,
+                'title' => "Shea Butter And Cocoa Butter With Lactic Acid Bodu Lotion - 400ml",
+                'category' => "Bath Body",
+                'subcategory' => "Hair Fall, Weak & Damaged Hair",
+
+                'category_2' => "Bath Body",
+                'subcategory_2' => "Hair Fall, Weak & Damaged Hair",
+
+                'category_3' => "Bath Body",
+                'subcategory_3' => "Hair Fall, Weak & Damaged Hair",
+
+                'category_4' => "Bath Body",
+                'subcategory_4' => "Hair Fall, Weak & Damaged Hair",
+
+                'category_5' => "Bath Body",
+                'subcategory_5' => "Hair Fall, Weak & Damaged Hair",
+
+                'tags' => "Retain Hydration,Repair Damage Skin, Boost Collagen",
+                'benefits' => "Retain Hydration,Repair Damage Skin, Boost Collagen",
+
+
+                'price' => "399.00",
+                'currency' => "INR",
+                'stock_quantity' => 10,
+                'rating' => rand(0.01, 4.99),
+                'reviews' => rand(99,1005),
+                'path' => 'products\1.jpg',
+
+
+            ],
+            [
+                'id' => 4,
+                'title' => "Shea Butter And Cocoa Butter With Lactic Acid Bodu Lotion - 400ml",
+                'category' => "Bath Body",
+                'subcategory' => "Hair Fall, Weak & Damaged Hair",
+
+                'category_2' => "Bath Body",
+                'subcategory_2' => "Hair Fall, Weak & Damaged Hair",
+
+                'category_3' => "Bath Body",
+                'subcategory_3' => "Hair Fall, Weak & Damaged Hair",
+
+                'category_4' => "Bath Body",
+                'subcategory_4' => "Hair Fall, Weak & Damaged Hair",
+
+                'category_5' => "Bath Body",
+                'subcategory_5' => "Hair Fall, Weak & Damaged Hair",
+
+                'tags' => "Retain Hydration,Repair Damage Skin, Boost Collagen",
+                'benefits' => "Retain Hydration,Repair Damage Skin, Boost Collagen",
+
+
+                'price' => "399.00",
+                'currency' => "INR",
+                'stock_quantity' => 10,
+                'rating' => 4.50,
+                'reviews' => 144,
+                'path' => 'products\1.jpg',
+
+
+            ]
+
+
+
+            ];
+
         $data['subcategories'] = $subcategories;
         $data['category'] = $category;
+        $data['products'] = $products;
+
+
 
         return response()->json($data);
     }
