@@ -31,11 +31,11 @@
                         class="nav-item dropdown"
                     >
                         <RouterLink
-                        v-if="item.url.length"
+                        v-if="item.slug.length"
                         class="nav-link"
-                        :to="item.url"
+                        :to="'/category/'+item.slug"
                         >
-                        {{ item.title }}
+                        {{ item.name }}
                         </RouterLink>
                         <div v-else class="dropdown">
                         <a
@@ -43,7 +43,7 @@
                             href="#"
                             data-bs-toggle="dropdown"
                         >
-                            {{ item.title }}
+                            {{ item.name }}
                         </a>
                         <ul class="dropdown-menu">
                             <li

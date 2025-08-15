@@ -1,7 +1,7 @@
 <template>
     <DefaultLayout>
       <div class="container">
-        <p class="p-2">Home / {{ category.title }}</p>
+        <p class="p-2">Home / {{ category.name }}</p>
         <HomeBanner src="/banners/banner1.jpg" alt="Image1" />
 
 
@@ -36,7 +36,9 @@
     <div class="col-md-12 text-end">
     <label for="sorty_by">Sort By </label>
     <select name="sort_by" id="sort_by">
-        <option value="">Sort by</option>
+        <option value="">--</option>
+        <option value="price_asc">Price - Low to High</option>
+
     </select>
 </div>
     <div class="rol-md-12">
@@ -94,20 +96,38 @@
         ]
       })
     },
+
+
+    watch: {
+  slug: {
+    immediate: true,
+    handler(newSlug) {
+      this.fetchCategory(newSlug);
+    }
+  }
+},
+methods: {
+  async fetchCategory(slug) {
+    try {
+      const url = route('category', { category_slug: slug });
+      const res = await axios.get(url);
+      this.category = res.data.category;
+      this.subcategories = res.data.subcategories;
+      this.products = res.data.products;
+      console.log(this.products);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+},
+
+
+
     mounted() {
 
 
-      const url =  route('category', { category_slug: this.slug})
+        this.fetchCategory(this.slug);
 
-
-      axios.get(url)
-        .then(res => {
-          this.subcategories = res.data.subcategories
-          this.category = res.data.category
-          this.products = res.data.products
-          console.log( this.products )
-
-        })
     }
   }
   </script>

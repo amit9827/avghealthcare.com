@@ -33,4 +33,7 @@ class HomeController extends Controller
 
         return redirect($path)->with('status', 'Welcome to the admin panel!');
     }
+
+
+
 }

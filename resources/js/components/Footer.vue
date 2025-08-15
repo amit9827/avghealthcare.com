@@ -30,7 +30,7 @@
                         class="nav-link"
                         :to="item.url"
                         >
-                        {{ item.title }}
+                        {{ item.name }}
                         </RouterLink>
                         <div v-else class="dropdown2">
                         <a
@@ -38,7 +38,7 @@
                             href="#"
                             data-bs-toggle="dropdown"
                         >
-                            {{ item.title }}
+                            {{ item.name }}
                         </a>
                         <ul class="dropdown2-menu">
                             <li

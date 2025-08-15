@@ -3,6 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Response;
+
+use App\Http\Controllers\Controller;
+
+use App\Models\Product;
+use App\Models\Category;
+
+use Illuminate\Validation\Rule;
+
+use Illuminate\Support\Str;
 
 class FrontendController extends Controller
 {
@@ -20,6 +31,7 @@ class FrontendController extends Controller
         Men Wellness
         Women Wellness
         */
+
 
         $menu_products = [
 
@@ -67,6 +79,7 @@ class FrontendController extends Controller
             ],
         ];
 
+        $menu_products = Category::orderby('priority', 'desc')->limit(6)-> get();
 
         $menu_ingredients = [
 
@@ -180,6 +193,8 @@ class FrontendController extends Controller
             'slug' => $category_slug,
         ];
 
+        $category = Category::where('slug', $category_slug)->first();
+
         $subcategories =   [
 
             [
@@ -203,7 +218,8 @@ class FrontendController extends Controller
 
         ];
 
-        $products = [
+        $products = $category->products;
+        $products_x = [
             [
                 'id' => 1,
                 'title' => "Shea Butter And Cocoa Butter With Lactic Acid Bodu Lotion - 400ml",

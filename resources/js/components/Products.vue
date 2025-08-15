@@ -1,17 +1,20 @@
 <template>
     <div>
-      <div v-if="products.length" class="row">
+      <div v-if="products.length" class="row mb-5">
         <div v-for="product in products" :key="product.id" class="col-md-3 product">
 
-<div href="#" class="product-card">
+<div href="#" class="product-card h-100 d-flex flex-column">
+    <a :href="getUrl(product.slug)"
+   class="d-flex flex-column justify-content-start gap-2 gap-md-3 align-self-stretch rounded p-1 p-md-0 bg-white h-auto text-decoration-none text-black">
 
-          <img :src="getpath(product.path)" class="product_img">
+
+          <img :src="getpath(product.featured_image)" class="product_img">
 
 
 
-          <div v-if="product.tags" class="m-2 ms-0 mb-2">
+          <div v-if="product.benefits_tags" class="m-2 ms-0 mb-2">
           <span
-            v-for="(sub, index) in product.tags.split(',')"
+            v-for="(sub, index) in product.benefits_tags.split(',')"
             :key="index"
             class="badge rounded-pill text-dark px-2 py-1 me-1 mb-2"
              :style="{
@@ -25,21 +28,23 @@
           </span>
         </div>
         <p class="para1_heading mb-0">{{ product.title }}</p>
-        <p class="para3_content">
-        <span v-for="(sub, index) in product.benefits.split(`,`)"
+        <p class="para3_content" v-if="product.ingredients_tags">
+        <span v-for="(sub, index) in product.ingredients_tags.split(`,`)"
         :key="index"
         >
         {{ sub.trim() }} |
         </span>
 
         </p>
+    </a>
 
-        <div class="product_reviews"><i class="fa-solid fa-star text-warning" data-v-bfe846de=""></i> {{ product.rating }} ({{ product.reviews }}) Reviews</div>
+    <div class="mt-auto">
+        <div class="product_reviews "><i class="fa-solid fa-star text-warning" data-v-bfe846de=""></i> {{ product.rating_count }} ({{ product.average_rating }}) Reviews</div>
 
         <div class="row">
 
-        <div class="p2_heading product_price col-6">₹{{ product.price}}</div>
-        <div class="text-end col-6">
+        <div class="p2_heading product_price col-7"><del class="text-gray-light">₹{{ product.regular_price}}</del> ₹{{ product.sale_price}}</div>
+        <div class="text-end col-5">
 
 
         <button
@@ -61,7 +66,7 @@
   </div>
 
 </div>
-
+</div>
 
 
 </div>
@@ -120,9 +125,15 @@
 
 methods: {
     getpath(product_path) {
-        product_path = "..\\" + product_path;
+        product_path = "..\\images\\" + product_path;
         return product_path;
     },
+
+    getUrl(slug) {
+        slug = "..\\product\\" + slug;
+        return slug;
+    },
+
     getRandomColor(index) {
       // Using index for consistent color assignment across renders
       return this.colors[index % this.colors.length];
@@ -140,6 +151,12 @@ methods: {
 
 
     getQuantity(product) {
+      return getters.getProductQuantity(product.id)
+    },
+
+    getPrice(product) {
+
+        if(product.onsale)
       return getters.getProductQuantity(product.id)
     },
 
@@ -239,5 +256,8 @@ methods: {
   user-select: none;
 }
 
+.text-gray-light{
+    color:#999;
+}
 
   </style>

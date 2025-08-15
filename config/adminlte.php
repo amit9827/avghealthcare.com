@@ -372,10 +372,29 @@ return [
 
         [
             'text' => 'Products',
-            'url' => 'admin/products',
-            'icon' => 'far fa-fw fa-file',
-            'label' => 4,
-            'label_color' => 'success',
+             'icon' => 'far fa-fw fa-file',
+             'url' => '#',
+
+            'submenu' => [
+                [
+                    'text' => 'All Products',
+                    'url' => 'admin/products',
+                ],
+
+                [
+                    'text' => 'Add Product',
+                    'url' => 'admin/product',
+                ],
+
+                [
+                    'text' => 'Categories',
+                    'url' => 'admin/categories',
+                ],
+
+
+             ],
+
+
         ],
 
         [

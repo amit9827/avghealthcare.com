@@ -29,26 +29,30 @@
         default: true,
       },
     },
-    setup(props) {
-      // Compute total item count from cartStore.items
-      const itemCount = computed(() =>
-        cartStore.items.reduce((acc, item) => acc + item.quantity, 0)
-      )
+     setup(props) {
+  // Compute total item count from cartStore.items
+  const itemCount = computed(() =>
+    cartStore.items.reduce((acc, item) => acc + item.quantity, 0)
+  )
 
-      // Compute total price assuming product has price property
-      const total = computed(() =>
-        cartStore.items.reduce(
-          (acc, item) => acc + item.product.price * item.quantity,
-          0
-        )
-      )
-
-      return {
-        itemCount,
-        total,
-        show: props.show,
+  // Compute total price considering sale price if available
+  const total = computed(() =>
+    cartStore.items.reduce((acc, item) => {
+      let price = item.product.regular_price
+      if (item.product.onsale == 1) {
+        price = item.product.sale_price
       }
-    },
+      return acc + price * item.quantity
+    }, 0)
+  )
+
+  return {
+    itemCount,
+    total,
+    show: props.show,
+  }
+},
+
   }
   </script>
 
