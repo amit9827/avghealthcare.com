@@ -20,6 +20,7 @@ Auth::routes();
 // Laravel-powered pages
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/category/laravel/{category_slug}', [FrontendController::class, 'category'])->name('category');
+Route::get('/product/laravel/{product_slug}', [FrontendController::class, 'product_by_slug'])->name('product_by_slug');
 
 
 // Admin routes

@@ -36,41 +36,69 @@
                 <label for="featured_image">Featured image</label>
                 @if(isset($data['product']->featured_image))
                  <div class="mt-2">
-                    <a href="{{ route('image.show', $data['product']->featured_image) }}"><img src="{{ route('image.show', $data['product']->featured_image) }}" alt="Featured Image" height="80"></a>
+                    @if($data['product']->featured_image)
+                    <a href="{{ route('image.show', $data['product']->featured_image) }}">
+                        <img src="{{ route('image.show', $data['product']->featured_image) }}" alt="Featured Image" height="80">
+                    </a>
+                    <input type="checkbox" name="featured_image_delete" value="1">
+
+                    @endif
                 </div>
                 @endif
-
-
-
 
                 <input type="file" name="featured_image" class="form-control" id="featured_image"  >
             </div>
 
             <!-- featured_image -->
             <div class="form-group">
-                <label for="benefit_image">Benefit image</label>
-                @if(isset($data['product']->benefit_image))
+                <label for="featured_image">Additional Product image(s)</label>
+                @if(isset($data['product']->additional_product_images))
+                    @foreach($data['product']->additional_product_images as $image)
+                        <div class="mt-2">
 
-                <div class="mt-2">
-                    <a href="{{ route('image.show', $data['product']->benefit_image) }}"><img src="{{ route('image.show', $data['product']->benefit_image) }}" alt="Benefit Image" height="80"></a>
-                </div>
+                            <a href="{{ route('image.show', $image->path) }}"> <img src="{{ route('image.show', $image->path) }}" alt="Featured Image" height="80"></a>
+                            <input type="checkbox" name="additional_product_image_delete[]" value="{{ $image->id }}">
+
+                        </div>
+                    @endforeach
                 @endif
+                <input type="file" name="additional_product_image" class="form-control" id="additional_product_image"  >
+             </div>
 
-                <input type="file" name="benefit_image" class="form-control" id="benefit_image"  >
-            </div>
 
             <!-- featured_image -->
             <div class="form-group">
                 <label for="banner_image">Banner image</label>
                 @if(isset($data['product']->banner_image))
-
                 <div class="mt-2">
-                    <a href="{{ route('image.show', $data['product']->banner_image) }}"><img src="{{ route('image.show', $data['product']->banner_image) }}" alt="Banner Image" height="80"></a>
+                    @if($data['product']->banner_image)
+                    <a href="{{ route('image.show', $data['product']->banner_image) }}"><img src="{{ route('image.show', $data['product']->banner_image) }}"
+                         alt="Banner Image" height="80"></a>
+                    @endif
+                    <input type="checkbox" name="banner_image_delete" value="1">
                 </div>
                 @endif
-
                 <input type="file" name="banner_image" class="form-control" id="banner_image"  >
             </div>
+
+
+            <!-- featured_image -->
+            <div class="form-group">
+                <label for="featured_image">Additional Banner image(s)</label>
+                @if(isset($data['product']->additional_banner_images))
+                    @foreach($data['product']->additional_banner_images as $image)
+                        <div class="mt-2">
+                            <a href="{{ route('image.show', $image->path) }}">
+                                <img src="{{ route('image.show', $image->path) }}" alt="Featured Image" height="80">
+                        </a>
+                            <input type="checkbox" name="additional_banner_image_delete[]" value="{{ $image->id }}">
+
+                        </div>
+                    @endforeach
+                @endif
+                <input type="file" name="additional_banner_image" class="form-control" id="additional_banner_image"  >
+            </div>
+
 
 
 

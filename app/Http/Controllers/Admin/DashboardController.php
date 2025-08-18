@@ -10,6 +10,8 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\CategoryProduct;
 
+use App\Models\BannerImage;
+use App\Models\ProductImage;
 
 use Illuminate\Validation\Rule;
 
@@ -64,7 +66,6 @@ public function showImage($path)
     {
         $data['categories'] = Category::get();
         $data['product'] = Product::find($id);
-
 
        $data['category_product'] = $data['product']->categories;
 
@@ -132,28 +133,11 @@ public function showImage($path)
         'benefit_image' => 'nullable|file',
         'banner_image' => 'nullable|file',
     ]);
+    $validated['onsale'] = $request->input('onsale', 0);
 
     // Create product (fillable fields should be defined in Product model)
-
-
-    if($request->hasFile('featured_image')) {
-        $path = $request->file('featured_image')->store('products', 'public');
-        $validated['featured_image'] = $path;
-    }
-
-    if($request->hasFile('benefit_image')) {
-        $path = $request->file('benefit_image')->store('products', 'public');
-        $validated['benefit_image'] = $path;
-    }
-
-
-    if($request->hasFile('banner_image')) {
-        $path = $request->file('banner_image')->store('products', 'public');
-        $validated['banner_image'] = $path;
-    }
-
-
     // Auto-generate slug if not given
+
 if (empty($validated['slug'])) {
     $validated['slug'] = Str::slug($validated['title']);
 }
@@ -194,6 +178,111 @@ if (empty($validated['slug'])) {
         foreach($category_product_delete as $category_id)
         $category_product  = CategoryProduct::where('product_id', $product->id) ->where('category_id', $category_id)->delete();
     }
+
+
+    if($request->hasFile('featured_image')) {
+        $file = $request->file('featured_image');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $path = $file->storeAs("products/{$product->id}", $filename, 'public');
+        $product->featured_image = $path;
+    }
+
+
+    if($request->filled('featured_image_delete')) {
+        $path = $request->input('featured_image_delete');
+
+        // Delete file from storage
+        if(Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
+        }
+
+        // Remove path from product
+        $product->featured_image = '';
+        $product->save();
+    }
+
+
+
+    if($request->hasFile('banner_image')) {
+
+        $file = $request->file('banner_image');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $path = $file->storeAs("products/{$product->id}", $filename, 'public');
+        $product->banner_image = $path;
+    }
+
+    if($request->filled('banner_image_delete')) {
+        $path = $request->input('banner_image_delete');
+
+        // Delete file from storage
+        if(Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
+        }
+
+        // Remove path from product
+        $product->banner_image = '';
+        $product->save();
+    }
+
+
+
+
+    $product->save();
+
+    if($request->hasFile('additional_product_image')){
+
+        $file = $request->file('additional_product_image');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $path = $file->storeAs("products/{$product->id}", $filename, 'public');
+
+        $BannerImage = new ProductImage;
+        $BannerImage->product_id = $product->id;
+        $BannerImage->path = $path;
+        $BannerImage->name = $filename;
+        $BannerImage->save();
+
+    };
+
+    $additional_product_image_delete = $request->input('additional_product_image_delete');
+    if($additional_product_image_delete!=''){
+        foreach($additional_product_image_delete as $id)
+        {
+            $BannerImage = ProductImage::find($id);
+            $path = $BannerImage->path;
+            if(Storage::disk('public')->exists($path)){
+                Storage::disk('public')->delete($path);
+            };
+            $BannerImage->delete();
+        }
+
+    };
+
+
+    if($request->hasFile('additional_banner_image')){
+        $file = $request->file('additional_banner_image');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $path = $file->storeAs("products/{$product->id}", $filename, 'public');
+
+        $BannerImage = new BannerImage;
+        $BannerImage->product_id = $product->id;
+        $BannerImage->path = $path;
+        $BannerImage->name = $filename;
+        $BannerImage->save();
+    };
+
+    $additional_banner_image_delete = $request->input('additional_banner_image_delete');
+    if($additional_banner_image_delete!=''){
+        foreach($additional_banner_image_delete as $id)
+        {
+            $BannerImage = BannerImage::find($id);
+            $path = $BannerImage->path;
+            if(Storage::disk('public')->exists($path)){
+                Storage::disk('public')->delete($path);
+            }
+            $BannerImage->delete();
+        }
+    };
+
 
   //  $product->categories()->sync($request->category_ids ?? []);
 

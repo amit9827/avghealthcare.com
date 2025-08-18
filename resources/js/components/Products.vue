@@ -4,8 +4,11 @@
         <div v-for="product in products" :key="product.id" class="col-md-3 product">
 
 <div href="#" class="product-card h-100 d-flex flex-column">
-    <a :href="getUrl(product.slug)"
-   class="d-flex flex-column justify-content-start gap-2 gap-md-3 align-self-stretch rounded p-1 p-md-0 bg-white h-auto text-decoration-none text-black">
+
+   <RouterLink
+  :to="{ name: 'Product', params: { slug: product.slug } }"
+  class="d-flex flex-column justify-content-start gap-2 gap-md-3 align-self-stretch rounded p-1 p-md-0 bg-white h-auto text-decoration-none text-black"
+>
 
 
           <img :src="getpath(product.featured_image)" class="product_img">
@@ -36,26 +39,30 @@
         </span>
 
         </p>
-    </a>
+    </RouterLink>
+
+
 
     <div class="mt-auto">
         <div class="product_reviews "><i class="fa-solid fa-star text-warning" data-v-bfe846de=""></i> {{ product.rating_count }} ({{ product.average_rating }}) Reviews</div>
 
         <div class="row">
 
-        <div class="p2_heading product_price col-7"><del class="text-gray-light">₹{{ product.regular_price}}</del> ₹{{ product.sale_price}}</div>
+        <div class="p2_heading product_price col-7" v-if="product.onsale" ><del class="text-gray-light">₹{{ product.regular_price}}</del> ₹{{ product.sale_price}}</div>
+        <div class="p2_heading product_price col-7" v-else >₹{{ product.regular_price}}</div>
+
         <div class="text-end col-5">
 
 
         <button
-  type="button"
-  class="btn btn-warning text-white fw-medium text-capitalize   rounded"
-  style="min-width: 4.5rem; width: 2rem;"
-  aria-label="Add Button" @click="add(product)"
-  v-if="!getQuantity(product)"
->
-  Add
-</button>
+    type="button"
+    class="btn btn-warning text-white fw-medium text-capitalize   rounded"
+    style="min-width: 4.5rem; width: 2rem;"
+    aria-label="Add Button" @click="add(product)"
+    v-if="!getQuantity(product)"
+    >
+    Add
+    </button>
 
 <div class="product_quantity text-end "   v-if="getQuantity(product)">
     <div class="quantity-grid border rounded overflow-hidden ms-auto">
@@ -83,6 +90,7 @@
       </div>
     </div>
   </template>
+
 
   <script>
    import { mutations, getters } from '../cartStore'

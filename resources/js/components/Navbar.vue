@@ -17,6 +17,7 @@
             <div class="container">
                 <nav class="navbar navbar-light  border-bottom ">
                 <div class="container-fluid justify-between ">
+
                     <RouterLink class="navbar-brand fw-bold" to="/"><img :src="main_logo" class="main_logo"></RouterLink>
 
                     <button class="btn d-lg-none" @click="toggleMobileMenu">
@@ -30,13 +31,19 @@
                         :key="i"
                         class="nav-item dropdown"
                     >
+
+
                         <RouterLink
-                        v-if="item.slug.length"
-                        class="nav-link"
-                        :to="'/category/'+item.slug"
-                        >
-                        {{ item.name }}
-                        </RouterLink>
+  v-if="item.slug.length"
+  class="nav-link"
+  :to="{ name: 'Category', params: { slug: item.slug } }"
+>
+  {{ item.name }}
+</RouterLink>
+
+
+
+
                         <div v-else class="dropdown">
                         <a
                             class="nav-link dropdown-toggle"
@@ -56,6 +63,7 @@
                             </li>
                         </ul>
                         </div>
+
                     </li>
                     </ul>
 

@@ -18,6 +18,18 @@ class Product extends Model
         return $this->belongsToMany(Category::class, 'category_product', 'product_id', 'category_id');
     }
 
+    public function additional_banner_images()
+    {
+        return $this->hasMany(BannerImage::class);
+
+    }
+
+    public function additional_product_images()
+    {
+        return $this->hasMany(ProductImage::class);
+
+    }
+
 
 
 

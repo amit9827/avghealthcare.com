@@ -1,6 +1,7 @@
 <template>
     <DefaultLayout>
         <div class="container">
+            <p class="p-2">Home / </p>
 
 
             <div class="row m-3">
@@ -8,51 +9,54 @@
 
                     <div class="row">
                         <div class="col-md-6 product_img_frame">
-                            <img src="https://media.buywow.in/public/80a36754-4fdc-40b6-912a-01b8187074be?w=480&q=75&f=webp" class="product_img">
+                            <img :src="getpath(product.featured_image)" class="product_img">
                         </div>
 
+                        <template v-for="(image, index) in additional_product_images"
+                        :key="index"
+                        >
                         <div class="col-md-6 product_img_frame">
-                            <img src="https://media.buywow.in/public/80a36754-4fdc-40b6-912a-01b8187074be?w=480&q=75&f=webp" class="product_img">
+                        <img :src="getpath(image.path)" class="product_img">
                         </div>
 
-                        <div class="col-md-6 product_img_frame">
-                            <img src="https://media.buywow.in/public/80a36754-4fdc-40b6-912a-01b8187074be?w=480&q=75&f=webp" class="product_img">
-                        </div>
+                        </template>
 
-                        <div class="col-md-6 product_img_frame">
-                            <img src="https://media.buywow.in/public/80a36754-4fdc-40b6-912a-01b8187074be?w=480&q=75&f=webp" class="product_img">
-                        </div>
+
                     </div>
                 </div>
 
                 <div class="col-md-6">
-                    <h1 class="para1_heading mt-3">Onion Anti-Hairfall Oil With Collagen - 200 ML / Pack Of 1</h1>
+                    <h1 class="para1_heading mt-3">{{ product.title }}</h1>
                     <h2 class="fs-6 fs-md-5 fw-normal text-dark lh-sm line-clamp-3">
-                          Reduces Hairfall | Nourishes Scalp &amp; Stimulates Roots | Reduces Breakage
+
+
+
+                          <span
+            v-for="(sub, index) in product.benefits_tags.split(',')"
+            :key="index"
+            class="badge rounded-pill text-dark px-2 py-1 me-1 mb-2"
+             :style="{
+                backgroundColor: getRandomColor(index),
+                fontSize: '0.875rem',
+                fontWeight: 400,
+                textTransform: 'capitalize'
+            }"
+
+          > {{ sub.trim() }}
+          </span>
+
+
                     </h2>
                     <a href="#product-reviews" class="d-inline-flex align-items-center gap-1 text-decoration-none">
                         <div class="d-inline-flex align-items-center gap-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="#FAB73B" viewBox="0 0 13 13">
-                            <path d="M6.43209 0.747855C6.61084 0.197704 7.38916 0.197706 7.56791 0.747857L8.66205 4.11525C8.74199 4.36129 8.97126 4.52786 9.22996 4.52786H12.7706C13.3491 4.52786 13.5896 5.26809 13.1216 5.6081L10.2572 7.68926C10.0479 7.84132 9.96029 8.11085 10.0402 8.35688L11.1344 11.7243C11.3131 12.2744 10.6835 12.7319 10.2155 12.3919L7.35099 10.3107C7.1417 10.1587 6.8583 10.1587 6.64901 10.3107L3.78453 12.3919C3.31655 12.7319 2.68688 12.2744 2.86563 11.7243L3.95976 8.35689C4.03971 8.11085 3.95213 7.84132 3.74284 7.68926L0.878362 5.6081C0.410376 5.26809 0.650891 4.52786 1.22935 4.52786H4.77004C5.02874 4.52786 5.25801 4.36129 5.33795 4.11525L6.43209 0.747855Z"/>
-                            </svg>
-                            <p class="mb-0 small fw-normal text-dark text-capitalize">4.83</p>
+                            <i class="fas fa-star color-custom-orange"></i>
+                            <p class="mb-0 small fw-normal text-dark text-capitalize">{{ product.average_rating }}</p>
                         </div>
-                        <p class="mb-0 small fw-normal text-dark text-capitalize">(8325) reviews</p>
+                        <p class="mb-0 small fw-normal text-dark text-capitalize">({{product.rating_count}}) reviews</p>
                     </a>
 
 
-                    <div class="my-2 flex flex-col gap-y-1 flex"> adfafd
-                        dsf
-                        adf dfadf adf dafdfdaf daf da fdsaf df dsaf dasf ad fdas fads
-                        adf dfadf adf dafdfdaf daf da fdsaf df dsaf dasf ad fdas fads
-                        adf dfadf adf dafdfdaf daf da fdsaf df dsaf dasf ad fdas fads
-                        adf dfadf adf dafdfdaf daf da fdsaf df dsaf dasf ad fdas fads
-                        adf dfadf adf dafdfdaf daf da fdsaf df dsaf dasf ad fdas fads
-                        adf dfadf adf dafdfdaf daf da fdsaf df dsaf dasf ad fdas fads
-                        adf dfadf adf dafdfdaf daf da fdsaf df dsaf dasf ad fdas fads
-                        adf dfadf adf dafdfdaf daf da fdsaf df dsaf dasf ad fdas fads
-                        adf dfadf adf dafdfdaf daf da fdsaf df dsaf dasf ad fdas fads
-                    </div>
+                    <div class="mb-3 my-2 flex flex-col gap-y-1 flex">{{ product.description }}</div>
 
                     <div>
 
@@ -88,9 +92,50 @@
 
 
 <div class="mt-3">
-  <button type="button" class="btn  btn-custom w-100 btn-warning text-white rounded-pill fw-medium  py-3 d-flex justify-content-center align-items-center gap-2 button_text">
-    Add To Cart
-  </button>
+
+
+
+<div class="text-center  ">
+
+    <div class="row m-1 mb-3 p-3" id="product_price">
+        <label class="col-md-6 text-start">Price Per Unit</label>
+        <div class="p1_heading  col-md-6 text-end" v-if="product.onsale" ><del class="text-gray-light"> ₹{{ product.regular_price}}</del> ₹{{ product.sale_price}}</div>
+        <div class="p1_heading  col-md-6 text-end" v-else >₹{{ product.regular_price}}</div>
+    </div>
+
+<button
+type="button"
+class="btn  btn-custom w-100 btn-warning text-white rounded-pill fw-medium  py-3 d-flex justify-content-center align-items-center gap-2 button_text"
+style="min-width: 4.5rem; width: 2rem;"
+aria-label="Add Button" @click="add(product)"
+v-if="!getQuantity(product)"
+>
+Add To Cart
+</button>
+
+<div class="row text-center" v-if="getQuantity(product)">
+    <div class="col-md-6">
+        <div class="product_quantity text-center "   >
+            <div class="quantity-grid border rounded overflow-hidden m-auto mb-3">
+                <button type="button"  @click="decrement(product)" class="btn quantity-btn">-</button>
+                <span class="quantity-value">{{ getQuantity(product) }}</span>
+                <button type="button"  @click="increment(product)" class="btn quantity-btn">+</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+    <RouterLink to="/cart"
+    class="btn  btn-custom w-100 btn-warning text-white rounded-pill fw-medium  py-3 d-flex justify-content-center align-items-center gap-2 button_text"
+    >GO TO CART</RouterLink>
+    </div>
+</div>
+
+
+</div>
+
+
+
+
 </div>
 
 <div class="m-3 d-flex justify-content-evenly gap-2 flex-wrap">
@@ -143,7 +188,7 @@
     <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#myAccordion">
       <div class="accordion-body row">
         <div class="col-md-12">
-        Independence Day Sale: Buy 1 Get 1 Free on all products - the lower-priced item is FREE.
+            {{ product.benefits }}
         </div>
 
 
@@ -159,33 +204,303 @@
                     </div>
 
 
+
+
+
                 </div>
 
             </div>
+
+
+
+
+<div class="row" id="benefits_block">
+
+  <div class="cl-md-12 text-center"><h3 class="para3_heading">Benefits</h3></div>
+<div class="col-md-3">
+<div class="d-flex flex-column align-items-center w-100">
+    <img
+        src="https://media.buywow.in/public/wow-cms/Reduces_Hair_Fall_f4fbeb1e3d.png?w=192&amp;q=75&amp;f=webp"
+        srcset="https://media.buywow.in/public/wow-cms/Reduces_Hair_Fall_f4fbeb1e3d.png?w=96&amp;q=75&amp;f=webp 1x,
+                https://media.buywow.in/public/wow-cms/Reduces_Hair_Fall_f4fbeb1e3d.png?w=192&amp;q=75&amp;f=webp 2x"
+        alt="Reduces Hair Fall"
+        class="img-fluid mb-2"
+        width="100" height="96" loading="lazy" decoding="async"
+        style="max-width: 92px;"
+    >
+    <div class="d-flex flex-column align-items-center justify-content-center gap-1">
+        <h5 class="text-center fw-medium text-capitalize mb-1" style="line-height: 1.2;">
+            Reduces hair fall
+        </h5>
+        <p class="text-center small mb-0" style="line-height: 1.4;">
+            The blend of nourishing oil powered by onion seed extract and collagen help
+            to boost scalp health and prevent breakage, reducing hair fall and thinning.
+        </p>
+    </div>
+</div>
+</div>
+
+
+
+<div class="col-md-3">
+<div class="d-flex flex-column align-items-center w-100">
+    <img
+        src="https://media.buywow.in/public/wow-cms/Reduces_Hair_Fall_f4fbeb1e3d.png?w=192&amp;q=75&amp;f=webp"
+        srcset="https://media.buywow.in/public/wow-cms/Reduces_Hair_Fall_f4fbeb1e3d.png?w=96&amp;q=75&amp;f=webp 1x,
+                https://media.buywow.in/public/wow-cms/Reduces_Hair_Fall_f4fbeb1e3d.png?w=192&amp;q=75&amp;f=webp 2x"
+        alt="Reduces Hair Fall"
+        class="img-fluid mb-2"
+        width="100" height="96" loading="lazy" decoding="async"
+        style="max-width: 92px;"
+    >
+    <div class="d-flex flex-column align-items-center justify-content-center gap-1">
+        <h5 class="text-center fw-medium text-capitalize mb-1" style="line-height: 1.2;">
+            Reduces hair fall
+        </h5>
+        <p class="text-center small mb-0" style="line-height: 1.4;">
+            The blend of nourishing oil powered by onion seed extract and collagen help
+            to boost scalp health and prevent breakage, reducing hair fall and thinning.
+        </p>
+    </div>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="d-flex flex-column align-items-center w-100">
+    <img
+        src="https://media.buywow.in/public/wow-cms/Reduces_Hair_Fall_f4fbeb1e3d.png?w=192&amp;q=75&amp;f=webp"
+        srcset="https://media.buywow.in/public/wow-cms/Reduces_Hair_Fall_f4fbeb1e3d.png?w=96&amp;q=75&amp;f=webp 1x,
+                https://media.buywow.in/public/wow-cms/Reduces_Hair_Fall_f4fbeb1e3d.png?w=192&amp;q=75&amp;f=webp 2x"
+        alt="Reduces Hair Fall"
+        class="img-fluid mb-2"
+        width="100" height="96" loading="lazy" decoding="async"
+        style="max-width: 92px;"
+    >
+    <div class="d-flex flex-column align-items-center justify-content-center gap-1">
+        <h5 class="text-center fw-medium text-capitalize mb-1" style="line-height: 1.2;">
+            Reduces hair fall
+        </h5>
+        <p class="text-center small mb-0" style="line-height: 1.4;">
+            The blend of nourishing oil powered by onion seed extract and collagen help
+            to boost scalp health and prevent breakage, reducing hair fall and thinning.
+        </p>
+    </div>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="d-flex flex-column align-items-center w-100">
+    <img
+        src="https://media.buywow.in/public/wow-cms/Reduces_Hair_Fall_f4fbeb1e3d.png?w=192&amp;q=75&amp;f=webp"
+        srcset="https://media.buywow.in/public/wow-cms/Reduces_Hair_Fall_f4fbeb1e3d.png?w=96&amp;q=75&amp;f=webp 1x,
+                https://media.buywow.in/public/wow-cms/Reduces_Hair_Fall_f4fbeb1e3d.png?w=192&amp;q=75&amp;f=webp 2x"
+        alt="Reduces Hair Fall"
+        class="img-fluid mb-2"
+        width="100" height="96" loading="lazy" decoding="async"
+        style="max-width: 92px;"
+    >
+    <div class="d-flex flex-column align-items-center justify-content-center gap-1">
+        <h5 class="text-center fw-medium text-capitalize mb-1" style="line-height: 1.2;">
+            Reduces hair fall
+        </h5>
+        <p class="text-center small mb-0" style="line-height: 1.4;">
+            The blend of nourishing oil powered by onion seed extract and collagen help
+            to boost scalp health and prevent breakage, reducing hair fall and thinning.
+        </p>
+    </div>
+</div>
+</div>
+</div>
+
+
+
+<div class="row">
+  <div id="product_banner">
+    <div class="col-md-12">
+
+        <template v-for="(image, index) in additional_banner_images"
+                        :key="index"
+                        >
+
+                        <img :src="getpath(image.path)"
+                        class="h-auto w-full object-contain"
+                        alt="Product Highlight 1"
+                        fetchpriority="high"
+                        width="500"
+                        height="500"
+                        decoding="async"
+                        data-nimg="1"
+                        style="color: transparent;"
+                        >
+
+
+
+
+                        </template>
+
+
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+<!-- ratings -->
+<ProductReview />
+
+        <!-- review card closed-->
+
+
+        <!--  product description -->
+
+<div class="accordion mt-3 mb-5" id="myAccordion">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingOne">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+       Product Details
+      </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#myAccordion">
+      <div class="accordion-body row">
+        <div class="col-md-12">
+        Independence Day Sale: Buy 1 Get 1 Free on all products - the lower-priced item is FREE.
         </div>
+
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+        <!-- product description ends-->
+    </div>
     </DefaultLayout>
   </template>
+<script>
+import DefaultLayout from '../layouts/DefaultLayout.vue'
+import { useHead } from '@vueuse/head'
+import ProductReview from '../components/ProductReviews.vue'
+import axios from 'axios'
+import { route } from 'ziggy-js'
+import { mutations, getters } from '../cartStore'
 
-  <script setup>
-  import DefaultLayout from '../layouts/DefaultLayout.vue'
-  import { useHead } from '@vueuse/head'
+export default {
+  name: 'Product',
+  components: {
+    DefaultLayout,
+    ProductReview,
+  },
+  data() {
+    return {
+      subcategories: [],
+      category: [],
+      subcategory: '',
+      product: [],
+      additional_product_images: [],
+      additional_banner_images: [],
+      colors: [
+        "rgb(203, 237, 243)", // light blue
+        "rgb(255, 230, 230)", // light red
+        "rgb(230, 255, 230)", // light green
+        "rgb(255, 245, 204)", // light yellow
+        "rgb(230, 230, 255)", // light purple
+        "rgb(255, 240, 245)"  // light pink
+      ],
+    }
+  },
+  created() {
+    this.updateHead(this.$route.params.slug)
+    this.fetchProduct(this.$route.params.slug)
+  },
+  watch: {
+    '$route.params.slug': {
+      immediate: true,
+      handler(newSlug) {
+        this.fetchProduct(newSlug)
+        this.updateHead(newSlug)
+      }
+    }
+  },
+  methods: {
+    async fetchProduct(slug) {
+      try {
+        const url = route('product_by_slug', { product_slug: slug });
+        const res = await axios.get(url);
+        this.category = res.data.category;
+        this.subcategories = res.data.subcategories;
+        this.product = res.data.product;
+        this.additional_product_images = res.data.additional_product_images;
+        this.additional_banner_images = res.data.additional_banner_images;
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    updateHead(slug) {
+      useHead({
+        title: `${slug} | AVG Healthcare`,
+        meta: [
+          { name: 'description', content: 'Product Page of AVG Healthcare.' }
+        ]
+      })
+    },
+    getpath(product_path) {
+      return `..\\images\\${product_path}`;
+    },
+    getRandomColor(index) {
+      return this.colors[index % this.colors.length];
+    },
 
-  useHead({
-    title: 'About | AVG Healthcare',
-    meta: [
-      { name: 'description', content: 'Learn more about AVG Healthcare.' }
-    ]
-  })
-  </script>
 
-  <<style scoped>
+
+
+    add(product) {
+      mutations.addToCart(product)
+    },
+    increment(product) {
+      mutations.incrementQuantity(product)
+    },
+
+    decrement(product) {
+      mutations.decrementQuantity(product)
+    },
+
+
+    getQuantity(product) {
+      return getters.getProductQuantity(product.id)
+    },
+
+    getPrice(product) {
+
+        if(product.onsale)
+      return getters.getProductQuantity(product.id)
+    },
+
+
+
+  }
+}
+</script>
+
+  <style scoped>
 
   .product_img_frame{
     padding:10px;
   }
+
   .product_img{
     height:300px;
+    width:auto;
     border-radius:10px;
+    display: block;
   }
 
   .para1_heading{
@@ -222,5 +537,96 @@
     height:auto;
     margin:0;
 }
+
+#benefits_block{
+  margin:50px 0px;
+  background-color:rgb(247 247 231);
+  padding:20px;
+}
+
+#product_banner {
+  padding: 0 10%;
+
+}
+#product_banner img{
+  width:100%;
+  margin-bottom:50px;
+
+}
+
+.color-custom-orange{
+color:#ffbb38;
+}
+
+.bg-custom-orange-dark{
+background-color: #ed7f30;
+}
+
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 15px;
+  border-radius: 0.5rem;
+  background-color: white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  text-decoration: none;
+  color: inherit;
+
+  margin:10px auto;
+}
+
+.product-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.quantity-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 14.5rem;
+  height: 64.5px;
+}
+
+.quantity-btn {
+  background-color: #f3fbd1;
+  color: #000;
+  line-height: 1;
+  border: none;
+  border-radius: 0;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500; /* fw-medium */
+  text-transform: capitalize;
+  padding: 0;
+  font-size: 1rem;
+}
+
+.quantity-value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 400; /* fw-normal */
+  color: #6c757d; /* Bootstrap's text-secondary */
+  font-size: 0.875rem;
+  user-select: none;
+}
+
+.text-gray-light{
+    color:#999;
+}
+
+#product_price {
+
+    font-size:18px;
+    font-weight: bold;
+    border: 1px solid #ed7f30;
+    background: #fbebdf;
+    border-radius: 10px;
+
+}
+
+
 
   </style>
