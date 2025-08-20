@@ -5,7 +5,7 @@
       <main class="p-0 bg-white">
         <slot />
       </main>
-      <FloatingCart :itemCount="3" :total="1147" :show="true" />
+
       <FloatingContactButtons phone-number="918888812345" whatsapp-number="918888812345" />
 
       <Footer />

@@ -10,6 +10,11 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Customer;
+use App\Models\ShoppingCart;
+use App\Models\ShippingAddress;
+use App\Models\Order;
+
 
 use Illuminate\Validation\Rule;
 
@@ -163,4 +168,116 @@ class FrontendController extends Controller
 
 
     }
+
+
+    // PhonePeController.php (simplified)
+public function createPayment(Request $request)
+{
+    $token = $this->getPhonePeToken();
+    $response = Http::withHeaders([
+        'Authorization' => 'O-Bearer ' . $token,
+    ])->post('https://api-preprod.phonepe.com/apis/pg-sandbox/checkout/v2/pay', [
+        'merchantOrderId' => 'ORD_123' . uniqid(),
+        'amount' => 1000,
+        'paymentFlow' => ['type' => 'PG_CHECKOUT'],
+        'merchantUrls' => ['redirectUrl' => route('phonepe.callback')],
+    ]);
+
+    if ($response->successful()) {
+        return redirect($response->json()['redirectUrl']);
+    }
+    abort(500, 'Payment initiation failed.');
+}
+
+public function handleCallback(Request $request)
+{
+    $transactionId = $request->transactionId;
+    $statusResponse = $this->verifyPhonePeStatus($transactionId);
+    // Update your database and return response to user
+}
+
+
+public function phonepe(Request $request){
+
+    $data=array();
+
+    return view('phonepesample', compact('data'));
+}
+
+public function checkout(Request $request)
+{
+
+    $customer = Customer::where('email', $request->address['email'])->first();
+    if($customer==null)
+    $customer = new Customer;
+
+    $customer->name =$request->address['name'];
+    $customer->address=$request->address['address'];
+    $customer->town=$request->address['town'];
+    $customer->pin_code= $request->address['pin_code'];
+    $customer->state=$request->address['state'];
+    $customer->phone=$request->address['phone'];
+    $customer->email=$request->address['email'];
+    $customer->save();
+
+    $items = $request->items;
+    foreach($items as $item)
+    {
+
+        $shopping_cart = ShoppingCart::where('session_id', $request->session_id)->where('product_id', $item['product']['id'] )->first();
+        if($shopping_cart==null)
+        $shopping_cart = new ShoppingCart;
+
+        $price = $item['product']['regular_price'];
+        if ($item['product']['onsale'] == 1) {
+            $price = $item['product']['sale_price'];
+        }
+
+        $shopping_cart->session_id = $request->session_id;
+        $shopping_cart->customer_id = $customer->id;
+        $shopping_cart->product_id = $item['product']['id'];
+        $shopping_cart->price = $price;
+        $shopping_cart->quantity = $item['quantity'];
+        $shopping_cart->amount = $price * $item['quantity'];
+        $shopping_cart->total_amount = $request->total_amount;
+        $shopping_cart->save();
+    }
+
+
+
+    $shipping_address = ShippingAddress::where('session_id', $request->session_id)->first();
+    if($shipping_address==null)
+    $shipping_address = new ShippingAddress;
+
+    $shipping_address->session_id = $request->session_id;
+    $shipping_address->customer_id =$customer->id;
+    $shipping_address->name =$request->shipping_address['name'];
+    $shipping_address->address=$request->shipping_address['address'];
+    $shipping_address->town=$request->shipping_address['town'];
+    $shipping_address->pin_code= $request->shipping_address['pin_code'];
+    $shipping_address->state=$request->shipping_address['state'];
+    $shipping_address->phone=$request->shipping_address['phone'];
+    $shipping_address->email=$request->shipping_address['email'];
+    $shipping_address->save();
+
+
+    $order = Order::where('shopping_cart_id', $shopping_cart->id)->first();
+    if($order==null)
+    $order = new Order;
+
+    $order->customer_id =  $customer->id;
+    $order->shopping_cart_id = $shopping_cart->id;
+    $order->total_amount =$request->total_amount;
+    $order->order_status = "DRAFT";
+    $order->dispatch_status = "PENDING";
+    $order->payment_mode = "PAYTM";
+    $order->save();
+
+    $data['order_saved']=1;
+    $data['order_id']=$order->id;
+    return response()->json($data);
+
+}
+
+
 }

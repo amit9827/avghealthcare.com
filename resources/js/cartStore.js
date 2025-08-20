@@ -1,10 +1,44 @@
 import { reactive } from 'vue'
 
+function generateSessionId() {
+    return 'sess_' + Math.random().toString(36).substr(2, 9)
+}
+
 export const cartStore = reactive({
-  items: [], // { product, quantity }
+session_id: generateSessionId(), // new session ID
+items: [], // { product, quantity }
+  // address object
+  address: {
+    name: '',
+    address: '',
+    email: '',
+    phone: '',
+    street: '',
+    town: '',
+    state: '',
+    pin_code: '',
+    country: '',
+  },
+
+  shipping_address:{
+    name: '',
+    address: '',
+    email: '',
+    phone: '',
+    street: '',
+    town: '',
+    state: '',
+    pin_code: '',
+    country: '',
+
+  }
 })
 
+
+
 export const mutations = {
+
+
   addToCart(product) {
     const item = cartStore.items.find(i => i.product.id === product.id)
     if (item) {
@@ -50,4 +84,5 @@ export const getters = {
     const item = cartStore.items.find(i => i.product.id === productId)
     return item ? item.quantity : 0
   },
+
 }

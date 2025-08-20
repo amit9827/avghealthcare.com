@@ -1,13 +1,10 @@
 <?php
 
-
-
-
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\PaymentController;
 
 // Laravel homepage
 Route::get('/', function () {
@@ -22,6 +19,13 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/category/laravel/{category_slug}', [FrontendController::class, 'category'])->name('category');
 Route::get('/product/laravel/{product_slug}', [FrontendController::class, 'product_by_slug'])->name('product_by_slug');
 
+Route::get('/phonepe/create-payment/{order_id}', [App\Http\Controllers\PhonePePaymentController::class, 'createPayment'])
+    ->name('phonepe.createPayment');
+Route::get('/phonepe/success/{id}', [App\Http\Controllers\PhonePePaymentController::class, 'success'])
+    ->name('phonepe.success');
+
+Route::post('/checkout', [App\Http\Controllers\FrontendController::class, 'checkout'])
+    ->name('checkout');
 
 // Admin routes
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -39,15 +43,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/category', [DashboardController::class, 'category_store'])->name('category_store');
         Route::get('/category/{category_id}', [DashboardController::class, 'category_get'])->name('category_get');
 
-
-
-
     });
 });
 
 Route::get('/images/{path}', [DashboardController::class, 'showImage'])
      ->where('path', '.*')
      ->name('image.show');
+
+
+
 
 
 // Catch-all for Vue, exclude admin

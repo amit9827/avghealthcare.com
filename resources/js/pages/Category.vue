@@ -54,6 +54,7 @@
 
 
       </div>
+      <FloatingCart :itemCount="3" :total="1147" :show="true" />
     </DefaultLayout>
   </template>
 
@@ -61,6 +62,7 @@
   import DefaultLayout from '../layouts/DefaultLayout.vue'
   import HomeBanner from '../components/HomeBanner.vue'
   import Products from '../components/Products.vue'
+  import FloatingCart from '../components/FloatingCart.vue'
 
   import { useHead } from '@vueuse/head'
   import axios from 'axios'
@@ -74,7 +76,8 @@
     components: {
       HomeBanner,
       DefaultLayout,
-      Products
+      Products,
+      FloatingCart
     },
 
     data() {

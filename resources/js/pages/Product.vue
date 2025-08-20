@@ -383,12 +383,14 @@ Add To Cart
 
         <!-- product description ends-->
     </div>
+    <FloatingCart :itemCount="3" :total="1147" :show="true" />
     </DefaultLayout>
   </template>
 <script>
 import DefaultLayout from '../layouts/DefaultLayout.vue'
 import { useHead } from '@vueuse/head'
 import ProductReview from '../components/ProductReviews.vue'
+import FloatingCart from '../components/FloatingCart.vue'
 import axios from 'axios'
 import { route } from 'ziggy-js'
 import { mutations, getters } from '../cartStore'
@@ -398,6 +400,7 @@ export default {
   components: {
     DefaultLayout,
     ProductReview,
+    FloatingCart,
   },
   data() {
     return {
@@ -417,6 +420,8 @@ export default {
       ],
     }
   },
+
+
   created() {
     this.updateHead(this.$route.params.slug)
     this.fetchProduct(this.$route.params.slug)
@@ -459,9 +464,6 @@ export default {
       return this.colors[index % this.colors.length];
     },
 
-
-
-
     add(product) {
       mutations.addToCart(product)
     },
@@ -473,16 +475,16 @@ export default {
       mutations.decrementQuantity(product)
     },
 
-
     getQuantity(product) {
       return getters.getProductQuantity(product.id)
     },
 
     getPrice(product) {
-
-        if(product.onsale)
+    if(product.onsale)
       return getters.getProductQuantity(product.id)
     },
+
+
 
 
 
