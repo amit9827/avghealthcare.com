@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../pages/Home.vue'
 import About from '../pages/About.vue'
+import Page from '../pages/Page.vue'
 import Category from '../pages/Category.vue'
 import Product from '../pages/Product.vue'
 import CartDisplay from '../pages/CartDisplay.vue'
@@ -13,6 +14,7 @@ const routes = [
   { path: '/product/:slug', name: 'Product', component: Product, props: true, },
   { path: '/go/:link', name: 'GoLink', component: GoLink },
   { path: '/cart', name: 'CartDisplay', component: CartDisplay },
+  { path: '/page/:slug', name: 'Page', component: Page, props: true, },
 
 
 

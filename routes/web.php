@@ -21,7 +21,7 @@ Route::get('/product/laravel/{product_slug}', [FrontendController::class, 'produ
 
 Route::get('/phonepe/create-payment/{order_id}', [App\Http\Controllers\PhonePePaymentController::class, 'createPayment'])
     ->name('phonepe.createPayment');
-Route::get('/phonepe/success/{id}', [App\Http\Controllers\PhonePePaymentController::class, 'success'])
+Route::get('/phonepe/success/{id}/{key}', [App\Http\Controllers\PhonePePaymentController::class, 'success'])
     ->name('phonepe.success');
 
 Route::post('/checkout', [App\Http\Controllers\FrontendController::class, 'checkout'])

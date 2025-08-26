@@ -57,27 +57,62 @@ class PhonePePaymentController extends Controller
         if ($response->successful()) {
              $accessToken = $data['access_token'] ?? null;
 
-             $order = Order::find($order_id);
+            $order = Order::find($order_id);
+
+            echo  $accessToken .
+            $this->PHONEPE_CHECKOUT_URL .
+            $order->total_amount*100 .
+            $order->id;
+            $amount = $order->total_amount*100;
+            $merchantOrderId = "TX".$order->id;
+            $key = time();
+            $request->session()->put('key', $key);
+            $redirectUrl = route('phonepe.success', [
+                'id' => $order->id,
+                'key' => $key,
+            ]);
 
 
             $response = Http::withHeaders([
                 'Content-Type'  => 'application/json',
                 'Authorization' => 'O-Bearer ' . $accessToken,
             ])->post($this->PHONEPE_CHECKOUT_URL, [
-                'merchantOrderId' => $order->id,
-                'amount' => $order->total_amount,
+                'merchantOrderId' => $merchantOrderId,
+                'amount' => $amount,
                 'paymentFlow' => [
                     'type' => 'PG_CHECKOUT',
                     'message' => 'Payment message used for collect requests',
                     'merchantUrls' => [
-                        'redirectUrl' => route('phonepe.success', ['id' => $order->id]),
+                        'redirectUrl' => "$redirectUrl",
                     ],
                 ],
             ]);
 
+           /* {
+                "merchantOrderId": "TX123456",
+                "amount": 1000,
+                "expireAfter": 1200,
+                "metaInfo": {
+                    "udf1": "additional-information-1",
+                    "udf2": "additional-information-2",
+                    "udf3": "additional-information-3",
+                    "udf4": "additional-information-4",
+                    "udf5": "additional-information-5"
+                },
+                "paymentFlow": {
+                    "type": "PG_CHECKOUT",
+                    "message": "Payment message used for collect requests",
+                    "merchantUrls": {
+                        "redirectUrl": ""
+                    }
+                }
+            }*/
 
-            return $data = $response->json();
+            $data = $response->json();
+
+            if(isset($data['redirectUrl']))
             return redirect($data['redirectUrl']);
+            return $data;
 
         } else {
 
@@ -88,10 +123,18 @@ class PhonePePaymentController extends Controller
     }
 
 
-    public function success($id)
+    public function success(Request $request, $id, $key)
     {
         $order = Order::find($id);
+        $session_key = $request->session()->get('key');
+        if($key != $session_key)
+        return "Error $key mismatch $session_key";
+
+
+
+        if($order)
         $order->order_status="COMPLETED";
+        $order->save();
 
         dd('Payment successful for order ID: ' . $id);
     }

@@ -25,13 +25,16 @@
                         :key="i"
                         class="nav-item "
                     >
+
                         <RouterLink
-                        v-if="item.url"
+                        v-if="item.slug.length"
                         class="nav-link"
-                        :to="item.url"
+                        :to="{ name: 'Category', params: { slug: item.slug } }"
                         >
                         {{ item.name }}
                         </RouterLink>
+
+
                         <div v-else class="dropdown2">
                         <a
                             class="nav-link"
@@ -40,6 +43,9 @@
                         >
                             {{ item.name }}
                         </a>
+
+
+
                         <ul class="dropdown2-menu">
                             <li
                             v-for="(sub, j) in item.submenu"

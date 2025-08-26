@@ -94,12 +94,9 @@ class FrontendController extends Controller
             ],
 
             [
-                'title' => 'Cardio care',
-                'url' => '/products',
-                'submenu' => [
-                    ['title' => 'Pharma', 'url' => '/products/pharma'],
-                    ['title' => 'Healthcare', 'url' => '/products/healthcare'],
-                ],
+                'title' => 'Privacy Policy',
+                'url' => '/page/privacy-policy',
+                'submenu' => [],
             ],
 
             [
