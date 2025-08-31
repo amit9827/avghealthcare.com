@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Customer;
+use App\Models\Page;
 use App\Models\ShoppingCart;
 use App\Models\ShippingAddress;
 use App\Models\Order;
@@ -67,11 +68,7 @@ class FrontendController extends Controller
                     ['title' => 'Healthcare', 'url' => '/products/healthcare'],
                 ],
             ],
-            [
-                'title' => 'About Us',
-                'url' => '/about',
-                'submenu' => [],
-            ],
+
             [
                 'title' => 'Cart',
                 'url' => '/cart',
@@ -84,13 +81,11 @@ class FrontendController extends Controller
                 'url' => '/',
                 'submenu' => [],
             ],
+
             [
-                'title' => 'Diabetes care',
-                'url' => '/products',
-                'submenu' => [
-                    ['title' => 'Pharma', 'url' => '/products/pharma'],
-                    ['title' => 'Healthcare', 'url' => '/products/healthcare'],
-                ],
+                'title' => 'About Us',
+                'url' => '/page/about',
+                'submenu' => [],
             ],
 
             [
@@ -100,18 +95,26 @@ class FrontendController extends Controller
             ],
 
             [
-                'title' => 'Digestive care',
-                'url' => '/products',
-                'submenu' => [
-                    ['title' => 'Pharma', 'url' => '/products/pharma'],
-                    ['title' => 'Healthcare', 'url' => '/products/healthcare'],
-                ],
-            ],
-            [
-                'title' => 'About Us',
-                'url' => '/about',
+                'title' => 'Terms and Conditions',
+                'url' => '/page/terms-and-conditions',
                 'submenu' => [],
             ],
+            [
+                'title' => 'Refund & Return Policy',
+                'url' => '/page/refund-return-policy',
+                'submenu' => [],
+            ],
+            [
+                'title' => 'Shipping Policy',
+                'url' => '/page/shipping-policy',
+                'submenu' => [],
+            ],
+
+
+
+
+
+
             [
                 'title' => 'Admin',
                 'url' => '/go/admin',
@@ -166,6 +169,17 @@ class FrontendController extends Controller
 
     }
 
+
+
+    public function page_by_slug(Request $request, $page_slug){
+
+        $page = Page::where('slug', $page_slug)->first();
+        $data['page'] = $page;
+
+        return response()->json($data);
+
+
+     }
 
     // PhonePeController.php (simplified)
 public function createPayment(Request $request)

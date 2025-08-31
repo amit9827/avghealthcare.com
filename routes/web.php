@@ -19,6 +19,9 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/category/laravel/{category_slug}', [FrontendController::class, 'category'])->name('category');
 Route::get('/product/laravel/{product_slug}', [FrontendController::class, 'product_by_slug'])->name('product_by_slug');
 
+Route::get('/page/laravel/{page_slug}', [FrontendController::class, 'page_by_slug'])->name('page_by_slug');
+
+
 Route::get('/phonepe/create-payment/{order_id}', [App\Http\Controllers\PhonePePaymentController::class, 'createPayment'])
     ->name('phonepe.createPayment');
 Route::get('/phonepe/success/{id}/{key}', [App\Http\Controllers\PhonePePaymentController::class, 'success'])
@@ -42,6 +45,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/category', [DashboardController::class, 'category'])->name('category');
         Route::post('/category', [DashboardController::class, 'category_store'])->name('category_store');
         Route::get('/category/{category_id}', [DashboardController::class, 'category_get'])->name('category_get');
+        Route::get('/pages', [DashboardController::class, 'pages'])->name('pages');
+        Route::get('/page/{id}', [DashboardController::class, 'page_get'])->name('page_get');
+        Route::get('/page', [DashboardController::class, 'page'])->name('page');
+        Route::post('/pages', [DashboardController::class, 'page_store'])->name('page_store');
+        Route::get('/page-delete/{id}', [DashboardController::class, 'page_delete'])->name('page_delete');
+
+
 
     });
 });

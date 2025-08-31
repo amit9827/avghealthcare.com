@@ -1,30 +1,19 @@
 <template>
     <DefaultLayout>
       <div class="container">
-        <p class="p-2">Home / {{ page.name }}</p>
-        <HomeBanner src="/banners/banner1.jpg" alt="Image1" />
+        <p class="p-2">Home / {{ page.title }}</p>
+        <HomeBanner
+
+        :src="getpath(page.featured_image)"
+          alt="Image1" />
 
 
         <div class="row">
-            <div class="col-md-2"><h1 class="para1_title">{{ category.title }}</h1></div>
-            <div class="col-md-10">
 
-        <div v-if="subcategories.length">
-            <ul class="nav nav-pills gap-2 flex-nowrap" role="tablist">
 
-                <li class="nav-item" role="presentation">
-                <button class="nav-link rounded-pill border px-3 py-1 text-capitalize" id="tab-all" data-bs-toggle="tab" data-bs-target="#panel-all" type="button" role="tab">All</button>
-                </li>
-
-                <div v-for="subcategory in subcategories" :key="subcategory.id">
-                <li class="nav-item" role="presentation">
-                <button class="nav-link rounded-pill border px-3 py-1 text-capitalize" id="tab-all" data-bs-toggle="tab" data-bs-target="#panel-all" type="button" role="tab">{{ subcategory.title }}</button>
-                </li>
+            <div class="col-md-12 mb-5">
+                <div v-html="page.long_description"></div>
                 </div>
-
-            </ul>
-        </div>
-
 
 
 
@@ -33,23 +22,30 @@
 
 <div class="row">
 
-    <div class="col-md-12 text-end">
-    <label for="sorty_by">Sort By </label>
-    <select name="sort_by" id="sort_by">
-        <option value="">--</option>
-        <option value="price_asc">Price - Low to High</option>
 
-    </select>
+
+
+    <div class="col-md-12">
+
+<div v-if="subcategories.length">
+    <ul class="nav nav-pills gap-2 flex-nowrap" role="tablist">
+
+        <li class="nav-item" role="presentation">
+        <button class="nav-link rounded-pill border px-3 py-1 text-capitalize" id="tab-all" data-bs-toggle="tab" data-bs-target="#panel-all" type="button" role="tab">All</button>
+        </li>
+
+        <div v-for="subcategory in subcategories" :key="subcategory.id">
+        <li class="nav-item" role="presentation">
+        <button class="nav-link rounded-pill border px-3 py-1 text-capitalize" id="tab-all" data-bs-toggle="tab" data-bs-target="#panel-all" type="button" role="tab">{{ subcategory.title }}</button>
+        </li>
+        </div>
+
+    </ul>
 </div>
-    <div class="rol-md-12">
 
-          <!-- Passing props to Products component -->
-          <Products
 
-          :products = "products"
 
-         />
-    </div>
+
 </div>
 
 
@@ -85,7 +81,7 @@
         subcategories: [],
         category:[],
         subcategory:'',
-        products:[],
+        page:[],
 
       }
     },
@@ -112,16 +108,21 @@
 methods: {
   async fetchCategory(slug) {
     try {
-      const url = route('page', { page_slug: slug });
+      const url = route('page_by_slug', { page_slug: slug });
       const res = await axios.get(url);
-      this.category = res.data.category;
-      this.subcategories = res.data.subcategories;
-      this.products = res.data.products;
+
+      this.page = res.data.page;
       console.log(this.products);
     } catch (err) {
       console.error(err);
     }
-  }
+  },
+
+
+  getpath(image_path) {
+      return `..\\images\\${image_path}`;
+    },
+
 },
 
 

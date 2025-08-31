@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\CategoryProduct;
+use App\Models\Page;
 
 use App\Models\BannerImage;
 use App\Models\ProductImage;
@@ -16,6 +17,7 @@ use App\Models\ProductImage;
 use Illuminate\Validation\Rule;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -294,10 +296,15 @@ public function categories()
 {
 
     $data['categories'] = Category::paginate($this->pagevalue);
-
     return view('admin.categories', compact('data'));
 }
 
+public function pages()
+{
+    $data['pages'] = Page::paginate($this->pagevalue);
+    return view('admin.pages', compact('data'));
+
+}
 public function category()
 {
     $data['all_categories'] = Category::get();
@@ -349,6 +356,101 @@ if ($request->category_id) {
 return redirect()->route('admin.categories')->with('success', $message);
 
 }
+
+
+public function page()
+{
+
+$data=array();
+
+    return view('admin.page', compact('data'));
+}
+
+
+public function page_get(Request $request, $id)
+{
+
+$data=array();
+
+
+$data['page'] = Page::find($id);
+if($data['page']==null)
+return redirect()->back()->with('error', "Page not found");
+
+
+return view('admin.page', compact('data'));
+}
+
+
+
+public function page_store(Request $request){
+
+
+    if (!Auth::check()) {
+        return redirect()->back()->with('error', "Not Logged In");
+    }
+
+    $user = Auth::user();
+
+// Validation rules
+$validated = $request->validate([
+    'title'        => 'required|string|max:255',
+    'slug'        => 'nullable|string|unique:categories,slug,' . $request->page_id,
+    'description' => 'nullable|string',
+    'long_description' => 'nullable|string',
+    'featured_image'  => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+
+    'meta_title' => 'nullable|string',
+    'meta_description' => 'nullable|string',
+    'meta_keywords' => 'nullable|string',
+
+
+]);
+
+
+$validated['created_by'] = $user->id;
+
+// Auto-generate slug if not given
+if (empty($validated['slug'])) {
+    $validated['slug'] = Str::slug($validated['title']);
+}
+
+// Handle image upload
+if ($request->hasFile('featured_image')) {
+    $validated['featured_image'] = $request->file('featured_image')->store('page', 'public');
+}
+
+// ✅ Update or Create category
+if ($request->page_id) {
+    $page = Page::findOrFail($request->page_id);
+    $page->update($validated);
+    $message = 'Page updated successfully.';
+} else {
+    $page = Page::create($validated);
+    $message = 'Page created successfully.';
+}
+
+return redirect()->route('admin.pages')->with('success', $message);
+
+
+
+}
+
+
+public function page_delete(Request $request, $delete_id){
+
+    $page = Page::find($delete_id);
+    if($page==null)
+        return redirect()->back()->with('error', "Page not found");
+
+    $page->delete();
+    return redirect()->back()->with('success', "Page deleted Successfully");
+
+
+
+
+}
+
 
 
 
