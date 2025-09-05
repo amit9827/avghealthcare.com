@@ -336,8 +336,8 @@ return [
             'text' => 'search',
         ],
         [
-            'text' => 'Posts',
-            'url' => 'admin/posts',
+            'text' => 'Site',
+            'url' => '/',
 
         ],
 
@@ -350,7 +350,7 @@ return [
             'text' => 'Pages',
             'url' => 'admin/pages',
             'icon' => 'far fa-fw fa-file',
-            'label' => 4,
+
             'label_color' => 'success',
         ],
 
@@ -358,16 +358,34 @@ return [
             'text' => 'Inquiries',
             'url' => 'admin/inquiries',
             'icon' => 'far fa-fw fa-file',
-            'label' => 4,
+
             'label_color' => 'success',
         ],
 
         [
             'text' => 'eCommerce',
-            'url' => 'admin/ecommerce',
+            'url' => '#',
             'icon' => 'far fa-fw fa-file',
-            'label' => 4,
             'label_color' => 'success',
+
+            'submenu' => [
+                [
+                    'text' => 'All Orders',
+                    'url' => 'admin/orders',
+                ],
+
+                [
+                    'text' => 'Customers',
+                    'url' => 'admin/customers',
+                ],
+
+                [
+                    'text' => 'Reports',
+                    'url' => 'admin/reports',
+                ],
+
+
+             ],
         ],
 
         [

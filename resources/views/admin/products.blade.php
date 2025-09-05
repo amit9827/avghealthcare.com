@@ -19,7 +19,7 @@
 <form action="{{ route('admin.product_store') }}" method="POST" enctype="multipart/form-data">
     @csrf
 
-    <button class="btn btn-primary">Save Product</button>
+    <a href="{{ route('admin.product') }}" class="btn btn-primary">+ Add Product</a>
 </form>
 
 <table class="table table-striped table-full-width mt-5" >

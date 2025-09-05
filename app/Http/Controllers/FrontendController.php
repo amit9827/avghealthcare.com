@@ -291,4 +291,13 @@ public function checkout(Request $request)
 }
 
 
+public function min_order_amount(Request $request){
+     return response()->json([
+        'min_order_amount' => config('avg_config.min_free_shopping_order_amount')
+    ]);
+}
+
+
+
+
 }

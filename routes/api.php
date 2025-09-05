@@ -15,9 +15,9 @@ Route::get('/test', function(Request $request){
     return "Hello Api";
 });
 
-http://avghealthcare.test:8000/api/menu
+
 
 Route::get('/menu', [FrontendController::class, 'menu'])->name('menu');
-
+Route::get('/config/min_order_amount', [FrontendController::class, 'min_order_amount'])->name('min_order_amount');
 
 

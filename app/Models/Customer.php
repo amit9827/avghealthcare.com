@@ -22,4 +22,20 @@ class Customer extends Model
     }
 
 
+
+    public function completed_orders_amount()
+    {
+        return $this->orders()
+            ->where('order_status', 'COMPLETED')
+            ->sum('total_amount');
+    }
+
+    public function completed_orders_count()
+{
+    return $this->orders()
+        ->where('order_status', 'COMPLETED')
+        ->count();
+}
+
+
 }

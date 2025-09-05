@@ -19,6 +19,9 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 
+use App\Models\Order;
+use App\Models\Customer;
+
 class DashboardController extends Controller
 {
 
@@ -60,6 +63,7 @@ public function showImage($path)
     {
 
         $data['categories'] = Category::get();
+        $data['category_product'] = array();
 
         return view('admin.product', compact('data'));
     }
@@ -446,12 +450,24 @@ public function page_delete(Request $request, $delete_id){
     $page->delete();
     return redirect()->back()->with('success', "Page deleted Successfully");
 
-
-
-
 }
 
+public function orders(Request $request){
 
+    $orders = Order::orderby('created_at', 'desc')->get();
+     $data['orders'] = $orders;
+
+    return view('admin.orders', compact('data'));
+}
+
+public function customers(Request $request){
+
+    $customers = Customer::orderby('name', 'desc')->get();
+    $data['customers'] = $customers;
+
+    return view('admin.customers', compact('data'));
+
+}
 
 
 

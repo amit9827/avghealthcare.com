@@ -6,6 +6,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\PaymentController;
 
+
+
 // Laravel homepage
 Route::get('/', function () {
     return view('vue');
@@ -24,8 +26,13 @@ Route::get('/page/laravel/{page_slug}', [FrontendController::class, 'page_by_slu
 
 Route::get('/phonepe/create-payment/{order_id}', [App\Http\Controllers\PhonePePaymentController::class, 'createPayment'])
     ->name('phonepe.createPayment');
-Route::get('/phonepe/success/{id}/{key}', [App\Http\Controllers\PhonePePaymentController::class, 'success'])
+    Route::get('/phonepe/success/{id}/{key}', [App\Http\Controllers\PhonePePaymentController::class, 'success'])
     ->name('phonepe.success');
+
+    Route::get('/phonepe/success/{order_id}', [App\Http\Controllers\PhonePePaymentController::class, 'callback'])
+    ->name('phonepe.callback');
+
+
 
 Route::post('/checkout', [App\Http\Controllers\FrontendController::class, 'checkout'])
     ->name('checkout');
@@ -50,6 +57,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/page', [DashboardController::class, 'page'])->name('page');
         Route::post('/pages', [DashboardController::class, 'page_store'])->name('page_store');
         Route::get('/page-delete/{id}', [DashboardController::class, 'page_delete'])->name('page_delete');
+
+        Route::get('/orders', [DashboardController::class, 'orders'])->name('orders');
+        Route::get('/order/{id}', [DashboardController::class, 'order_get'])->name('order_get');
+        Route::get('/order-delete/{id}', [DashboardController::class, 'order_delete'])->name('order_delete');
+
+        Route::get('/customers', [DashboardController::class, 'customers'])->name('customers');
+        Route::get('/customer/{id}', [DashboardController::class, 'customer_get'])->name('customer_get');
+        Route::get('/customer-delete/{id}', [DashboardController::class, 'customer_delete'])->name('customer_delete');
+
+
 
 
 
