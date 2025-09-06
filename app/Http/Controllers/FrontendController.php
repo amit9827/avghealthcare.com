@@ -181,7 +181,8 @@ class FrontendController extends Controller
 
      }
 
-    // PhonePeController.php (simplified)
+
+  /*   // PhonePeController.php (simplified)
 public function createPayment(Request $request)
 {
     $token = $this->getPhonePeToken();
@@ -208,12 +209,15 @@ public function handleCallback(Request $request)
 }
 
 
+
 public function phonepe(Request $request){
 
     $data=array();
 
     return view('phonepesample', compact('data'));
 }
+
+*/
 
 public function checkout(Request $request)
 {
@@ -295,6 +299,31 @@ public function min_order_amount(Request $request){
      return response()->json([
         'min_order_amount' => config('avg_config.min_free_shopping_order_amount')
     ]);
+}
+
+public function getOrderStatus(Request $request)
+{
+    $orderId = $request->session()->get('order_id');
+    $status  = $request->session()->get('order_status');
+
+    return response()->json([
+        'orderId' => $orderId,
+        'status'  => $status
+    ]);
+}
+
+public function order_status(Request $request){
+    $orderId = $request->session()->get('order_id');
+    $path= url("/order/$orderId");
+    return redirect($path);
+}
+
+public function order_detail(Request $request, $id){
+
+
+    return $order = Order::find($id);
+
+
 }
 
 

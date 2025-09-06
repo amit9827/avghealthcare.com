@@ -23,19 +23,23 @@ Route::get('/product/laravel/{product_slug}', [FrontendController::class, 'produ
 
 Route::get('/page/laravel/{page_slug}', [FrontendController::class, 'page_by_slug'])->name('page_by_slug');
 
-
 Route::get('/phonepe/create-payment/{order_id}', [App\Http\Controllers\PhonePePaymentController::class, 'createPayment'])
     ->name('phonepe.createPayment');
-    Route::get('/phonepe/success/{id}/{key}', [App\Http\Controllers\PhonePePaymentController::class, 'success'])
+
+Route::get('/phonepe/success/{id}/{key}', [App\Http\Controllers\PhonePePaymentController::class, 'success'])
     ->name('phonepe.success');
 
-    Route::get('/phonepe/success/{order_id}', [App\Http\Controllers\PhonePePaymentController::class, 'callback'])
+Route::get('/phonepe/success/{order_id}', [App\Http\Controllers\PhonePePaymentController::class, 'callback'])
     ->name('phonepe.callback');
 
-
+Route::get('/checkout/order-status', [App\Http\Controllers\FrontendController::class, 'order_status'])
+    ->name('order_status');
 
 Route::post('/checkout', [App\Http\Controllers\FrontendController::class, 'checkout'])
     ->name('checkout');
+
+
+
 
 // Admin routes
 Route::prefix('admin')->name('admin.')->group(function () {

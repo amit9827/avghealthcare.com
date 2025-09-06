@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('order_status')->nullable();
             $table->string('dispatch_status')->nullable();
             $table->string('payment_mode')->nullable();
+            $table->string('txn_id')->nullable();
             $table->timestamps();
         });
     }
