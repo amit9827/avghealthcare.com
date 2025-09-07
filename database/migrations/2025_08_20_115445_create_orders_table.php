@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('customer_id')->nullable();
-            $table->bigInteger('shopping_cart_id')->nullable();
+            $table->string('shopping_cart_session_id')->nullable();
             $table->decimal('total_amount',10,2)->nullable();
             $table->string('order_status')->nullable();
             $table->string('dispatch_status')->nullable();

@@ -1,7 +1,8 @@
 <template>
     <DefaultLayout>
         <div class="container">
-            <p class="p-2">Home / </p>
+            <p class="p-2">
+                <RouterLink class="nav-link inline" :to="{ name: 'Home' }">Home</RouterLink> / {{ product.title }}</p>
 
 
             <div class="row m-3">

@@ -13,4 +13,10 @@ class Order extends Model
     {
         return $this->belongsTo(Customer::class, 'customer_id', 'id');
     }
+
+    public function shopping_cart_items()
+    {
+        return $this->hasMany(ShoppingCart::class, 'session_id', 'shopping_cart_session_id');
+    }
+
 }

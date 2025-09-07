@@ -19,6 +19,6 @@ Route::get('/test', function(Request $request){
 
 Route::get('/menu', [FrontendController::class, 'menu'])->name('menu');
 Route::get('/config/min_order_amount', [FrontendController::class, 'min_order_amount'])->name('min_order_amount');
-Route::get('/order_detail/{id}', [FrontendController::class, 'order_detail'])->name('order_detail');
+Route::get('/order/detail/{txn_id}', [FrontendController::class, 'order_detail'])->name('order_detail');
 
 

@@ -1,7 +1,7 @@
 <template>
         <DefaultLayout>
     <div class="container">
-        <p class="p-2">Home / Shopping Cart</p>
+        <p class="p-2"><RouterLink class="nav-link inline" :to="{ name: 'Home' }">Home</RouterLink>  / Shopping Cart</p>
         <div class="row">
 <div class="col-md-8">
         <div class="card mb-5">
@@ -89,17 +89,15 @@
     </tr>
 
 
-
     <tr class="fee">
-        <th>Payment Method</th>
-        <td data-title="COD Fee" class="text-end">
-        <select name="fee" v-model="payment_fee" >
-            <option value="0">Online </option>
-            <option :value="CODFee">Cash on Delivery : <span class="woocommerce-Price-currencySymbol">₹</span>{{ CODFee }} </option>
-        </select>
-
-        </td>
-    </tr>
+  <th>Payment </th>
+  <td data-title="COD Fee" class="text-end">
+    <select name="payment_method" v-model="payment_method" @change="setPaymentFee" class="form-control">
+      <option value="PhonePe">Online - PhonePe</option>
+      <option value="COD">Cash on Delivery + ₹{{ CODFee }}</option>
+    </select>
+  </td>
+</tr>
 
 
 
@@ -114,6 +112,13 @@
 </div>
 </div>
 </div>
+
+
+  <!-- 🔴 Show error here -->
+  <div v-if="errorMessage" class="alert alert-danger m-3">
+    {{ errorMessage }}
+  </div>
+
 
     <div class="card mb-3">
        <div class="card-header">
@@ -178,7 +183,8 @@
         min_order_amount:0,
         CODFee:60,
         payment_fee:0,
-
+        payment_method:"PhonePe",
+        errorMessage: "",   // 🔴 for showing validation errors
       }
     },
 
@@ -221,6 +227,15 @@
                 return this.cartTotal + this.shippingFee + this.payment_fee;
 
                 return 0;
+            },
+
+            setPaymentFee(){
+
+                if(this.payment_method=="PhonePe")
+                this.payment_fee = 0;
+
+                if(this.payment_method=="COD")
+                this.payment_fee = this.CODFee;
             }
 
 
@@ -241,31 +256,65 @@
     },
 
     async submitCart() {
-      try {
+        this.errorMessage = ""; // reset
 
-        const response = await axios.post(route('checkout'), {
+        const billing = this.cartStore.address;
+        const shipping = this.cartStore.shipping_address;
 
-          session_id: this.cartStore.session_id,
-          address: this.cartStore.address,
-          shipping_address: this.cartStore.shipping_address,
-          items: this.cartStore.items,
-          total_amount: this.cartTotal,
+              // Cart validation
+              if (this.cartStore.items.length === 0) {
+            this.errorMessage = "⚠️ Your cart is empty. Please add items before checkout.";
+            return;
+        }
 
-        })
 
-        console.log("Cart submitted:", response.data.order_id);
-        if(response.data.order_saved ==1 )
-        location.href=route('phonepe.createPayment', [response.data.order_id]);
+        // Billing validation
+        if (!billing.name || !billing.address || !billing.town || !billing.pin_code ||
+            !billing.state || !billing.phone || !billing.email) {
+            this.errorMessage = "⚠️ Please complete all required Billing Address fields.";
+            return;
+        }
 
-        alert("Order submitted successfully!")
+        // Shipping validation
+        if (!shipping.name || !shipping.address || !shipping.town || !shipping.pin_code ||
+            !shipping.state || !shipping.phone || !shipping.email) {
+            this.errorMessage = "⚠️ Please complete all required Shipping Address fields.";
+            return;
+        }
 
-      } catch (error) {
 
-        console.error("Error submitting cart:", error)
-        alert("Something went wrong. Please try again.")
 
-      }
-    },
+
+        // ✅ If no errors, submit cart
+        try {
+            const response = await axios.post(route('checkout'), {
+            session_id: this.cartStore.session_id,
+            address: billing,
+            shipping_address: shipping,
+            items: this.cartStore.items,
+            total_amount: this.cartTotal,
+            });
+
+
+
+
+            if (response.data.order_saved == 1) {
+
+            if(this.payment_method=="COD")
+            location.href = route('cod.success', [response.data.txn_id]);
+
+
+            if(this.payment_method=="PhonePe")
+            location.href = route('phonepe.createPayment', [response.data.order_id]);
+
+            }
+        } catch (error) {
+            console.error("Error submitting cart:", error);
+            this.errorMessage = "❌ Something went wrong. Please try again.";
+        }
+
+        },
+
 
     copybilling(){
 

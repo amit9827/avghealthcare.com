@@ -89,6 +89,15 @@ class FrontendController extends Controller
             ],
 
             [
+                'title' => 'Contact',
+                'url' => '/page/contact',
+                'submenu' => [],
+            ],
+
+
+
+
+            [
                 'title' => 'Privacy Policy',
                 'url' => '/page/privacy-policy',
                 'submenu' => [],
@@ -236,10 +245,12 @@ public function checkout(Request $request)
     $customer->save();
 
     $items = $request->items;
+    $session_id = $request->session_id;
+
     foreach($items as $item)
     {
 
-        $shopping_cart = ShoppingCart::where('session_id', $request->session_id)->where('product_id', $item['product']['id'] )->first();
+        $shopping_cart = ShoppingCart::where('session_id', $session_id)->where('product_id', $item['product']['id'] )->first();
         if($shopping_cart==null)
         $shopping_cart = new ShoppingCart;
 
@@ -248,7 +259,7 @@ public function checkout(Request $request)
             $price = $item['product']['sale_price'];
         }
 
-        $shopping_cart->session_id = $request->session_id;
+        $shopping_cart->session_id = $session_id;
         $shopping_cart->customer_id = $customer->id;
         $shopping_cart->product_id = $item['product']['id'];
         $shopping_cart->price = $price;
@@ -260,11 +271,11 @@ public function checkout(Request $request)
 
 
 
-    $shipping_address = ShippingAddress::where('session_id', $request->session_id)->first();
+    $shipping_address = ShippingAddress::where('session_id', $session_id)->first();
     if($shipping_address==null)
     $shipping_address = new ShippingAddress;
 
-    $shipping_address->session_id = $request->session_id;
+    $shipping_address->session_id = $session_id;
     $shipping_address->customer_id =$customer->id;
     $shipping_address->name =$request->shipping_address['name'];
     $shipping_address->address=$request->shipping_address['address'];
@@ -276,20 +287,22 @@ public function checkout(Request $request)
     $shipping_address->save();
 
 
-    $order = Order::where('shopping_cart_id', $shopping_cart->id)->first();
+    $order = Order::where('shopping_cart_session_id', $session_id)->first();
     if($order==null)
     $order = new Order;
 
     $order->customer_id =  $customer->id;
-    $order->shopping_cart_id = $shopping_cart->id;
+    $order->shopping_cart_session_id = $session_id;
     $order->total_amount =$request->total_amount;
     $order->order_status = "DRAFT";
     $order->dispatch_status = "PENDING";
-    $order->payment_mode = "PAYTM";
+    $order->payment_mode = "COD";
+    $order->txn_id = "COD-".time();
     $order->save();
 
     $data['order_saved']=1;
     $data['order_id']=$order->id;
+    $data['txn_id']=$order->txn_id;
     return response()->json($data);
 
 }
@@ -312,16 +325,22 @@ public function getOrderStatus(Request $request)
     ]);
 }
 
-public function order_status(Request $request){
-    $orderId = $request->session()->get('order_id');
-    $path= url("/order/$orderId");
+public function order_status(Request $request, $txn_id){
+    //$orderId = $request->session()->get('order_id');
+    $path= url("/order/$txn_id");
     return redirect($path);
 }
 
-public function order_detail(Request $request, $id){
+public function order_detail(Request $request, $txn_id){
 
 
-    return $order = Order::find($id);
+    $data['order'] = Order::where('txn_id', $txn_id)->first();
+    $data['shopping_cart_items'] =  $data['order']->shopping_cart_items;
+    foreach( $data['shopping_cart_items'] as $shopping_cart_item )
+    $shopping_cart_item['product'] =  $shopping_cart_item->product;
+
+    $data['customer'] =  $data['order']->customer;
+    return $data;
 
 
 }

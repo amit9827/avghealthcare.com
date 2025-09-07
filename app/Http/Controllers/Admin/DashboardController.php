@@ -22,6 +22,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
 use App\Models\Customer;
 
+use App\Models\Ingredient;
+
 class DashboardController extends Controller
 {
 
@@ -82,6 +84,18 @@ public function showImage($path)
         return view('admin.product', compact('data'));
     }
 
+    public function product_delete(Request $request, $delete_id)
+    {
+        $data['product'] = Product::find($delete_id);
+        if($data['product']==null)
+        return redirect()->back()->with('error', "Invalid Products");
+
+        $name=$data['product']->title;
+        $data['product']->delete();
+        return redirect()->back()->with('success', "Product Deleted : $name");
+
+
+    }
     public function products()
     {
         $data['categories'] = Category::get();
@@ -292,10 +306,82 @@ if (empty($validated['slug'])) {
 
   //  $product->categories()->sync($request->category_ids ?? []);
 
-    return redirect()->back()->with('success', 'Product created/upated successfully.');
+    return redirect()->route('admin.products')->with('success', 'Product created/upated successfully.');
 }
 
 
+public function ingredients()
+{
+    $data['all_ingredients'] = Ingredient::get();
+
+    $data['ingredients'] = Ingredient::paginate($this->pagevalue);
+    return view('admin.ingredients', compact('data'));
+}
+
+public function ingredient()
+{
+    $data['all_ingredients'] = Ingredient::get();
+
+    $data['ingredients'] = Ingredient::paginate($this->pagevalue);
+    return view('admin.ingredient', compact('data'));
+}
+
+public function ingredient_store(Request $request)
+{
+
+// Validation rules
+$validated = $request->validate([
+    'name'        => 'required|string|max:255',
+    'slug'        => 'nullable|string|unique:ingredients,slug,' . $request->ingredient_id,
+    'description' => 'nullable|string',
+    'image_path'  => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+    'parent_id'   => 'nullable|integer|exists:ingredients,id',
+]);
+
+// Auto-generate slug if not given
+if (empty($validated['slug'])) {
+    $validated['slug'] = Str::slug($validated['name']);
+}
+
+// Handle image upload
+if ($request->hasFile('image_path')) {
+    $validated['image_path'] = $request->file('image_path')->store('ingredients', 'public');
+}
+
+// ✅ Update or Create ingredient
+if ($request->ingredient_id) {
+    $ingredient = ingredient::findOrFail($request->ingredient_id);
+    $ingredient->update($validated);
+    $message = 'ingredient updated successfully.';
+} else {
+    $ingredient = ingredient::create($validated);
+    $message = 'ingredient created successfully.';
+}
+
+return redirect()->route('admin.ingredients')->with('success', $message);
+
+}
+
+public function ingredient_get(Request $request,  $ingredient_id)
+{
+
+    $data['ingredient'] =      Ingredient::find($ingredient_id)   ;
+    $data['all_ingredients'] = Ingredient::get();
+
+    return view('admin.ingredient', compact('data'));
+}
+
+public function ingredient_delete(Request $request,  $ingredient_id)
+{
+    $data['ingredient'] =      Ingredient::find($ingredient_id)   ;
+    if($data['ingredient']==null)
+    return redirect()->back()->with('error', "Ingredient ingredient");
+
+    $name=$data['ingredient']->title;
+    $data['ingredient']->delete();
+    return redirect()->back()->with('success', "Ingredient Deleted : $name");
+
+}
 public function categories()
 {
 
@@ -323,6 +409,19 @@ public function category_get(Request $request,  $category_id)
     $data['all_categories'] = Category::get();
 
     return view('admin.category', compact('data'));
+}
+
+public function category_delete(Request $request, $delete_id)
+{
+    $data['category'] = Category::find($delete_id);
+    if($data['category']==null)
+    return redirect()->back()->with('error', "Invalid Category");
+
+    $name=$data['category']->title;
+    $data['category']->delete();
+    return redirect()->back()->with('success', "Category Deleted : $name");
+
+
 }
 
 public function category_store(Request $request)

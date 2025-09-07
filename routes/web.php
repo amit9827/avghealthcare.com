@@ -26,13 +26,18 @@ Route::get('/page/laravel/{page_slug}', [FrontendController::class, 'page_by_slu
 Route::get('/phonepe/create-payment/{order_id}', [App\Http\Controllers\PhonePePaymentController::class, 'createPayment'])
     ->name('phonepe.createPayment');
 
-Route::get('/phonepe/success/{id}/{key}', [App\Http\Controllers\PhonePePaymentController::class, 'success'])
+Route::get('/phonepe/verifyPayment/{txn_id}', [App\Http\Controllers\PhonePePaymentController::class, 'verifyPayment'])
+    ->name('phonepe.verifyPayment');
+
+Route::get('/phonepe/success/{txn_id}', [App\Http\Controllers\PhonePePaymentController::class, 'success'])
     ->name('phonepe.success');
 
-Route::get('/phonepe/success/{order_id}', [App\Http\Controllers\PhonePePaymentController::class, 'callback'])
-    ->name('phonepe.callback');
+Route::get('/cod/success/{txn_id}', [App\Http\Controllers\PhonePePaymentController::class, 'cod_success'])
+    ->name('cod.success');
 
-Route::get('/checkout/order-status', [App\Http\Controllers\FrontendController::class, 'order_status'])
+
+
+Route::get('/order/status/{txn_id}', [App\Http\Controllers\FrontendController::class, 'order_status'])
     ->name('order_status');
 
 Route::post('/checkout', [App\Http\Controllers\FrontendController::class, 'checkout'])
@@ -51,11 +56,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/products', [DashboardController::class, 'products'])->name('products');
         Route::post('/products', [DashboardController::class, 'product_store'])->name('product_store');
         Route::get('/product/{id}', [DashboardController::class, 'product_get'])->name('product_get');
+        Route::get('/product-delete/{id}', [DashboardController::class, 'product_delete'])->name('product_delete');
 
         Route::get('/categories', [DashboardController::class, 'categories'])->name('categories');
         Route::get('/category', [DashboardController::class, 'category'])->name('category');
         Route::post('/category', [DashboardController::class, 'category_store'])->name('category_store');
         Route::get('/category/{category_id}', [DashboardController::class, 'category_get'])->name('category_get');
+        Route::get('/category-delete/{id}', [DashboardController::class, 'category_delete'])->name('category_delete');
+
+
         Route::get('/pages', [DashboardController::class, 'pages'])->name('pages');
         Route::get('/page/{id}', [DashboardController::class, 'page_get'])->name('page_get');
         Route::get('/page', [DashboardController::class, 'page'])->name('page');
@@ -69,6 +78,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/customers', [DashboardController::class, 'customers'])->name('customers');
         Route::get('/customer/{id}', [DashboardController::class, 'customer_get'])->name('customer_get');
         Route::get('/customer-delete/{id}', [DashboardController::class, 'customer_delete'])->name('customer_delete');
+
+        Route::get('/ingredients', [DashboardController::class, 'ingredients'])->name('ingredients');
+        Route::get('/ingredient', [DashboardController::class, 'ingredient'])->name('ingredient');
+        Route::post('/ingredient', [DashboardController::class, 'ingredient_store'])->name('ingredient_store');
+        Route::get('/ingredient/{ingredient_id}', [DashboardController::class, 'ingredient_get'])->name('ingredient_get');
+        Route::get('/ingredient-delete/{id}', [DashboardController::class, 'ingredient_delete'])->name('ingredient_delete');
 
 
 

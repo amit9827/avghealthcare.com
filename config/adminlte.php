@@ -410,6 +410,12 @@ return [
                 ],
 
 
+                [
+                    'text' => 'Ingredients',
+                    'url' => 'admin/ingredients',
+                ],
+
+
              ],
 
 

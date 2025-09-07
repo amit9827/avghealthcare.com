@@ -11,7 +11,9 @@
 
                     <div class="col-md-6">
                        <img :src="main_logo" class="footer_logo">
-                        <p>Experience the purity and performance of our curated brands — WOW Skin Science, WOW Life Science, Body Cupid, Color Cupid, and Nature Derma. Each range is thoughtfully formulated without harmful sulfates, silicones, or parabens, and many are dermatologically tested to support your well-being. Discover science-backed supplements, clean beauty essentials, luxurious bath & body care, high-performance makeup, and targeted skincare solutions — all crafted to help you look and feel your best every day.
+                        <p>Discover innovation and reliability with AVG Healthcare’s carefully developed healthcare and nutraceutical brands. We focus on scientifically crafted formulations that align with international benchmarks for safety and effectiveness.
+
+Each product is created with the highest standards of quality, free from harmful additives, and undergoes stringent testing — helping you live healthier and more confidently every day.
 
                         </p>
                     </div>
@@ -114,6 +116,7 @@
                             >
                             {{ item.title }}
                             </RouterLink>
+
                             <div v-else class="dropdown2">
                             <a
                                 class="nav-link"

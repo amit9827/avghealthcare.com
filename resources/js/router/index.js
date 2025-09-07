@@ -16,7 +16,7 @@ const routes = [
   { path: '/go/:link', name: 'GoLink', component: GoLink },
   { path: '/cart', name: 'CartDisplay', component: CartDisplay },
   { path: '/page/:slug', name: 'Page', component: Page, props: true, },
-  { path: '/order/:order_id', name: 'OrderStatus', component: OrderStatus, props: true, },
+  { path: '/order/:txn_id', name: 'OrderStatus', component: OrderStatus, props: true, },
 
 
 

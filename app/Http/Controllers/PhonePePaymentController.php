@@ -52,6 +52,33 @@ class PhonePePaymentController extends Controller
     public function createPayment(Request $request, $order_id)
     {
 
+        $order = Order::find($order_id);
+
+        if (!$order) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Order not found',
+            ], 404);
+        }
+
+        // 🔄 Step 1: Verify payment status before creating a new payment
+        $verifyResponse = $this->verifyPayment($request, $order->txn_id);
+
+        // If verifyPayment returns a proper JsonResponse, convert to array
+        if ($verifyResponse instanceof \Illuminate\Http\JsonResponse) {
+            $verifyData = $verifyResponse->getData(true);
+
+            $status = $verifyData['state'] ?? $verifyData['paymentDetails'][0]['state'] ?? null;
+
+            if ($status === 'COMPLETED') {
+                // ✅ Already paid → redirect to order status page
+                return redirect()->route('order_status', ['txn_id' => $order->txn_id])
+                                 ->with('message', 'Order already completed.');
+            }
+        }
+
+        // 🔑 Step 2: Get access token
+
 
         $response = Http::asForm()->post( $this->PHONEPE_OATH_TOKEN_URL, [
             'client_id' =>  $this->PHONEPE_CLIENT_ID,
@@ -74,25 +101,17 @@ class PhonePePaymentController extends Controller
             $order->total_amount*100 .
             $order->id;
             $amount = $order->total_amount*100;
-            $merchantOrderId = "TX".$order->id;
+           // $merchantOrderId = "TX".$order->id;
 
 
-            $merchantOrderId = "TX".$order->id;
+            $merchantOrderId = "PhonePe-".$order->id."-".rand(1000,9999);
 
             // Save transaction ID in order record
             $order->payment_mode="PhonePe";
             $order->txn_id = $merchantOrderId;
             $order->order_status="PENDING";
             $order->save();
-
-
-            $key = time();
-            $request->session()->put('key', $key);
-            $redirectUrl = route('phonepe.success', [
-                'id' => $order->id,
-                'key' => $key,
-            ]);
-
+            $redirectUrl = route('phonepe.success', ['txn_id' => $merchantOrderId]);
 
             $response = Http::withHeaders([
                 'Content-Type'  => 'application/json',
@@ -146,10 +165,48 @@ class PhonePePaymentController extends Controller
     }
 
 
-    public function success(Request $request, $id, $key)
+    public function cod_success(Request $request, $txn_id)
+    {
+
+        $order = Order::where('txn_id', $txn_id)->first();
+
+        if ($order === null) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Error: Order Session is invalid'
+            ], 404);
+        }
+
+        Payment::updateOrCreate(
+            [
+                'order_id' => $order->id,
+                'transaction_id' => null,
+            ],
+            [
+                'payment_type'    => 'COD',
+                'status'          => "DUE",
+                'amount'          => $order->total_amount*100, //paise
+                'payment_mode'    => "CASH",
+                'payment_details' => null
+            ]
+        );
+
+
+
+        // Step 3: Update order status if present
+        $order->order_status = "COMPLETED";
+        $order->save();
+
+        return redirect()->route('order_status', ['txn_id' => $txn_id]);
+
+
+    }
+
+
+    public function success(Request $request, $txn_id)
     {
         // Verify payment via PhonePe
-        $response = $this->verifyPayment($request, $id);
+        $response = $this->verifyPayment($request, $txn_id);
 
         // If verifyPayment() already updates the order status, no need to do it again
         if ($response->getStatusCode() !== 200) {
@@ -157,15 +214,16 @@ class PhonePePaymentController extends Controller
         }
 
         $data = $response->getData(true); // Convert JsonResponse to array
-        $order = Order::find($id);
+        $order = Order::where('txn_id', $txn_id)->first();
 
-        // Validate session key
-        $session_key = $request->session()->get('key');
-        if ($key != $session_key) {
+        if ($order === null) {
             return response()->json([
-                'error' => "Key mismatch: given=$key, expected=$session_key"
-            ], 400);
+                'status'  => 'error',
+                'message' => 'Error: Order TXN ID is invalid'
+            ], 404);
         }
+
+
 
         // Extract status correctly
         $status = $data['state'] ?? $data['paymentDetails'][0]['state'] ?? null;
@@ -181,19 +239,26 @@ class PhonePePaymentController extends Controller
                // Save in session
             }
 
-            $request->session()->put('order_id', $data['orderId'] ?? $id);
-            $request->session()->put('order_status', $status);
+           // $request->session()->put('order_id', $id);
+           // $request->session()->put('order_status', $status);
 
-            return redirect()->route('order_status');
+            return redirect()->route('order_status', ['txn_id' => $txn_id]);
 
 
         //return response()->json($data); // Return the verification response
     }
 
 
-    public function verifyPayment(Request $request, $order_id)
+    public function verifyPayment(Request $request, $txn_id)
     {
-        $order = Order::findOrFail($order_id);
+        $order = Order::firstWhere('txn_id', $txn_id);
+
+        if (!$order) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Transaction not found',
+            ], 404);
+        }
 
         // Step 1: Get access token
         $tokenResponse = Http::asForm()->post($this->PHONEPE_OATH_TOKEN_URL, [
@@ -232,7 +297,7 @@ class PhonePePaymentController extends Controller
         Payment::updateOrCreate(
             [
                 'order_id' => $order->id,
-                'transaction_id' => $data['paymentDetails'][0]['transactionId'] ?? 'COD-'.$order->id,
+                'transaction_id' => $data['paymentDetails'][0]['transactionId'] ?? null,
             ],
             [
                 'payment_type'    => 'PhonePe',
@@ -246,8 +311,8 @@ class PhonePePaymentController extends Controller
 
 
         // Step 3: Update order status if present
-        if (isset($data['status'])) {
-            $order->order_status = $data['status'];
+        if (isset($data['state'])) {
+            $order->order_status = $data['state'];
             $order->save();
         }
 

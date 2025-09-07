@@ -10,10 +10,8 @@
 @section('content')
 
 
-    @if (session('success'))
-    <x-adminlte-alert theme="success" title="Success!" dismissable>
-        {{ session('success') }}
-    </x-adminlte-alert>
+
+@include('admin.errors')
 @endif
 
 <form action="{{ route('admin.product_store') }}" method="POST" enctype="multipart/form-data">
@@ -46,7 +44,8 @@
         <td><input type="checkbox" name="select_all"></td>
 
 
-        <td><a href="{{ route('admin.product_get', $product->id  ) }}">{{ $product->title}}</a></td>
+        <td><a href="{{ route('admin.product_get', $product->id  ) }}">{{ $product->title}}</a>
+            <a href="{{ route('admin.product_delete', $product->id  ) }}" class="text-danger" onclick="return confirm('Do you really want to delete?')" ><i class=" fas fa-fw fa-trash "></i></a></td>
         <td>{{ $product->sku}}</td>
         <td>{{ $product->stock_quantity}}</td>
         <td>{!! $product->onsale ? "<del>".$product->regular_price."</del> ". $product->sale_price :  $product->regular_price !!}</td>

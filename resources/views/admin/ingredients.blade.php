@@ -3,22 +3,21 @@
 @section('title', 'Categories')
 
 @section('content_header')
-    <h1>Categories</h1>
+    <h1>Ingredients</h1>
 @stop
 
 @section('content')
-
 
 @include('admin.errors')
 <div class="card">
     <div class="card-header">
 
         <div class="ms-0 float-left">
-        <h3 class="card-title ms-0">Category List</h3>
+        <h3 class="card-title ms-0">Ingredients List</h3>
         </div>
         <div class=" me-0 float-right">
-        <a href="{{ route('admin.category') }}" class="btn btn-primary ">
-            <i class="fas fa-plus"></i> Add New Category
+        <a href="{{ route('admin.ingredient') }}" class="btn btn-primary ">
+            <i class="fas fa-plus"></i> Add New Ingredient
         </a>
     </div>
     </div>
@@ -35,16 +34,15 @@
                  </tr>
             </thead>
             <tbody>
-                @forelse($data['categories'] as $category)
+                @forelse($data['ingredients'] as $ingredient)
                     <tr>
-                        <td>{{ $category->id }}</td>
-                        <td>  <a href="{{ route('admin.category_get', [$category->id]) }}"
-                           >{{ $category->name }} </a>
-                           <a href="{{ route('admin.category_delete', $category->id  ) }}" class="text-danger" onclick="return confirm('Do you really want to delete?')" ><i class=" fas fa-fw fa-trash "></i></a></td>
-
-                        </td>
-                        <td>{{ $category->description }}</td>
-                        <td>{{ $category->slug }}</td>
+                        <td>{{ $ingredient->id }}</td>
+                        <td>  <a href="{{ route('admin.ingredient_get', [$ingredient->id]) }}"
+                           >{{ $ingredient->name }} </a>
+                           <a href="{{ route('admin.ingredient_delete', $ingredient->id  ) }}" class="text-danger" onclick="return confirm('Do you really want to delete?')" ><i class=" fas fa-fw fa-trash "></i></a></td>
+                         </td>
+                        <td>{{ $ingredient->description }}</td>
+                        <td>{{ $ingredient->slug }}</td>
 
                     </tr>
                 @empty
@@ -57,7 +55,7 @@
     </div>
 
     <div class="card-footer d-flex justify-content-center">
-        {{ $data['categories']->links('pagination::bootstrap-4') }}
+        {{ $data['ingredients']->links('pagination::bootstrap-4') }}
     </div>
 </div>
 @stop
