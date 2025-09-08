@@ -8,4 +8,7 @@ class Ingredient extends Model
 {
     //
     protected $guarded = [];
+
+
+
 }

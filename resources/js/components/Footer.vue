@@ -37,28 +37,7 @@ Each product is created with the highest standards of quality, free from harmful
                         </RouterLink>
 
 
-                        <div v-else class="dropdown2">
-                        <a
-                            class="nav-link"
-                            href="#"
-                            data-bs-toggle="dropdown"
-                        >
-                            {{ item.name }}
-                        </a>
 
-
-
-                        <ul class="dropdown2-menu">
-                            <li
-                            v-for="(sub, j) in item.submenu"
-                            :key="j"
-                            >
-                            <RouterLink class="dropdown-item" :to="sub.url">
-                                {{ sub.title }}
-                            </RouterLink>
-                            </li>
-                        </ul>
-                        </div>
                     </li>
                     </ul>
                     </div>
@@ -72,31 +51,14 @@ Each product is created with the highest standards of quality, free from harmful
                         class="nav-item "
                         >
                         <RouterLink
-                        v-if="item.url"
+                        v-if="item.slug.length"
                         class="nav-link"
-                        :to="item.url"
+                        :to="{ name: 'Ingredients', params: { slug: item.slug } }"
                         >
-                        {{ item.title }}
+                        {{ item.name }}
                         </RouterLink>
-                        <div v-else class="dropdown2">
-                        <a
-                            class="nav-link"
-                            href="#"
-                            data-bs-toggle="dropdown"
-                        >
-                            {{ item.title }}
-                        </a>
-                        <ul class="dropdown2-menu">
-                            <li
-                            v-for="(sub, j) in item.submenu"
-                            :key="j"
-                            >
-                            <RouterLink class="dropdown-item" :to="sub.url">
-                                {{ sub.title }}
-                            </RouterLink>
-                            </li>
-                        </ul>
-                        </div>
+
+
                         </li>
                         </ul>
                         </div>
@@ -179,6 +141,7 @@ export default {
       this.menu_ingredients = response.data.menu_ingredients || []
       this.menu_quick_links = response.data.menu_quick_links || []
 
+      console.log( this.menu_ingredients);
 
     } catch (error) {
       console.error('Menu fetch failed:', error)

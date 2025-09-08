@@ -1,8 +1,8 @@
-<template>
+e<template>
     <DefaultLayout>
       <div class="container">
-        <p class="p-2"> <RouterLink class="nav-link inline" :to="{ name: 'Home' }">Home</RouterLink> / {{ category.name }}</p>
-        <HomeBanner src="/banners/banner1.jpg" alt="Image1" />
+        <p class="p-2"> <RouterLink class="nav-link inline" :to="{ name: 'Home' }">Home</RouterLink> / {{ ingredients.name }}</p>
+
 
 
         <div class="row">
@@ -70,7 +70,7 @@
 
 
   export default {
-    name: "Category",
+    name: "Ingredients",
     props: ['slug'],
 
     components: {
@@ -86,6 +86,7 @@
         category:[],
         subcategory:'',
         products:[],
+        ingredients:'',
 
       }
     },
@@ -105,16 +106,16 @@
   slug: {
     immediate: true,
     handler(newSlug) {
-      this.fetchCategory(newSlug);
+      this.fetchIngredients(newSlug);
     }
   }
 },
 methods: {
-  async fetchCategory(slug) {
+  async fetchIngredients(slug) {
     try {
-      const url = route('category', { category_slug: slug });
+      const url = route('ingredients', { ingredient_slug: slug });
       const res = await axios.get(url);
-      this.category = res.data.category;
+      this.ingredients = res.data.ingredients;
       this.subcategories = res.data.subcategories;
       this.products = res.data.products;
       console.log(this.products);
@@ -129,7 +130,7 @@ methods: {
     mounted() {
 
 
-        this.fetchCategory(this.slug);
+        this.fetchIngredients(this.slug);
 
     }
   }

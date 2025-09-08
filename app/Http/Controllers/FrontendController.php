@@ -15,6 +15,7 @@ use App\Models\Page;
 use App\Models\ShoppingCart;
 use App\Models\ShippingAddress;
 use App\Models\Order;
+use App\Models\Ingredient;
 
 
 use Illuminate\Validation\Rule;
@@ -75,6 +76,9 @@ class FrontendController extends Controller
                 'submenu' => [],
             ],
         ];
+
+        $menu_ingredients = Ingredient::orderby('priority', 'desc')->limit(6)->get();
+
         $menu_quick_links = [
             [
                 'title' => 'Home',
@@ -137,6 +141,27 @@ class FrontendController extends Controller
 
         return response()->json($menu);
     }
+
+
+
+
+
+    public function ingredients(Request $request, $ingredient_slug){
+
+          $ingredients = Ingredient::where('slug', $ingredient_slug)->first();
+        $subcategories =   [
+
+        ];
+
+        $products =  Product::where('ingredients_tags', 'like', "%$ingredients->name%")->get();
+        $data['subcategories'] = $subcategories;
+        $data['ingredients'] = $ingredients;
+        $data['products'] = $products;
+
+        return response()->json($data);
+    }
+
+
 
     public function category(Request $request, $category_slug){
 

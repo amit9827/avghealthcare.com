@@ -12,7 +12,7 @@
 
 
 @include('admin.errors')
-@endif
+
 
 <form action="{{ route('admin.product_store') }}" method="POST" enctype="multipart/form-data">
     @csrf
