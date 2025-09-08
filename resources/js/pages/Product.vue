@@ -218,99 +218,47 @@ Add To Cart
 <div class="row" id="benefits_block">
 
   <div class="cl-md-12 text-center"><h3 class="para3_heading">Benefits</h3></div>
-<div class="col-md-3">
-<div class="d-flex flex-column align-items-center w-100">
+
+
+
+  <div
+    v-for="(benefit, index) in benefits"
+    :key="index"
+    class="col-md-3"
+  >
+
+  <div class="d-flex flex-column align-items-center w-100">
+
+    <!-- Image -->
     <img
-        src="https://media.buywow.in/public/wow-cms/Reduces_Hair_Fall_f4fbeb1e3d.png?w=192&amp;q=75&amp;f=webp"
-        srcset="https://media.buywow.in/public/wow-cms/Reduces_Hair_Fall_f4fbeb1e3d.png?w=96&amp;q=75&amp;f=webp 1x,
-                https://media.buywow.in/public/wow-cms/Reduces_Hair_Fall_f4fbeb1e3d.png?w=192&amp;q=75&amp;f=webp 2x"
-        alt="Reduces Hair Fall"
-        class="img-fluid mb-2"
-        width="100" height="96" loading="lazy" decoding="async"
-        style="max-width: 92px;"
-    >
+      :src="getpath(benefit.image_path)"
+      :alt="benefit.name"
+      class="img-fluid mb-2"
+      width="100"
+      height="96"
+      loading="lazy"
+      decoding="async"
+      style="max-width: 92px;"
+    />
+
+    <!-- Name + Description -->
     <div class="d-flex flex-column align-items-center justify-content-center gap-1">
-        <h5 class="text-center fw-medium text-capitalize mb-1" style="line-height: 1.2;">
-            Reduces hair fall
-        </h5>
-        <p class="text-center small mb-0" style="line-height: 1.4;">
-            The blend of nourishing oil powered by onion seed extract and collagen help
-            to boost scalp health and prevent breakage, reducing hair fall and thinning.
-        </p>
+      <h5
+        class="text-center fw-medium text-capitalize mb-1"
+        style="line-height: 1.2;"
+      >
+        {{ benefit.name }}
+      </h5>
+      <p class="text-center small mb-0" style="line-height: 1.4;">
+        {{ benefit.description }}
+      </p>
     </div>
+  </div>
 </div>
-</div>
+
 
 
 
-<div class="col-md-3">
-<div class="d-flex flex-column align-items-center w-100">
-    <img
-        src="https://media.buywow.in/public/wow-cms/Reduces_Hair_Fall_f4fbeb1e3d.png?w=192&amp;q=75&amp;f=webp"
-        srcset="https://media.buywow.in/public/wow-cms/Reduces_Hair_Fall_f4fbeb1e3d.png?w=96&amp;q=75&amp;f=webp 1x,
-                https://media.buywow.in/public/wow-cms/Reduces_Hair_Fall_f4fbeb1e3d.png?w=192&amp;q=75&amp;f=webp 2x"
-        alt="Reduces Hair Fall"
-        class="img-fluid mb-2"
-        width="100" height="96" loading="lazy" decoding="async"
-        style="max-width: 92px;"
-    >
-    <div class="d-flex flex-column align-items-center justify-content-center gap-1">
-        <h5 class="text-center fw-medium text-capitalize mb-1" style="line-height: 1.2;">
-            Reduces hair fall
-        </h5>
-        <p class="text-center small mb-0" style="line-height: 1.4;">
-            The blend of nourishing oil powered by onion seed extract and collagen help
-            to boost scalp health and prevent breakage, reducing hair fall and thinning.
-        </p>
-    </div>
-</div>
-</div>
-
-<div class="col-md-3">
-<div class="d-flex flex-column align-items-center w-100">
-    <img
-        src="https://media.buywow.in/public/wow-cms/Reduces_Hair_Fall_f4fbeb1e3d.png?w=192&amp;q=75&amp;f=webp"
-        srcset="https://media.buywow.in/public/wow-cms/Reduces_Hair_Fall_f4fbeb1e3d.png?w=96&amp;q=75&amp;f=webp 1x,
-                https://media.buywow.in/public/wow-cms/Reduces_Hair_Fall_f4fbeb1e3d.png?w=192&amp;q=75&amp;f=webp 2x"
-        alt="Reduces Hair Fall"
-        class="img-fluid mb-2"
-        width="100" height="96" loading="lazy" decoding="async"
-        style="max-width: 92px;"
-    >
-    <div class="d-flex flex-column align-items-center justify-content-center gap-1">
-        <h5 class="text-center fw-medium text-capitalize mb-1" style="line-height: 1.2;">
-            Reduces hair fall
-        </h5>
-        <p class="text-center small mb-0" style="line-height: 1.4;">
-            The blend of nourishing oil powered by onion seed extract and collagen help
-            to boost scalp health and prevent breakage, reducing hair fall and thinning.
-        </p>
-    </div>
-</div>
-</div>
-
-<div class="col-md-3">
-<div class="d-flex flex-column align-items-center w-100">
-    <img
-        src="https://media.buywow.in/public/wow-cms/Reduces_Hair_Fall_f4fbeb1e3d.png?w=192&amp;q=75&amp;f=webp"
-        srcset="https://media.buywow.in/public/wow-cms/Reduces_Hair_Fall_f4fbeb1e3d.png?w=96&amp;q=75&amp;f=webp 1x,
-                https://media.buywow.in/public/wow-cms/Reduces_Hair_Fall_f4fbeb1e3d.png?w=192&amp;q=75&amp;f=webp 2x"
-        alt="Reduces Hair Fall"
-        class="img-fluid mb-2"
-        width="100" height="96" loading="lazy" decoding="async"
-        style="max-width: 92px;"
-    >
-    <div class="d-flex flex-column align-items-center justify-content-center gap-1">
-        <h5 class="text-center fw-medium text-capitalize mb-1" style="line-height: 1.2;">
-            Reduces hair fall
-        </h5>
-        <p class="text-center small mb-0" style="line-height: 1.4;">
-            The blend of nourishing oil powered by onion seed extract and collagen help
-            to boost scalp health and prevent breakage, reducing hair fall and thinning.
-        </p>
-    </div>
-</div>
-</div>
 </div>
 
 
@@ -411,6 +359,7 @@ export default {
       product: [],
       additional_product_images: [],
       additional_banner_images: [],
+      benefits:[],
       colors: [
         "rgb(203, 237, 243)", // light blue
         "rgb(255, 230, 230)", // light red
@@ -444,6 +393,9 @@ export default {
         this.category = res.data.category;
         this.subcategories = res.data.subcategories;
         this.product = res.data.product;
+        this.benefits = res.data.benefits;
+        console.log(this.benefits);
+
         this.additional_product_images = res.data.additional_product_images;
         this.additional_banner_images = res.data.additional_banner_images;
       } catch (err) {

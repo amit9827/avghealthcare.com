@@ -89,6 +89,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/ingredient/{ingredient_id}', [DashboardController::class, 'ingredient_get'])->name('ingredient_get');
         Route::get('/ingredient-delete/{id}', [DashboardController::class, 'ingredient_delete'])->name('ingredient_delete');
 
+        Route::get('/benefits', [DashboardController::class, 'benefits'])->name('benefits');
+        Route::get('/benefit', [DashboardController::class, 'benefit'])->name('benefit');
+        Route::post('/benefit', [DashboardController::class, 'benefit_store'])->name('benefit_store');
+        Route::get('/benefit/{benefit_id}', [DashboardController::class, 'benefit_get'])->name('benefit_get');
+        Route::get('/benefit-delete/{id}', [DashboardController::class, 'benefit_delete'])->name('benefit_delete');
+
+
 
 
 

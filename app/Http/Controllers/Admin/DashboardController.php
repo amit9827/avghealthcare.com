@@ -23,6 +23,7 @@ use App\Models\Order;
 use App\Models\Customer;
 
 use App\Models\Ingredient;
+use App\Models\Benefit;
 
 class DashboardController extends Controller
 {
@@ -565,6 +566,81 @@ public function customers(Request $request){
     $data['customers'] = $customers;
 
     return view('admin.customers', compact('data'));
+
+}
+
+
+
+public function benefits()
+{
+    $data['all_benefits'] = benefit::get();
+
+    $data['benefits'] = benefit::paginate($this->pagevalue);
+    return view('admin.benefits', compact('data'));
+}
+
+public function benefit()
+{
+    $data['all_benefits'] = benefit::get();
+
+    $data['benefits'] = benefit::paginate($this->pagevalue);
+    return view('admin.benefit', compact('data'));
+}
+
+public function benefit_store(Request $request)
+{
+
+// Validation rules
+$validated = $request->validate([
+    'name'        => 'required|string|max:255',
+    'slug'        => 'nullable|string|unique:benefits,slug,' . $request->benefit_id,
+    'description' => 'nullable|string',
+    'image_path'  => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+    'parent_id'   => 'nullable|integer|exists:benefits,id',
+]);
+
+// Auto-generate slug if not given
+if (empty($validated['slug'])) {
+    $validated['slug'] = Str::slug($validated['name']);
+}
+
+// Handle image upload
+if ($request->hasFile('image_path')) {
+    $validated['image_path'] = $request->file('image_path')->store('benefits', 'public');
+}
+
+// ✅ Update or Create benefit
+if ($request->benefit_id) {
+    $benefit = benefit::findOrFail($request->benefit_id);
+    $benefit->update($validated);
+    $message = 'benefit updated successfully.';
+} else {
+    $benefit = benefit::create($validated);
+    $message = 'benefit created successfully.';
+}
+
+return redirect()->route('admin.benefits')->with('success', $message);
+
+}
+
+public function benefit_get(Request $request,  $benefit_id)
+{
+
+    $data['benefit'] =      benefit::find($benefit_id)   ;
+    $data['all_benefits'] = benefit::get();
+
+    return view('admin.benefit', compact('data'));
+}
+
+public function benefit_delete(Request $request,  $benefit_id)
+{
+    $data['benefit'] =      benefit::find($benefit_id)   ;
+    if($data['benefit']==null)
+    return redirect()->back()->with('error', "benefit benefit");
+
+    $name=$data['benefit']->title;
+    $data['benefit']->delete();
+    return redirect()->back()->with('success', "benefit Deleted : $name");
 
 }
 

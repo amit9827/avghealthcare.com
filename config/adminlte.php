@@ -414,6 +414,10 @@ return [
                     'text' => 'Ingredients',
                     'url' => 'admin/ingredients',
                 ],
+                [
+                    'text' => 'Benefits',
+                    'url' => 'admin/benefits',
+                ],
 
 
              ],

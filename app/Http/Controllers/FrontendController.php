@@ -16,7 +16,7 @@ use App\Models\ShoppingCart;
 use App\Models\ShippingAddress;
 use App\Models\Order;
 use App\Models\Ingredient;
-
+use App\Models\Benefit;
 
 use Illuminate\Validation\Rule;
 
@@ -198,6 +198,32 @@ class FrontendController extends Controller
        $data['product'] = $product;
        $data['additional_product_images'] = $product->additional_product_images;
        $data['additional_banner_images'] = $product->additional_banner_images;
+
+
+
+       $benefits = $product->benefits_tags;
+       $benefits_array = explode(",", $benefits);
+
+       $data['benefits'] = [];
+       if(is_array($benefits_array))
+       {
+        foreach($benefits_array  as $benefit)
+        {
+         $benefit = Benefit::where('name', "like" , trim($benefit))->first();
+         if($benefit)
+         $data['benefits'][] = $benefit;
+
+
+        }
+
+
+
+       }
+
+
+
+
+
        return response()->json($data);
 
 
