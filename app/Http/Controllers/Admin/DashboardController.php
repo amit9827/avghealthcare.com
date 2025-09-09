@@ -645,5 +645,18 @@ public function benefit_delete(Request $request,  $benefit_id)
 }
 
 
+public function order_get(Request $request,  $order_id)
+{
+    $data['order'] = Order::find($order_id);
+    if($data['order']==null)
+    return redirect()->back()->with('error', "Order not found");
+
+    return view('admin.order', compact('data'));
+
+
+
+}
+
+
 
 }

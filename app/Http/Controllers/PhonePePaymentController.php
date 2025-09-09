@@ -61,6 +61,13 @@ class PhonePePaymentController extends Controller
             ], 404);
         }
 
+
+        if($this->env=="prod")
+        {
+
+            return $this->payment($request, $order_id);
+        }
+
         // 🔄 Step 1: Verify payment status before creating a new payment
         $verifyResponse = $this->verifyPayment($request, $order->txn_id);
 
@@ -165,6 +172,162 @@ class PhonePePaymentController extends Controller
     }
 
 
+
+public function createPayment_production(Request $request, $order_id)
+{
+    $order = Order::findOrFail($order_id);
+
+    $merchantId  = env('PHONEPE_MERCHANT_ID');
+    $saltKey     = env('PHONEPE_SALT_KEY');
+    $saltIndex   = env('PHONEPE_SALT_INDEX');
+    $baseUrl     = env('PHONEPE_CHECKOUT_BASEURL'); // e.g. https://api.phonepe.com/apis/hermes
+
+    $merchantTransactionId = "TXN-" . $order->id . "-" . rand(1000,9999);
+
+    $payload = [
+        "merchantId"   => $merchantId,
+        "merchantTransactionId" => $merchantTransactionId,
+        "merchantUserId" => "MUID-" . $order->id,
+        "amount"       => $order->total_amount * 100, // in paise
+        "redirectUrl"  => route('phonepe.success', ['txn_id' => $merchantTransactionId]),
+        "callbackUrl"  => route('phonepe.callback'),
+        "paymentInstrument" => [
+            "type" => "PAY_PAGE"
+        ]
+    ];
+
+    $payloadJson = json_encode($payload);
+    $base64Payload = base64_encode($payloadJson);
+
+    // Generate checksum (X-VERIFY)
+    // API path https://api.phonepe.com/apis/pg/checkout/v2/pay
+    $endpoint = "/v2/pay";
+
+    $apiPath = "/pg/v2/pay";  // For checksum only
+    $checksum = hash("sha256", $base64Payload . $apiPath . $saltKey) . "###" . $saltIndex;
+
+
+    $response = Http::withHeaders([
+        "Content-Type" => "application/json",
+        "X-VERIFY"     => $checksum,
+        "X-MERCHANT-ID"=> $merchantId
+    ])->post("https://api.phonepe.com/apis/pg/v2/pay", [
+        "request" => $base64Payload
+    ]);
+
+
+    $data = $response->json();
+
+    if (isset($data['data']['instrumentResponse']['redirectInfo']['url'])) {
+        return redirect($data['data']['instrumentResponse']['redirectInfo']['url']);
+    }
+
+    return $data;
+}
+
+
+public function payment(Request $request, $order_id)
+    {
+
+        $order = Order::findOrFail($order_id);
+
+        $amount =  $order->total_amount;
+        $name   =  $order->customer->name;
+        $email  = $order->customer->email ?? "noemail@webtechindia.com";
+        $phone  = $order->customer->phone;
+
+
+
+        // Get PhonePe credentials from .env
+        $merchantId   = env('PHONEPE_MERCHANT_ID');
+        $apiKey       = env('PHONEPE_SALT_KEY');
+
+
+
+
+        $merchantOrderId = "PhonePe-".$order->id."-".time();
+
+        // Save transaction ID in order record
+        $order->payment_mode="PhonePe";
+        $order->txn_id = $merchantOrderId;
+        $order->order_status="PENDING";
+        $order->save();
+
+
+        $salt_index   = env('PHONEPE_SALT_INDEX', 1);
+        $redirectUrl = route('phonepe.success', ['txn_id' => $merchantOrderId]);
+
+       // $redirectUrl = "https://www.avghealthcare.com/phonepe/";
+        // Unique Order ID
+        $order_id = uniqid();
+
+        // Prepare transaction data
+         $transaction_data = [
+            'merchantId'            => $merchantId,
+            'merchantTransactionId' => $merchantOrderId,
+            'merchantUserId'        => $order->customer->email,
+            'amount'                => $amount * 100, // Convert to paise
+            'redirectUrl'           => $redirectUrl,
+            'redirectMode'          => "POST",
+            'callbackUrl'           => $redirectUrl,
+            'paymentInstrument'     => [
+                'type' => "PAY_PAGE",
+            ]
+        ];
+
+        $encoded      = json_encode($transaction_data);
+        $payloadMain  = base64_encode($encoded);
+        $payload      = $payloadMain . "/pg/v1/pay" . $apiKey;
+
+        $sha256       = hash("sha256", $payload);
+        $final_x_header = $sha256 . '###' . $salt_index;
+        $json_request = json_encode(['request' => $payloadMain]);
+
+        // Choose endpoint based on environment
+        $url =  "https://api.phonepe.com/apis/hermes/pg/v1/pay";
+
+     // upgrade the code to work with :
+    //  $url = "https://api.phonepe.com/apis/pg/checkout/v2/pay";
+
+        // cURL call
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL            => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING       => "",
+            CURLOPT_MAXREDIRS      => 10,
+            CURLOPT_TIMEOUT        => 30,
+            CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST  => "POST",
+            CURLOPT_POSTFIELDS     => $json_request,
+            CURLOPT_HTTPHEADER     => [
+                "Content-Type: application/json",
+                "X-VERIFY: " . $final_x_header,
+                "accept: application/json"
+            ],
+        ]);
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+        curl_close($curl);
+
+        if ($err) {
+            return response()->json(['error' => 'cURL Error: ' . $err], 500);
+        }
+
+         $res = json_decode($response);
+
+
+        if (isset($res->code) && $res->code === 'PAYMENT_INITIATED') {
+            $payUrl = $res->data->instrumentResponse->redirectInfo->url;
+            return redirect()->away($payUrl);
+        }
+
+        return response()->json(['error' => 'Transaction Error', 'details' => $res], 400);
+    }
+
+
+
     public function cod_success(Request $request, $txn_id)
     {
 
@@ -201,6 +364,101 @@ class PhonePePaymentController extends Controller
 
 
     }
+
+
+    public function payment_new(Request $request, $order_id)
+{
+    $order = Order::findOrFail($order_id);
+
+    $amount = $order->total_amount;
+    $name   = $order->customer->name;
+    $email  = $order->customer->email ?? "noemail@webtechindia.com";
+    $phone  = $order->customer->phone;
+
+    // Get PhonePe credentials from .env
+    $merchantId  = env('PHONEPE_MERCHANT_ID');
+    $saltKey     = env('PHONEPE_SALT_KEY');     // 👈 Correct: Salt key
+    $saltIndex   = env('PHONEPE_SALT_INDEX', 1);
+
+    $merchantOrderId = "PhonePe-" . $order->id . "-" . rand(1000, 9999);
+
+    // Save transaction ID in order record
+    $order->payment_mode = "PhonePe";
+    $order->txn_id       = $merchantOrderId;
+    $order->order_status = "PENDING";
+    $order->save();
+
+    $redirectUrl = route('phonepe.success', ['txn_id' => $merchantOrderId]);
+
+    // Prepare transaction data
+    $transaction_data = [
+        'merchantId'            => $merchantId,
+        'merchantTransactionId' => $merchantOrderId,
+        'merchantUserId'        => $email,
+        'amount'                => $amount * 100, // Convert to paise
+        'redirectUrl'           => $redirectUrl,
+        'redirectMode'          => "POST",
+        'callbackUrl'           => $redirectUrl,
+        'paymentInstrument'     => [
+            'type' => "PAY_PAGE",
+        ]
+    ];
+
+    // Encode payload
+    $encoded     = json_encode($transaction_data, JSON_UNESCAPED_SLASHES);
+    $payloadMain = base64_encode($encoded);
+
+    // Endpoint (without domain)
+    $endpoint = "/pg/v1/pay";
+
+    // ✅ Correct checksum calculation
+    $stringToHash   = $payloadMain . $endpoint . $saltKey;
+    $sha256         = hash("sha256", $stringToHash);
+    $final_x_header = $sha256 . "###" . $saltIndex;
+
+    $json_request = json_encode(['request' => $payloadMain]);
+
+    // ✅ Production endpoint
+    $url = "https://api.phonepe.com/apis/pg/checkout/v2/pay";
+
+    // cURL call
+    $curl = curl_init();
+    curl_setopt_array($curl, [
+        CURLOPT_URL            => $url,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING       => "",
+        CURLOPT_MAXREDIRS      => 10,
+        CURLOPT_TIMEOUT        => 30,
+        CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST  => "POST",
+        CURLOPT_POSTFIELDS     => $json_request,
+        CURLOPT_HTTPHEADER     => [
+            "Content-Type: application/json",
+            "X-VERIFY: " . $final_x_header,
+            "X-MERCHANT-ID: " . $merchantId,   // Required for v2
+            "accept: application/json"
+        ],
+    ]);
+
+    $response = curl_exec($curl);
+    $err = curl_error($curl);
+    curl_close($curl);
+
+    if ($err) {
+        return response()->json(['error' => 'cURL Error: ' . $err], 500);
+    }
+
+    $res = json_decode($response);
+
+    if (isset($res->code) && $res->code === 'PAYMENT_INITIATED') {
+        $payUrl = $res->data->instrumentResponse->redirectInfo->url;
+        return redirect()->away($payUrl);
+    }
+
+    return response()->json(['error' => 'Transaction Error', 'details' => $res], 400);
+}
+
+
 
 
     public function success(Request $request, $txn_id)

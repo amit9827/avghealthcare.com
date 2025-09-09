@@ -19,4 +19,11 @@ class Order extends Model
         return $this->hasMany(ShoppingCart::class, 'session_id', 'shopping_cart_session_id');
     }
 
+    public function product()
+    {
+        return $this->hasMany(Product::class, 'product_id');
+    }
+
+
+
 }

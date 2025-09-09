@@ -166,23 +166,8 @@ class FrontendController extends Controller
     public function category(Request $request, $category_slug){
 
         $category = Category::where('slug', $category_slug)->first();
-        $subcategories =   [
-            [
-                'title' => 'Bath Wash',
-                'url' => "/category/$category_slug/bath-body",
-                'submenu' => [],
-            ],
-            [
-                'title' => 'Bath Wash',
-                'url' => "/category/$category_slug/bath-wash",
-                'submenu' => [],
-            ],
-            [
-                'title' => 'Bath Lotion',
-                'url' => "/category/$category_slug/bath-Lotion",
-                'submenu' => [],
-            ],
-        ];
+        $subcategories =   [];
+
 
         $products = $category->products;
         $data['subcategories'] = $subcategories;

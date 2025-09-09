@@ -33,8 +33,12 @@ Route::get('/phonepe/create-payment/{order_id}', [App\Http\Controllers\PhonePePa
 Route::get('/phonepe/verifyPayment/{txn_id}', [App\Http\Controllers\PhonePePaymentController::class, 'verifyPayment'])
     ->name('phonepe.verifyPayment');
 
-Route::get('/phonepe/success/{txn_id}', [App\Http\Controllers\PhonePePaymentController::class, 'success'])
+Route::post('/phonepe/success/{txn_id}', [App\Http\Controllers\PhonePePaymentController::class, 'success'])
     ->name('phonepe.success');
+
+    Route::get('/phonepe/callback', [App\Http\Controllers\PhonePePaymentController::class, 'callback'])
+    ->name('phonepe.callback');
+
 
 Route::get('/cod/success/{txn_id}', [App\Http\Controllers\PhonePePaymentController::class, 'cod_success'])
     ->name('cod.success');
@@ -96,7 +100,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/benefit-delete/{id}', [DashboardController::class, 'benefit_delete'])->name('benefit_delete');
 
 
-
+        Route::get('/order', [DashboardController::class, 'order'])->name('order');
+        Route::get('/orders', [DashboardController::class, 'orders'])->name('orders');
+        Route::post('/orders', [DashboardController::class, 'order_store'])->name('order_store');
+        Route::get('/order/{id}', [DashboardController::class, 'order_get'])->name('order_get');
+        Route::get('/order-delete/{id}', [DashboardController::class, 'order_delete'])->name('order_delete');
 
 
 

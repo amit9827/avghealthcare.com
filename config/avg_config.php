@@ -3,7 +3,7 @@
 return [
 
 
-'min_free_shopping_order_amount' => 500.00,
+'min_free_shopping_order_amount' => 00.00,
 
 ]
 

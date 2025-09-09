@@ -1,7 +1,7 @@
 <template>
     <div>
       <div v-if="products.length" class="row mb-5">
-        <div v-for="product in products" :key="product.id" class="col-md-3 product">
+        <div v-for="product in products" :key="product.id" class="col-md-3 col-6 product">
 
 <div href="#" class="product-card h-100 d-flex flex-column">
 
@@ -56,8 +56,8 @@
 
         <button
     type="button"
-    class="btn btn-warning text-white fw-medium text-capitalize   rounded"
-    style="min-width: 4.5rem; width: 2rem;"
+    class="btn btn-warning text-white fw-medium text-capitalize   rounded add_btn"
+
     aria-label="Add Button" @click="add(product)"
     v-if="!getQuantity(product)"
     >
@@ -267,5 +267,33 @@ methods: {
 .text-gray-light{
     color:#999;
 }
+
+.add_btn{
+    min-width: 4.5rem;
+    width: 2rem;
+  }
+
+@media (max-width: 767px) {
+    .para1_heading{
+    font-size: 0.75rem;
+  }
+
+  .para3_content{
+    font-size:.5em;
+  }
+
+  .add_btn{
+    min-width: 2.5rem;
+    width: 2rem;
+    padding: 5px;
+  }
+
+  .product {
+
+    padding:1px;
+  }
+
+}
+
 
   </style>

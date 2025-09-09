@@ -3,7 +3,7 @@
       <!-- Call Now Button -->
       <a
         :href="'tel:' + phoneNumber"
-        class="btn btn-danger position-fixed bottom-0 start-0 m-3 d-flex align-items-center gap-2"
+        class="btn btn-danger position-fixed bottom-0 start-0 m-3 d-flex align-items-center gap-2 d-none d-md-flex"
         style="z-index: 1050; border-radius: 30px;"
       >
         <i class="fa fa-phone"></i> Call Now
@@ -13,7 +13,7 @@
       <a
         :href="'https://wa.me/' + whatsappNumber"
         target="_blank"
-        class="btn btn-success position-fixed bottom-0 end-0 m-3 d-flex align-items-center gap-2"
+        class="btn btn-success position-fixed bottom-0 end-0 m-3 d-flex align-items-center gap-2 d-none d-md-flex"
         style="z-index: 1050; border-radius: 30px;"
       >
         <i class="fab fa-whatsapp"></i> Chat
