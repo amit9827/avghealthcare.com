@@ -158,6 +158,10 @@
 
        </div>
     </div>
+
+    <input type="hidden" name="shipping_fee"  v-model="cartStore.shipping_fee"  placeholder="0" class="form-control">
+    <input type="hidden" name="payment_fee"  v-model="cartStore.payment_fee"  placeholder="0" class="form-control">
+
     <button @click="submitCart" class="btn btn-primary m-3">Submit Order</button>
 
 
@@ -223,9 +227,14 @@
 
             gTotal(){
 
+                this.cartStore.shipping_fee = this.shippingFee;
+                this.cartStore.payment_fee = this.payment_fee;
+
                 if(this.cartTotal >0)
                 return this.cartTotal + this.shippingFee + this.payment_fee;
 
+                this.cartStore.shipping_fee = 0;
+                this.cartStore.payment_fee = 0;
                 return 0;
             },
 
@@ -291,6 +300,8 @@
             session_id: this.cartStore.session_id,
             address: billing,
             shipping_address: shipping,
+            shipping_fee: this.cartStore.shipping_fee,
+            payment_fee: this.cartStore.payment_fee,
             items: this.cartStore.items,
             total_amount: this.cartTotal,
             });

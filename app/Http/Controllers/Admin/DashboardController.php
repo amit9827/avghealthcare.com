@@ -75,6 +75,8 @@ public function showImage($path)
     {
         $data['categories'] = Category::get();
         $data['product'] = Product::find($id);
+        $data['ingredients'] = Ingredient::get();
+        $data['benefits'] = Benefit::get();
 
        $data['category_product'] = $data['product']->categories;
 
@@ -250,19 +252,30 @@ if (empty($validated['slug'])) {
 
     $product->save();
 
-    if($request->hasFile('additional_product_image')){
 
-        $file = $request->file('additional_product_image');
-        $filename = time() . '_' . $file->getClientOriginalName();
-        $path = $file->storeAs("products/{$product->id}", $filename, 'public');
 
-        $BannerImage = new ProductImage;
+    $uploadedFiles = [];
+
+    if ($request->hasFile('additional_product_image')) {
+        foreach ($request->file('additional_product_image') as $file) {
+            if ($file && $file->isValid()) {
+
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $path = $file->storeAs("products/{$product->id}", $filename, 'public');
+
+                $BannerImage = new ProductImage;
         $BannerImage->product_id = $product->id;
         $BannerImage->path = $path;
         $BannerImage->name = $filename;
         $BannerImage->save();
 
-    };
+
+            }
+        }
+    }
+
+
+
 
     $additional_product_image_delete = $request->input('additional_product_image_delete');
     if($additional_product_image_delete!=''){
@@ -279,17 +292,25 @@ if (empty($validated['slug'])) {
     };
 
 
-    if($request->hasFile('additional_banner_image')){
-        $file = $request->file('additional_banner_image');
-        $filename = time() . '_' . $file->getClientOriginalName();
-        $path = $file->storeAs("products/{$product->id}", $filename, 'public');
 
-        $BannerImage = new BannerImage;
-        $BannerImage->product_id = $product->id;
-        $BannerImage->path = $path;
-        $BannerImage->name = $filename;
-        $BannerImage->save();
-    };
+    if ($request->hasFile('additional_banner_image')) {
+        foreach ($request->file('additional_banner_image') as $file) {
+            if ($file && $file->isValid()) {
+
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $path = $file->storeAs("products/{$product->id}", $filename, 'public');
+
+                $BannerImage = new BannerImage;
+                $BannerImage->product_id = $product->id;
+                $BannerImage->path = $path;
+                $BannerImage->name = $filename;
+                $BannerImage->save();
+
+
+            }
+        }
+    }
+
 
     $additional_banner_image_delete = $request->input('additional_banner_image_delete');
     if($additional_banner_image_delete!=''){
@@ -307,7 +328,8 @@ if (empty($validated['slug'])) {
 
   //  $product->categories()->sync($request->category_ids ?? []);
 
-    return redirect()->route('admin.products')->with('success', 'Product created/upated successfully.');
+  //  return redirect()->route('admin.products')->with('success', 'Product created/upated successfully.');
+    return redirect()->back()->with('success', 'Product created/upated successfully.');
 }
 
 
@@ -435,7 +457,11 @@ $validated = $request->validate([
     'description' => 'nullable|string',
     'image_path'  => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
     'parent_id'   => 'nullable|integer|exists:categories,id',
+    'featured' => 'nullable|string',
+    'visibility' => 'nullable|string',
 ]);
+
+
 
 // Auto-generate slug if not given
 if (empty($validated['slug'])) {
@@ -657,6 +683,43 @@ public function order_get(Request $request,  $order_id)
 
 }
 
+
+
+public function order_update(Request $request,  $order_id)
+{
+    $data['order'] = Order::find($order_id);
+    if($data['order']==null)
+    return redirect()->back()->with('error', "Order not found");
+
+    $data['order']->order_status = $request->order_status;
+    $data['order']->dispatch_status = $request->dispatch_status;
+
+    $update = [
+        'order_status' => $request->order_status,
+        'dispatch_status' => $request->dispatch_status,
+
+
+    ];
+    $data['order']->update($update);
+
+    return redirect()->back()->with('success', "Order updated");
+
+
+
+}
+
+public function order_delete(Request $request,  $order_id){
+
+$data['order'] = Order::find($order_id);
+if($data['order']==null)
+return redirect()->back()->with('error', "Order not found");
+$data['order']->delete();
+return redirect()->back()->with('success', "Order deleted");
+
+
+
+
+}
 
 
 }

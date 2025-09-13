@@ -24,6 +24,10 @@ Route::get('/ingredients/laravel/{ingredient_slug}', [FrontendController::class,
 
 
 Route::get('/product/laravel/{product_slug}', [FrontendController::class, 'product_by_slug'])->name('product_by_slug');
+Route::get('/products_featured/laravel', [FrontendController::class, 'products_featured'])->name('products_featured');
+Route::get('/category_featured/laravel', [FrontendController::class, 'category_featured'])->name('category_featured');
+
+
 
 Route::get('/page/laravel/{page_slug}', [FrontendController::class, 'page_by_slug'])->name('page_by_slug');
 
@@ -33,8 +37,7 @@ Route::get('/phonepe/create-payment/{order_id}', [App\Http\Controllers\PhonePePa
 Route::get('/phonepe/verifyPayment/{txn_id}', [App\Http\Controllers\PhonePePaymentController::class, 'verifyPayment'])
     ->name('phonepe.verifyPayment');
 
-Route::post('/phonepe/success/{txn_id}', [App\Http\Controllers\PhonePePaymentController::class, 'success'])
-    ->name('phonepe.success');
+
 
     Route::get('/phonepe/callback', [App\Http\Controllers\PhonePePaymentController::class, 'callback'])
     ->name('phonepe.callback');
@@ -104,9 +107,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/orders', [DashboardController::class, 'orders'])->name('orders');
         Route::post('/orders', [DashboardController::class, 'order_store'])->name('order_store');
         Route::get('/order/{id}', [DashboardController::class, 'order_get'])->name('order_get');
-        Route::get('/order-delete/{id}', [DashboardController::class, 'order_delete'])->name('order_delete');
-
-
+        Route::post('/order_update/{id}', [DashboardController::class, 'order_update'])->name('order_update');
 
     });
 });

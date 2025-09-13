@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\PhonePePaymentController;
 
 
 
@@ -22,3 +23,7 @@ Route::get('/config/min_order_amount', [FrontendController::class, 'min_order_am
 Route::get('/order/detail/{txn_id}', [FrontendController::class, 'order_detail'])->name('order_detail');
 
 
+Route::post('/phonepe/success/{txn_id}', [App\Http\Controllers\PhonePePaymentController::class, 'success'])
+    ->name('phonepe.success');
+    Route::get('/phonepe/success/{txn_id}', [App\Http\Controllers\PhonePePaymentController::class, 'success'])
+    ->name('phonepe.success_get');

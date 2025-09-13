@@ -6,7 +6,7 @@
         <slot />
       </main>
 
-      <FloatingContactButtons phone-number="918888812345" whatsapp-number="918888812345" />
+      <FloatingContactButtons phone-number="+919501106343" whatsapp-number="919501106343" />
 
       <Footer />
     </div>

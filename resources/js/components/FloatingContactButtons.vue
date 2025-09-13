@@ -27,11 +27,11 @@
     props: {
       phoneNumber: {
         type: String,
-        default: '918888888888', // Replace with your number
+        default: '+919501106343', // Replace with your number
       },
       whatsappNumber: {
         type: String,
-        default: '918888888888', // Replace with your number (country code + number)
+        default: '919501106343', // Replace with your number (country code + number)
       },
     },
   }

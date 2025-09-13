@@ -1,10 +1,10 @@
 <template>
     <DefaultLayout>
       <div class="container">
-        <p class="p-2"> <RouterLink class="nav-link inline" :to="{ name: 'Home' }">Home</RouterLink> / {{ category.name }}</p>
-        <HomeBanner src="/banners/banner1.jpg" alt="Image1" />
-
-
+        <p class="p-2"><RouterLink class="nav-link inline" :to="{ name: 'Home' }">Home</RouterLink> / {{ category.name }}</p>
+        <template v-if="category.image_path" >
+        <HomeBanner  :src="getpath(category.image_path)"  alt="category.title" />
+        </template>
         <div class="row">
             <div class="col-md-2"><h1 class="para1_title">{{ category.title }}</h1></div>
             <div class="col-md-10">
@@ -24,10 +24,6 @@
 
             </ul>
         </div>
-
-
-
-
 </div>
 </div>
 
@@ -109,6 +105,7 @@
     }
   }
 },
+
 methods: {
   async fetchCategory(slug) {
     try {
@@ -121,9 +118,19 @@ methods: {
     } catch (err) {
       console.error(err);
     }
-  }
-},
+  },
 
+  getpath(product_path) {
+        product_path = "..\\images\\" + product_path;
+        return product_path;
+   },
+
+  getUrl(slug) {
+        slug = "..\\product\\" + slug;
+        return slug;
+  },
+
+},
 
 
     mounted() {

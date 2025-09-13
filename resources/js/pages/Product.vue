@@ -10,14 +10,17 @@
 
                     <div class="row">
                         <div class="col-md-6 product_img_frame">
-                            <img :src="getpath(product.featured_image)" class="product_img">
+
+                            <Lightbox :src="getpath(product.featured_image)" alt="Product Image" imgClass="product_img" />
+
                         </div>
 
                         <template v-for="(image, index) in additional_product_images"
                         :key="index"
                         >
                         <div class="col-md-6 product_img_frame">
-                        <img :src="getpath(image.path)" class="product_img">
+                         <Lightbox :src="getpath(image.path)" alt="Product Image"  />
+
                         </div>
 
                         </template>
@@ -31,8 +34,9 @@
                     <h2 class="fs-6 fs-md-5 fw-normal text-dark lh-sm line-clamp-3">
 
 
-
+<template  v-if="product.benefits_tags">
                           <span
+
             v-for="(sub, index) in product.benefits_tags.split(',')"
             :key="index"
             class="badge rounded-pill text-dark px-2 py-1 me-1 mb-2"
@@ -45,6 +49,7 @@
 
           > {{ sub.trim() }}
           </span>
+        </template>
 
 
                     </h2>
@@ -66,20 +71,20 @@
   <div class="accordion-item">
     <h2 class="accordion-header" id="headingOne">
       <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-        1 Offer Available
+        0 Offer Available
       </button>
     </h2>
     <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#myAccordion">
       <div class="accordion-body row">
         <div class="col-md-10">
-        Independence Day Sale: Buy 1 Get 1 Free on all products - the lower-priced item is FREE.
+        Keep visiting this section for latest offer.
         </div>
         <div class="col-md-2">
 
         <div class="d-flex flex-column align-items-end gap-1">
-  <span class="small fw-light text-dark">Use code</span>
-  <span class="small fw-normal text-dark border border-dark border-dashed rounded-pill bg-white px-2 py-1">
-    BOGO
+  <span class="small fw-light text-dark min_50px">Use code</span>
+  <span class="small fw-normal text-dark border border-dark border-dashed rounded-pill bg-white px-2 py-1 min_50px text-center">
+    ----
   </span>
 </div>
 </div>
@@ -261,6 +266,35 @@ Add To Cart
 
 </div>
 
+<div class="row">
+  <div id="product_banner">
+    <div class="col-md-12">
+
+
+                        <img
+                        v-if="product.banner_image && product.banner_image !== ''"
+                        :src="getpath(product.banner_image)"
+                        class="h-auto w-full object-contain"
+                        alt="Product Highlight 1"
+                        fetchpriority="high"
+                        width="500"
+                        height="500"
+                        decoding="async"
+                        data-nimg="1"
+                        style="color: transparent;"
+                        >
+
+
+
+
+
+
+
+
+
+    </div>
+  </div>
+</div>
 
 
 <div class="row">
@@ -318,8 +352,8 @@ Add To Cart
     <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#myAccordion">
       <div class="accordion-body row">
         <div class="col-md-12">
-        Independence Day Sale: Buy 1 Get 1 Free on all products - the lower-priced item is FREE.
-        </div>
+            <div v-html="product.long_description"></div>
+     </div>
 
 
 
@@ -343,6 +377,7 @@ import FloatingCart from '../components/FloatingCart.vue'
 import axios from 'axios'
 import { route } from 'ziggy-js'
 import { mutations, getters } from '../cartStore'
+import Lightbox from '../components/Lightbox.vue'
 
 export default {
   name: 'Product',
@@ -350,6 +385,7 @@ export default {
     DefaultLayout,
     ProductReview,
     FloatingCart,
+    Lightbox,
   },
   data() {
     return {
@@ -394,7 +430,8 @@ export default {
         this.subcategories = res.data.subcategories;
         this.product = res.data.product;
         this.benefits = res.data.benefits;
-        console.log(this.benefits);
+        console.log(this.product);
+
 
         this.additional_product_images = res.data.additional_product_images;
         this.additional_banner_images = res.data.additional_banner_images;
@@ -452,8 +489,10 @@ export default {
   }
 
   .product_img{
-    height:300px;
+    max-width:100%;
+    height:auto;
     width:auto;
+
     border-radius:10px;
     display: block;
   }
@@ -582,6 +621,9 @@ background-color: #ed7f30;
 
 }
 
+.min_50px{
+    min-width:50px;
+}
 
 
   </style>

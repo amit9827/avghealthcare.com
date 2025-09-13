@@ -84,6 +84,7 @@ class PhonePePaymentController extends Controller
             }
         }
 
+
         // 🔑 Step 2: Get access token
 
 
@@ -315,7 +316,9 @@ public function payment(Request $request, $order_id)
             return response()->json(['error' => 'cURL Error: ' . $err], 500);
         }
 
-         $res = json_decode($response);
+       $res = json_decode($response);
+       $payUrl = $res->data->instrumentResponse->redirectInfo->url;
+       return redirect($payUrl);
 
 
         if (isset($res->code) && $res->code === 'PAYMENT_INITIATED') {
@@ -576,6 +579,7 @@ public function payment(Request $request, $order_id)
 
         return response()->json($data, $response->status());
     }
+
 
 
 

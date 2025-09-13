@@ -71,6 +71,29 @@
                 @enderror
             </div>
 
+
+                   <!-- Boolean Checkboxes -->
+                   <div class="row">
+                    <div class="col-md-12">
+                    <label for="sale_price">Status</label>
+                    </div>
+
+                    <div class="col-md-4">
+                <div class="form-group form-check">
+                    <input type="checkbox" name="visibility" class="form-check-input" id="visibility" value="1"
+                    {{ isset($data['category']->visibility) &&  $data['category']->visibility==1 ? 'checked': '' }} >
+                    <label class="form-check-label" for="visibility">Visible</label>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group form-check">
+                    <input type="checkbox" name="featured" class="form-check-input" id="featured" value="1"
+                     {{ isset($data['category']->featured) &&  $data['category']->featured==1 ? 'checked': '' }} >
+                    <label class="form-check-label" for="featured">Featured</label>
+                </div>
+            </div>
+            </div>
+
             <!-- Image -->
             <div class="form-group">
                 <label for="image_path">Category Image</label>

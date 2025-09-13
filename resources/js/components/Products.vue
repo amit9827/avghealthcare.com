@@ -96,6 +96,7 @@
    import { mutations, getters } from '../cartStore'
 
 
+
   export default {
     name: 'Products',
     props: {
@@ -105,6 +106,7 @@
       },
 
     },
+
 
     data()  {
         return {
@@ -209,11 +211,12 @@ methods: {
 
   .product_img{
 
-    width:100%;
-
+    max-width:100%;
     height:auto;
+    width:auto;
     border-radius: 10px;
   }
+
 
   .para1_heading{
     font-size: 1.25rem;

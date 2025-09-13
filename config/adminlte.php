@@ -342,6 +342,111 @@ return [
         ],
 
         [
+            'text' => 'Pages',
+            'url' => 'admin/pages',
+            'icon' => 'far fa-fw fa-file',
+
+            'label_color' => 'success',
+        ],
+
+
+        [
+            'text' => 'eCommerce',
+            'url' => '#',
+            'icon' => 'far fa-fw fa-file',
+            'label_color' => 'success',
+
+            'submenu' => [
+                [
+                    'text' => 'All Orders',
+                    'url' => 'admin/orders',
+                ],
+
+                [
+                    'text' => 'Customers',
+                    'url' => 'admin/customers',
+                ],
+
+
+
+
+             ],
+        ],
+
+        [
+            'text' => 'Products',
+             'icon' => 'far fa-fw fa-file',
+             'url' => '#',
+
+            'submenu' => [
+                [
+                    'text' => 'All Products',
+                    'url' => 'admin/products',
+                ],
+
+                [
+                    'text' => 'Add Product',
+                    'url' => 'admin/product',
+                ],
+
+                [
+                    'text' => 'Categories',
+                    'url' => 'admin/categories',
+                ],
+
+
+                [
+                    'text' => 'Ingredients Tags',
+                    'url' => 'admin/ingredients',
+                ],
+                [
+                    'text' => 'Benefit Tags',
+                    'url' => 'admin/benefits',
+                ],
+
+
+             ],
+
+
+        ],
+
+        [
+            'text' => 'Payments',
+            'url' => 'admin/payments',
+            'icon' => 'far fa-fw fa-file',
+            'label' => 4,
+            'label_color' => 'success',
+        ],
+
+
+    ],
+
+
+
+    'original_menu' => [
+        // Navbar items:
+        [
+            'type' => 'navbar-search',
+            'text' => 'search',
+            'topnav_right' => true,
+        ],
+        [
+            'type' => 'fullscreen-widget',
+            'topnav_right' => true,
+        ],
+
+        // Sidebar items:
+        [
+            'type' => 'sidebar-menu-search',
+            'text' => 'search',
+        ],
+        [
+            'text' => 'Site',
+            'url' => '/',
+
+        ],
+
+        [
             'text' => 'Media',
             'url' => 'admin/media',
 

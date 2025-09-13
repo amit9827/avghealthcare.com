@@ -31,7 +31,12 @@ items: [], // { product, quantity }
     pin_code: '',
     country: '',
 
-  }
+  },
+
+  shipping_fee:0,
+  payment_fee:0,
+
+
 })
 
 

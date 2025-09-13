@@ -137,7 +137,7 @@ export default {
     try {
       const response = await axios.get(route('menu'))
 
-      this.menu_products = response.data.menu_products || []
+      this.menu_products = response.data.footer_menu_products || []
       this.menu_ingredients = response.data.menu_ingredients || []
       this.menu_quick_links = response.data.menu_quick_links || []
 

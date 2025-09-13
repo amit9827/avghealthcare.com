@@ -28,7 +28,7 @@
             <thead>
                 <tr>
                     <th style="width: 60px;">#</th>
-                    <th>Title</th>
+                    <th>Tag</th>
                     <th>Desciption</th>
                     <th>Slug</th>
                  </tr>

@@ -41,6 +41,7 @@ class FrontendController extends Controller
 
 
         $menu_products = Category::orderby('priority', 'desc')->limit(6)-> get();
+        $footer_menu_products = Category::orderby('priority', 'desc')-> get();
         $menu_ingredients = [
 
             [
@@ -135,6 +136,7 @@ class FrontendController extends Controller
             ],
         ];
 
+        $menu['footer_menu_products']=$footer_menu_products;
         $menu['menu_products']=$menu_products;
         $menu['menu_ingredients']=$menu_ingredients;
         $menu['menu_quick_links']=$menu_quick_links;
@@ -144,7 +146,21 @@ class FrontendController extends Controller
 
 
 
+public function products_featured(Request $request){
 
+$data['products_featured']=Product::where('featured', 1)->get();
+return response()->json($data);
+
+
+}
+
+
+public function category_featured(Request $request){
+
+    $data['category_featured']=Category::where('featured', 1)->get();
+return response()->json($data);
+
+}
 
     public function ingredients(Request $request, $ingredient_slug){
 
@@ -334,6 +350,8 @@ public function checkout(Request $request)
     $order->dispatch_status = "PENDING";
     $order->payment_mode = "COD";
     $order->txn_id = "COD-".time();
+    $order->shipping_fee = $request->shipping_fee;
+    $order->payment_fee = $request->payment_fee;
     $order->save();
 
     $data['order_saved']=1;

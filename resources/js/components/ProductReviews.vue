@@ -28,7 +28,7 @@
 
               <!-- Write Review Button -->
 <div class="text-center">
-    <button class="btn  text-white font-bold bg-custom-orange-dark">Write A Review</button>
+    <button class="btn  text-white font-bold bg-custom-orange-dark mb-5">Write A Review</button>
 </div>
 
 
@@ -37,11 +37,11 @@
     <div class="col-md-6">
 
 <!-- Rating Breakdown -->
-<div class="rating-breakdown">
+<div class="rating-breakdown ps-3">
     <!-- 5 Stars -->
     <div class="rating-row row">
-        <div class="col-2 rating-label">5 Stars</div>
-        <div class="col-7 progress-wrapper">
+        <div class="col-md-2 col-3   rating-label">5 Stars</div>
+        <div class="col-md-7 col-6    progress-wrapper">
             <div class="progress">
                 <div class="progress-bar bg-custom-orange-dark" style="width: 83%"></div>
             </div>
@@ -51,8 +51,8 @@
 
     <!-- 4 Stars -->
     <div class="rating-row row">
-        <div class="col-2 rating-label">4 Stars</div>
-        <div class="col-7 progress-wrapper">
+        <div class="col-md-2 col-3 rating-label">4 Stars</div>
+        <div class="col-md-7 col-6 progress-wrapper">
             <div class="progress">
                 <div class="progress-bar bg-custom-orange-dark" style="width: 17%"></div>
             </div>
@@ -62,8 +62,8 @@
 
     <!-- 3 Stars -->
     <div class="rating-row row">
-        <div class="col-2 rating-label">3 Stars</div>
-        <div class="col-7 progress-wrapper">
+        <div class="col-md-2 col-3 rating-label">3 Stars</div>
+        <div class="col-md-7 col-6 progress-wrapper">
             <div class="progress">
                 <div class="progress-bar bg-custom-orange-dark" style="width: 0%"></div>
             </div>
@@ -73,8 +73,8 @@
 
     <!-- 2 Stars -->
     <div class="rating-row row">
-        <div class="col-2 rating-label">2 Stars</div>
-        <div class="col-7 progress-wrapper">
+        <div class="col-md-2 col-3 rating-label">2 Stars</div>
+        <div class="col-md-7 col-6 progress-wrapper">
             <div class="progress">
                 <div class="progress-bar bg-custom-orange-dark" style="width: 0%"></div>
             </div>
@@ -84,8 +84,8 @@
 
     <!-- 1 Star -->
     <div class="rating-row row">
-        <div class="col-2 rating-label">1 Star</div>
-        <div class="col-7 progress-wrapper">
+        <div class="col-md-2 col-3 rating-label">1 Star</div>
+        <div class="col-md-7 col-6 progress-wrapper">
             <div class="progress">
                 <div class="progress-bar bg-custom-orange-dark" style="width: 0%"></div>
             </div>
