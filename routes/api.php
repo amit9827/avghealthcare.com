@@ -27,3 +27,19 @@ Route::post('/phonepe/success/{txn_id}', [App\Http\Controllers\PhonePePaymentCon
     ->name('phonepe.success');
     Route::get('/phonepe/success/{txn_id}', [App\Http\Controllers\PhonePePaymentController::class, 'success'])
     ->name('phonepe.success_get');
+
+//from web.php
+
+// Laravel-powered pages
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/category/laravel/{category_slug}', [FrontendController::class, 'category'])->name('category');
+Route::get('/ingredients/laravel/{ingredient_slug}', [FrontendController::class, 'ingredients'])->name('ingredients');
+Route::get('/product/laravel/{product_slug}', [FrontendController::class, 'product_by_slug'])->name('product_by_slug');
+Route::get('/products_featured/laravel', [FrontendController::class, 'products_featured'])->name('products_featured');
+Route::get('/category_featured/laravel', [FrontendController::class, 'category_featured'])->name('category_featured');
+Route::get('/page/laravel/{page_slug}', [FrontendController::class, 'page_by_slug'])->name('page_by_slug');
+
+Route::get('/images/{path}', [DashboardController::class, 'showImage'])
+     ->where('path', '.*')
+     ->name('image.show');
+

@@ -24,6 +24,8 @@ use App\Models\Customer;
 
 use App\Models\Ingredient;
 use App\Models\Benefit;
+use App\Helpers\Helper;
+
 
 class DashboardController extends Controller
 {
@@ -67,7 +69,8 @@ public function showImage($path)
 
         $data['categories'] = Category::get();
         $data['category_product'] = array();
-
+        $data['ingredients'] = Ingredient::get();
+        $data['benefits'] = Benefit::get();
         return view('admin.product', compact('data'));
     }
 
@@ -104,6 +107,8 @@ public function showImage($path)
         $data['categories'] = Category::get();
 
         $data['products'] = Product::get();
+     //   $data['ingredients'] = Ingredient::get();
+     //   $data['benefits'] = Benefit::get();
 
         return view('admin.products', compact('data'));
     }
@@ -205,10 +210,15 @@ if (empty($validated['slug'])) {
 
     if($request->hasFile('featured_image')) {
         $file = $request->file('featured_image');
-        $filename = time() . '_' . $file->getClientOriginalName();
+      //  $filename = time() . '_' . $file->getClientOriginalName();
+        $filename = Helper::makeSafeFilename($file->getClientOriginalName());
+
         $path = $file->storeAs("products/{$product->id}", $filename, 'public');
         $product->featured_image = $path;
     }
+
+
+
 
 
     if($request->filled('featured_image_delete')) {
@@ -229,7 +239,9 @@ if (empty($validated['slug'])) {
     if($request->hasFile('banner_image')) {
 
         $file = $request->file('banner_image');
-        $filename = time() . '_' . $file->getClientOriginalName();
+       // $filename = time() . '_' . $file->getClientOriginalName();
+       $filename = Helper::makeSafeFilename($file->getClientOriginalName());
+
         $path = $file->storeAs("products/{$product->id}", $filename, 'public');
         $product->banner_image = $path;
     }
@@ -260,7 +272,9 @@ if (empty($validated['slug'])) {
         foreach ($request->file('additional_product_image') as $file) {
             if ($file && $file->isValid()) {
 
-                $filename = time() . '_' . $file->getClientOriginalName();
+              //  $filename = time() . '_' . $file->getClientOriginalName();
+                $filename = Helper::makeSafeFilename($file->getClientOriginalName());
+
                 $path = $file->storeAs("products/{$product->id}", $filename, 'public');
 
                 $BannerImage = new ProductImage;
@@ -297,7 +311,9 @@ if (empty($validated['slug'])) {
         foreach ($request->file('additional_banner_image') as $file) {
             if ($file && $file->isValid()) {
 
-                $filename = time() . '_' . $file->getClientOriginalName();
+               // $filename = time() . '_' . $file->getClientOriginalName();
+                $filename = Helper::makeSafeFilename($file->getClientOriginalName());
+
                 $path = $file->storeAs("products/{$product->id}", $filename, 'public');
 
                 $BannerImage = new BannerImage;
