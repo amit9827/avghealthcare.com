@@ -60,7 +60,7 @@
             </a>
         </p>
     @endif
-
+<?php /*
     @if (Route::has('register'))
         <p class="my-0">
             <a href="{{ route('register') }}" class="text-center">
@@ -68,4 +68,5 @@
             </a>
         </p>
     @endif
+    */?>
 @endsection

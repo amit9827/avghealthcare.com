@@ -114,7 +114,7 @@ methods: {
       this.category = res.data.category;
       this.subcategories = res.data.subcategories;
       this.products = res.data.products;
-      console.log(this.products);
+
     } catch (err) {
       console.error(err);
     }

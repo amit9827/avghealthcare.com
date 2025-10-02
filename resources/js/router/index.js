@@ -9,6 +9,8 @@ import OrderStatus from '../pages/OrderStatus.vue'
 import Product from '../pages/Product.vue'
 import CartDisplay from '../pages/CartDisplay.vue'
 import GoLink from '../components/GoLink.vue'
+import SearchResults from "../pages/SearchResults.vue"
+
 
 const routes = [
   { path: '/', name: 'Home', component: Home },
@@ -20,9 +22,15 @@ const routes = [
   { path: '/cart', name: 'CartDisplay', component: CartDisplay },
   { path: '/page/:slug', name: 'Page', component: Page, props: true, },
   { path: '/order/:txn_id', name: 'OrderStatus', component: OrderStatus, props: true, },
+  { path: "/search",    name: "SearchResults",     component: SearchResults,   },
 
-
-
+   // Catch-all for 404
+   {
+    path: '/:pathMatch(.*)*',
+    redirect: (to) => {
+      return { name: 'Home', query: { message: 'page-not-found' } }
+    }
+  }
 
 ]
 

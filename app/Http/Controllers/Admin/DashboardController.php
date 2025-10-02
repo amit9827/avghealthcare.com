@@ -37,6 +37,12 @@ class DashboardController extends Controller
     }
 
 
+    public function showImageUndefined()
+    {
+        return response(null, 200)
+            ->header('Content-Type', 'text/plain') // or application/octet-stream
+            ->header('Cache-Control', 'public, max-age=31536000'); // cache 1 year
+    }
 
 
 public function showImage($path)
@@ -53,8 +59,14 @@ public function showImage($path)
     $type = Storage::disk('public')->mimeType($path);
 
     // Return file as response
-    return response($file, 200)
-            ->header('Content-Type', $type);
+   // return response($file, 200) ->header('Content-Type', $type);
+
+            // In a controller/response middleware
+            return response($file, 200)
+            ->header('Content-Type', $type)
+            ->header('Cache-Control', 'public, max-age=31536000'); // cache 1 year
+
+
 }
 
 
@@ -104,9 +116,9 @@ public function showImage($path)
     }
     public function products()
     {
-        $data['categories'] = Category::get();
+        $data['categories'] = Category::orderby('name', 'desc')->get();
 
-        $data['products'] = Product::get();
+        $data['products'] = Product::orderby('priority', 'desc')->orderby('title')->get();
      //   $data['ingredients'] = Ingredient::get();
      //   $data['benefits'] = Benefit::get();
 
@@ -124,6 +136,8 @@ public function showImage($path)
         'ingredients_tags'  => 'nullable|string',
         'benefits'          => 'nullable|string',
         'benefits_tags'     => 'nullable |String',
+        'priority'          => 'nullable|numeric|min:0|max:1000',
+
 
         'sku' => [
             'nullable',
@@ -162,6 +176,9 @@ public function showImage($path)
         'banner_image' => 'nullable|file',
     ]);
     $validated['onsale'] = $request->input('onsale', 0);
+    $validated['featured'] = $request->input('featured', 0);
+    $validated['visibility'] = $request->input('visibility', 0);
+
 
     // Create product (fillable fields should be defined in Product model)
     // Auto-generate slug if not given
@@ -436,7 +453,7 @@ public function pages()
 }
 public function category()
 {
-    $data['all_categories'] = Category::get();
+    $data['all_categories'] = Category::orderby('priority', 'desc')->orderby('name')->get();
 
     return view('admin.category', compact('data'));
 }
@@ -466,6 +483,8 @@ public function category_delete(Request $request, $delete_id)
 public function category_store(Request $request)
 {
 
+
+
 // Validation rules
 $validated = $request->validate([
     'name'        => 'required|string|max:255',
@@ -475,8 +494,16 @@ $validated = $request->validate([
     'parent_id'   => 'nullable|integer|exists:categories,id',
     'featured' => 'nullable|string',
     'visibility' => 'nullable|string',
+    'priority'          => 'nullable|numeric|min:0|max:1000',
+    'brand_featured'    => 'nullable|numeric|min:0|max:1',
+    'brand_priority'    => 'nullable|numeric|min:0|max:1000',
+    'brand_image_path'  => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
 ]);
 
+
+$validated['featured'] = $request->input('featured', 0);
+$validated['visibility'] = $request->input('visibility', 0);
+$validated['brand_featured'] = $request->input('brand_featured', 0);
 
 
 // Auto-generate slug if not given
@@ -489,6 +516,12 @@ if ($request->hasFile('image_path')) {
     $validated['image_path'] = $request->file('image_path')->store('categories', 'public');
 }
 
+// Handle image upload
+if ($request->hasFile('brand_image_path')) {
+    $validated['brand_image_path'] = $request->file('brand_image_path')->store('categories', 'public');
+}
+
+
 // ✅ Update or Create category
 if ($request->category_id) {
     $category = Category::findOrFail($request->category_id);
@@ -499,7 +532,7 @@ if ($request->category_id) {
     $message = 'Category created successfully.';
 }
 
-return redirect()->route('admin.categories')->with('success', $message);
+return redirect()->back()->with('success', $message);
 
 }
 

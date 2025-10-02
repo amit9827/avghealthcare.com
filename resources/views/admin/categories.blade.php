@@ -32,6 +32,7 @@
                     <th>Title</th>
                     <th>Desciption</th>
                     <th>Slug</th>
+                    <th>Priority</th>
                  </tr>
             </thead>
             <tbody>
@@ -45,6 +46,7 @@
                         </td>
                         <td>{{ $category->description }}</td>
                         <td>{{ $category->slug }}</td>
+                        <td>{{ $category->priority }}</td>
 
                     </tr>
                 @empty

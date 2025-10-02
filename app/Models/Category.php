@@ -13,7 +13,7 @@ class Category extends Model
 
     public function products()
 {
-    return $this->belongsToMany(Product::class, 'category_product');
+    return $this->belongsToMany(Product::class, 'category_product')->where('visibility', 1 )->orderby('priority','desc')->orderby('title');
 }
 
 }

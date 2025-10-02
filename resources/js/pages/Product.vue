@@ -1,6 +1,16 @@
 <template>
     <DefaultLayout>
         <div class="container">
+
+        <!-- Loading state -->
+        <div v-if="loading" class="d-flex justify-content-center align-items-center py-5">
+      <div class="spinner-border text-warning" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    <div v-else>
+
+
             <p class="p-2">
                 <RouterLink class="nav-link inline" :to="{ name: 'Home' }">Home</RouterLink> / {{ product.title }}</p>
 
@@ -363,7 +373,7 @@ Add To Cart
   </div>
 </div>
 
-
+</div>
         <!-- product description ends-->
     </div>
     <FloatingCart :itemCount="3" :total="1147" :show="true" />
@@ -389,6 +399,7 @@ export default {
   },
   data() {
     return {
+        loading:true,
       subcategories: [],
       category: [],
       subcategory: '',
@@ -430,23 +441,53 @@ export default {
         this.subcategories = res.data.subcategories;
         this.product = res.data.product;
         this.benefits = res.data.benefits;
-        console.log(this.product);
-
 
         this.additional_product_images = res.data.additional_product_images;
         this.additional_banner_images = res.data.additional_banner_images;
+        this.loading = false;
+
+            // ✅ Now update the head with fresh product meta
+    this.updateHead();
+
+
       } catch (err) {
         console.error(err);
       }
     },
-    updateHead(slug) {
-      useHead({
-        title: `${slug} | AVG Healthcare`,
-        meta: [
-          { name: 'description', content: 'Product Page of AVG Healthcare.' }
-        ]
-      })
-    },
+    updateHead() {
+  if (!this.product) return;
+
+  useHead({
+    title: `${this.product.meta_title || this.product.title} | AVG Healthcare`,
+    meta: [
+      {
+        name: 'description',
+        content: this.product.meta_description || this.product.short_description || 'Product page of AVG Healthcare.'
+      },
+      {
+        name: 'keywords',
+        content: this.product.meta_keywords || this.product.title || 'Product page of AVG Healthcare.'
+      },
+      {
+        property: 'og:title',
+        content: `${this.product.meta_title || this.product.title} | AVG Healthcare`
+      },
+      {
+        property: 'og:description',
+        content: this.product.meta_description || this.product.short_description || 'Product page of AVG Healthcare.'
+      },
+      {
+        property: 'og:image',
+        content: getpath(this.product.featured_image) ? this.getpath(this.product.featured_image) : '/default-image.jpg'
+      },
+      {
+        property: 'og:url',
+        content: window.location.href
+      }
+    ]
+  })
+},
+
     getpath(product_path) {
       return `..\\images\\${product_path}`;
     },
@@ -481,6 +522,20 @@ export default {
   }
 }
 </script>
+
+
+<script setup>
+
+import { useHead } from '@vueuse/head'
+
+useHead({
+  title: 'Product | AVG Healthcare',
+  meta: [
+    { name: 'description', content: 'Product from AVG Healthcare.' }
+  ]
+})
+</script>
+
 
   <style scoped>
 

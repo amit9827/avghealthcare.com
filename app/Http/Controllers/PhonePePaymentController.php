@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Payment;
+use App\Http\Controllers\EmailController;
 
 //https://developer.phonepe.com/payment-gateway/website-integration/standard-checkout/api-integration/api-reference/order-status#nav-environment
 
@@ -65,7 +66,7 @@ class PhonePePaymentController extends Controller
         if($this->env=="prod")
         {
 
-            return $this->payment($request, $order_id);
+           // return $this->payment($request, $order_id);
         }
 
         // 🔄 Step 1: Verify payment status before creating a new payment
@@ -157,6 +158,8 @@ class PhonePePaymentController extends Controller
             }*/
 
             $data = $response->json();
+
+
 
 
             if(isset($data['redirectUrl']))
@@ -343,7 +346,7 @@ public function payment(Request $request, $order_id)
             ], 404);
         }
 
-        Payment::updateOrCreate(
+        $payment = Payment::updateOrCreate(
             [
                 'order_id' => $order->id,
                 'transaction_id' => null,
@@ -363,8 +366,14 @@ public function payment(Request $request, $order_id)
         $order->order_status = "COMPLETED";
         $order->save();
 
-        return redirect()->route('order_status', ['txn_id' => $txn_id]);
+        $data['payment'] = $payment;
+        $data['order'] = $order;
 
+         // ✅ Call EmailController for confirmation email
+        $emailController = new EmailController();
+        $emailController->sendOrderConfirmation($data);
+
+        return redirect()->route('order_status', ['txn_id' => $txn_id]);
 
     }
 
@@ -495,7 +504,7 @@ public function payment(Request $request, $order_id)
             // Example: send email
             // Mail::to($order->customer_email)->send(new OrderConfirmed($order));
 
-            echo "Order Complted";
+            echo "Order Completed";
 
                // Save in session
             }
@@ -503,7 +512,17 @@ public function payment(Request $request, $order_id)
            // $request->session()->put('order_id', $id);
            // $request->session()->put('order_status', $status);
 
-            return redirect()->route('order_status', ['txn_id' => $txn_id]);
+           $payment = Payment::where('order_id', $order->id)->orderby('id', 'desc')->first();
+
+           $data2['payment'] = $payment;
+           $data2['order'] = $order;
+
+            // ✅ Call EmailController for confirmation email
+           $emailController = new EmailController();
+           $emailController->sendOrderConfirmation($data2);
+
+
+           return redirect()->route('order_status', ['txn_id' => $txn_id]);
 
 
         //return response()->json($data); // Return the verification response

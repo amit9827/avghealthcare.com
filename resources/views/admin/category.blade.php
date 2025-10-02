@@ -71,6 +71,38 @@
                 @enderror
             </div>
 
+                  <!-- Priority -->
+                  <div class="form-group">
+                    <label for="priority">Priority (0-1000)</label>
+                    <input name="priority"
+                              id="priority"
+                              type="number"
+                              step=1
+                              min=0
+                              max=1000
+
+                              class="form-control @error('priority') is-invalid @enderror" value="{{ old('priority', $data['category']->priority ?? '0') }}">
+                    @error('priority')
+                        <span class="invalid-feedback">{{ $message }}</span>
+                    @enderror
+                </div>
+
+
+                  <!-- Priority -->
+                  <div class="form-group">
+                    <label for="brand_priority">Brand Priority (0-1000)</label>
+                    <input name="brand_priority"
+                              id="brand_priority"
+                              type="number"
+                              step=1
+                              min=0
+                              max=1000
+
+                              class="form-control @error('brand_priority') is-invalid @enderror" value="{{ old('brand_priority', $data['category']->brand_priority ?? '0') }}">
+                    @error('brand_priority')
+                        <span class="invalid-feedback">{{ $message }}</span>
+                    @enderror
+                </div>
 
                    <!-- Boolean Checkboxes -->
                    <div class="row">
@@ -92,6 +124,16 @@
                     <label class="form-check-label" for="featured">Featured</label>
                 </div>
             </div>
+
+            <div class="col-md-4">
+                <div class="form-group form-check">
+                    <input type="checkbox" name="brand_featured" class="form-check-input" id="brand_featured" value="1"
+                     {{ isset($data['category']->brand_featured) &&  $data['category']->brand_featured==1 ? 'checked': '' }} >
+                    <label class="form-check-label" for="brand_featured">Brand Featured</label>
+                </div>
+            </div>
+
+
             </div>
 
             <!-- Image -->
@@ -113,6 +155,29 @@
                 @enderror
             </div>
 
+
+
+                   <!-- Image -->
+                   <div class="form-group">
+                    <label for="brand_image_path">Brand Image (Package)</label>
+                    <input type="file"
+                           name="brand_image_path"
+                           id="brand_image_path"
+                           class="form-control-file @error('brand_image_path') is-invalid @enderror">
+                    @if(isset($data['category']->brand_image_path))
+                        <div class="mt-2">
+                            <a href="{{ route('image.show', $data['category']->brand_image_path) }}"><img src="{{ route('image.show', $data['category']->brand_image_path) }}" alt="Brand Image" height="80"></a>
+
+
+                        </div>
+                    @endif
+                    @error('brand_image_path')
+                        <span class="invalid-feedback">{{ $message }}</span>
+                    @enderror
+                </div>
+
+
+
             <!-- Hidden ID -->
             <input type="hidden" name="category_id" value="{{ $data['category']->id ?? '' }}">
 
@@ -121,7 +186,7 @@
                 <i class="fas fa-save"></i> {{ isset($data['category']) ? 'Update' : 'Save' }}
             </button>
             <a href="{{ route('admin.categories') }}" class="btn btn-secondary">
-                Cancel
+                Back
             </a>
         </form>
     </div>

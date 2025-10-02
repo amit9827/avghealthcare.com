@@ -28,8 +28,8 @@
         <td>SKU</td>
         <td>Stock</td>
         <td>Price</td>
-        <td>Categories</td>
-        <td>Tags</td>
+        <td>Qty</td>
+        <td>Priority</td>
         <td>*</td>
         <td>Date</td>
     </tr>
@@ -50,8 +50,9 @@
         <td>{{ $product->stock_quantity}}</td>
         <td>{!! $product->onsale ? "<del>".$product->regular_price."</del> ". $product->sale_price :  $product->regular_price !!}</td>
         <td>{{ $product->stock_quantity}}</td>
-        <td> </td>
-        <td>{{ $product->is_starred}}</td>
+        <td>{{ $product->priority}}</td>
+
+        <td>{{ $product->featured ? "*" : ''}}</td>
 
         <td>{{ $product->created_at}}</td>
 

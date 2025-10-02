@@ -66,7 +66,10 @@
               <div class="accordion-body">
                 <p><strong>Order ID:</strong> {{ order.id }}</p>
                 <p><strong>Transaction ID:</strong> {{ order.txn_id }}</p>
-                <p><strong>Status:</strong> {{ order.order_status }}</p>
+                <p><strong>Order Status:</strong> {{ order.order_status }}</p>
+                <p><strong>Payment Mode:</strong> {{ payment.payment_mode }}</p>
+                <p><strong>Payment Status:</strong> {{ payment.status }}</p>
+                <p><strong>Delivery Status:</strong> {{ order.dispatch_status }}</p>
                 <p><strong>Total:</strong> {{ order.total_amount }}</p>
                 <p><strong>Date:</strong> {{ order.created_at }}</p>
               </div>
@@ -134,6 +137,7 @@
       return {
         order: null,
         customer: null,
+        payment:null,
         shopping_cart_items: [],
         error: null,
         retry_url: null,
@@ -149,13 +153,14 @@
 
           // Use backend structure
           this.order = res.data.order
+          this.payment = res.data.payment
           this.customer = res.data.customer
           this.shopping_cart_items = res.data.shopping_cart_items
 
           this.retry_url = route('phonepe.createPayment', { order_id: this.order.id})
           this.verify_url = route('phonepe.verifyPayment',  { txn_id: this.txn_id })
 
-          console.log(this.retry_url);
+          console.log(this.payment);
 
           // Update meta tags once order is loaded
           if (this.order) {

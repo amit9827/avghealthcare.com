@@ -5,6 +5,7 @@ use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\SitemapController;
 
 
 
@@ -16,20 +17,7 @@ Route::get('/', function () {
 // Laravel Auth routes
 Auth::routes();
 
-// Laravel-powered pages
-Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('/category/laravel/{category_slug}', [FrontendController::class, 'category'])->name('category');
-Route::get('/ingredients/laravel/{ingredient_slug}', [FrontendController::class, 'ingredients'])->name('ingredients');
 
-
-
-Route::get('/product/laravel/{product_slug}', [FrontendController::class, 'product_by_slug'])->name('product_by_slug');
-Route::get('/products_featured/laravel', [FrontendController::class, 'products_featured'])->name('products_featured');
-Route::get('/category_featured/laravel', [FrontendController::class, 'category_featured'])->name('category_featured');
-
-
-
-Route::get('/page/laravel/{page_slug}', [FrontendController::class, 'page_by_slug'])->name('page_by_slug');
 
 Route::get('/phonepe/create-payment/{order_id}', [App\Http\Controllers\PhonePePaymentController::class, 'createPayment'])
     ->name('phonepe.createPayment');
@@ -53,7 +41,6 @@ Route::get('/order/status/{txn_id}', [App\Http\Controllers\FrontendController::c
 
 Route::post('/checkout', [App\Http\Controllers\FrontendController::class, 'checkout'])
     ->name('checkout');
-
 
 
 
@@ -112,13 +99,20 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 });
 
+Route::get('/images/undefined', [DashboardController::class, 'showImageundefined'])
+     ->name('image.undefined');
+
 Route::get('/images/{path}', [DashboardController::class, 'showImage'])
      ->where('path', '.*')
      ->name('image.show');
 
+     Route::get('/sitemap.xml', [SitemapController::class, 'index']);
+     Route::get('/sitemap-products/{page?}', [SitemapController::class, 'products']);
+     Route::get('/sitemap-categories/{page?}', [SitemapController::class, 'categories']);
 
-
-
+     Route::get('/sitemap_html', [SitemapController::class, 'index_html'])->name('sitemap_html');
+     Route::get('/sitemap_html-products/{page?}', [SitemapController::class, 'products_html'])->name('sitemap_products_html');
+     Route::get('/sitemap_html-categories/{page?}', [SitemapController::class, 'categories_html'])->name('sitemap_categories_html');
 
 // Catch-all for Vue, exclude admin
 Route::get('/{any}', function () {

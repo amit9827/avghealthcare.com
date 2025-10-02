@@ -14,6 +14,7 @@
 
 
 
+<p><a href="{{ route('order_status', ['txn_id' => $data['order']->txn_id]) }}" class="button" target="_blank">View Order -  {{ $data['order']->id  }}</a></p>
 
 
 

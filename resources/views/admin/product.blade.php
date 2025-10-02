@@ -196,13 +196,31 @@
 
 
 
-
+            <div class="row">
 
             <!-- SKU -->
-            <div class="form-group">
+            <div class="col-md-6 form-group">
                 <label for="sku">SKU</label>
                 <input type="text" name="sku" class="form-control" id="sku" value="{{ $data['product']->sku ?? '' }}" >
             </div>
+
+
+                <!-- Priority -->
+                <div class="col-md-6 form-group">
+                    <label for="priority">Priority (0-1000)</label>
+                    <input name="priority"
+                              id="priority"
+                              type="number"
+                              step=1
+                              min=0
+                              max=1000
+
+                              class="form-control @error('priority') is-invalid @enderror" value="{{ old('priority', $data['product']->priority ?? '0') }}">
+
+                </div>
+
+            </div>
+
 
             <!-- Price Fields -->
             <div class="row">

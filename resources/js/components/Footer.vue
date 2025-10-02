@@ -23,7 +23,7 @@ Each product is created with the highest standards of quality, free from harmful
                         <span class="footer-title">Products</span>
                         <ul class="footer_menu flex-row gap-3">
                     <li
-                        v-for="(item, i) in menu_products"
+                        v-for="(item, i) in menuProducts"
                         :key="i"
                         class="nav-item "
                     >
@@ -46,7 +46,7 @@ Each product is created with the highest standards of quality, free from harmful
                         <span class="footer-title">Ingredients</span>
                         <ul class="footer_menu flex-row gap-3">
                         <li
-                        v-for="(item, i) in menu_ingredients"
+                        v-for="(item, i) in menuIngredients"
                         :key="i"
                         class="nav-item "
                         >
@@ -67,7 +67,7 @@ Each product is created with the highest standards of quality, free from harmful
                             <span class="footer-title">Quick Links</span>
                             <ul class="footer_menu flex-row gap-3">
                             <li
-                            v-for="(item, i) in menu_quick_links"
+                            v-for="(item, i) in menuQuickLinks"
                             :key="i"
                             class="nav-item "
                             >
@@ -122,9 +122,7 @@ export default {
   components: { RouterLink },
   data() {
     return {
-      menu_products: [],
-      menu_ingredients: [],
-      menu_quick_links: [],
+
       mobileOpen: false,
       activeSubmenu: null,
       main_logo :  window.base_url + "/assets/logo_footer.svg",
@@ -132,20 +130,49 @@ export default {
     }
   },
 
+  props: {
+    menu_footer_products: {
+      type: Array,
+      default: () => []
+    },
+
+    menu_ingredients: {
+      type: Array,
+      default: () => []
+    },
+
+    menu_quick_links: {
+      type: Array,
+      default: () => []
+    },
+
+  },
+
+  computed: {
+    menuProducts() {
+
+      return this.menu_footer_products; // always use prop
+    },
+
+    menuIngredients() {
+
+      return this.menu_ingredients; // always use prop
+    },
+
+
+
+    menuQuickLinks() {
+
+      return this.menu_quick_links; // always use prop
+    },
+
+
+
+
+  },
 
   async mounted() {
-    try {
-      const response = await axios.get(route('menu'))
 
-      this.menu_products = response.data.footer_menu_products || []
-      this.menu_ingredients = response.data.menu_ingredients || []
-      this.menu_quick_links = response.data.menu_quick_links || []
-
-      console.log( this.menu_ingredients);
-
-    } catch (error) {
-      console.error('Menu fetch failed:', error)
-    }
   },
 }
 

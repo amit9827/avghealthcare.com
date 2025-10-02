@@ -125,6 +125,7 @@
     max-height: 90vh;
     overflow: scroll;
     cursor: grab;
+    height:80%;
   }
   .viewer:active {
     cursor: grabbing;

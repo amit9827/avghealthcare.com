@@ -126,7 +126,7 @@
             <!-- Review Text -->
             <div>
                 <p class="review-text">
-                    I have used many branded products to stop hair fall but none have given the results that Wow has given. I am very happy with the results of Wow.
+                    I have used many branded products but none have given the results that AVG has given. I am very happy with the results of AVG products.
                 </p>
             </div>
         </div>

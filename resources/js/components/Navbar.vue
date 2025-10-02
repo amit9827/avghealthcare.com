@@ -3,7 +3,7 @@
     <div class="text-center text-white p-2 bg-top-header" id="top-header">
       <div class="container">
         <div class="row">
-          <div class="col-md-4 text-start d-none d-md-block">Earn Cash on Every Order</div>
+          <div class="col-md-4 text-start d-none d-md-block"><i class="fa fa-phone"></i> Call  : {{phoneNumber}}</div>
           <div class="col-md-4">From Herbal Remedies to Wellness Solutions</div>
           <div class="col-md-4 text-end d-none d-md-block">100% Quality Assurance</div>
         </div>
@@ -20,61 +20,49 @@
               <img :src="main_logo" class="main_logo" />
             </RouterLink>
 
-            <!-- Mobile Menu Toggle -->
-            <button class="btn d-lg-none" @click="toggleMobileMenu">
+
+
+
+
+            <!-- Right Icons + Search -->
+            <div class="d-md-flex align-items-center gap-3" >
+              <div class="search-box d-flex align-items-center">
+                <input
+        class="form-control"
+        placeholder="Search product…"
+        autocomplete="off"
+        type="text"
+        v-model="searchText"
+        @keyup.enter="doSearch"
+      />
+      <i
+        class="fa-solid fa-magnifying-glass ms-2 text-muted"
+        style="cursor:pointer"
+        @click="doSearch"
+      ></i>
+
+
+              <RouterLink class="text-gray ps-3" :to="cart">
+                <i class="fa-solid fa-basket-shopping text-gray"></i>
+              </RouterLink>
+            </div>
+        </div>
+
+               <!-- Mobile Menu Toggle -->
+               <button class="btn d-lg-none" @click="toggleMobileMenu">
                 <i class="fa-solid fa-bars fs-2"></i>
 
             </button>
 
-            <!-- Desktop Nav -->
-            <ul class="navbar-nav d-none d-lg-flex flex-row gap-3 align-items-center">
-              <li v-for="(item, i) in menu" :key="i" class="nav-item dropdown">
-                <!-- Simple link -->
-                <RouterLink
-                  v-if="item.slug?.length"
-                  class="nav-link"
-                  active-class="active"
-                  :to="{ name: 'Category', params: { slug: item.slug } }"
-                >
-                  {{ item.name }}
-                </RouterLink>
 
-                <!-- Dropdown -->
-                <div v-else class="dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                    {{ item.name }}
-                  </a>
-                  <ul class="dropdown-menu">
-                    <li v-for="(sub, j) in item.submenu" :key="j">
-                      <RouterLink class="dropdown-item" :to="sub.url">
-                        {{ sub.title }}
-                      </RouterLink>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-            </ul>
 
-            <!-- Right Icons + Search -->
-            <div class="d-none d-md-flex align-items-center gap-3">
-              <div class="search-box d-flex align-items-center">
-                <input
-                  class="form-control"
-                  placeholder="Search products…"
-                  autocomplete="off"
-                  type="text"
-                  v-model="searchText"
-                />
-                <i class="fa-solid fa-magnifying-glass ms-2 text-muted"></i>
-              </div>
-              <a href="#" class="text-gray p-2">
-                <i class="fa-solid fa-user text-gray"></i>
-              </a>
-              <RouterLink class="text-gray p-2" :to="cart">
-                <i class="fa-solid fa-basket-shopping text-gray"></i>
-              </RouterLink>
-            </div>
           </div>
+
+
+
+
+
+
 
           <!-- Mobile Sidebar Menu -->
           <div v-if="mobileOpen" class="sidebar-overlay d-lg-none" @click.self="toggleMobileMenu">
@@ -141,7 +129,44 @@
 
 
 
+
+
+
+
+
         </nav>
+        <div class="align-center" >
+            <!-- Desktop Nav -->
+    <ul class="navbar-nav d-none d-lg-flex flex-row gap-3 align-items-center p-1 ps-2 align-center"  >
+              <li v-for="(item, i) in menu" :key="i" class="nav-item dropdown">
+                <!-- Simple link -->
+                <RouterLink
+                  v-if="item.slug?.length"
+                  class="nav-link"
+                  active-class="active"
+                  :to="{ name: 'Category', params: { slug: item.slug } }"
+                >
+                  {{ item.name }}
+                </RouterLink>
+
+                <!-- Dropdown -->
+                <div v-else class="dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                    {{ item.name }}
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li v-for="(sub, j) in item.submenu" :key="j">
+                      <RouterLink class="dropdown-item" :to="sub.url">
+                        {{ sub.title }}
+                      </RouterLink>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+        </div>
+
+
       </div>
     </div>
   </template>
@@ -156,7 +181,7 @@
     components: { RouterLink },
     data() {
       return {
-        menu: [],
+
         mobileOpen: false,
         activeSubmenu: null,
         searchText: "",
@@ -165,6 +190,25 @@
         cart: "/cart",
       };
     },
+
+    props: {
+    menu_header_products: {
+      type: Array,
+      default: () => []
+    },
+    phoneNumber: {
+        type: String,
+        default: '+919501106343', // Replace with your number
+    },
+    whatsappNumber: {
+    type: String,
+    default: '919501106343', // Replace with your number (country code + number)
+    },
+  },
+
+
+
+
     methods: {
       toggleMobileMenu() {
         this.mobileOpen = !this.mobileOpen;
@@ -173,15 +217,25 @@
       toggleSubmenu(index) {
         this.activeSubmenu = this.activeSubmenu === index ? null : index;
       },
-    },
-    async mounted() {
-      try {
-        const response = await axios.get(route("menu"));
-        this.menu = response.data.menu_products || [];
-      } catch (error) {
-        console.error("Menu fetch failed:", error);
+
+      doSearch() {
+      if (this.searchText.trim()) {
+        this.$router.push({
+          name: "SearchResults",   // route name
+          query: { q: this.searchText }
+        });
+        this.searchText = ""; // clear after search (optional)
       }
     },
+
+    },
+
+    computed: {
+    menu() {
+
+      return this.menu_header_products; // always use prop
+    }
+  },
   };
   </script>
 
@@ -270,6 +324,11 @@
     color:#333;
 }
 
+.align-center{
+   margin: 0px auto;
+
+}
+
 /* Slide in animation */
 @keyframes slideIn {
   from {
@@ -282,3 +341,4 @@
 
 
   </style>
+

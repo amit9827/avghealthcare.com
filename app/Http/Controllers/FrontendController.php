@@ -15,6 +15,9 @@ use App\Models\Page;
 use App\Models\ShoppingCart;
 use App\Models\ShippingAddress;
 use App\Models\Order;
+use App\Models\Payment;
+
+
 use App\Models\Ingredient;
 use App\Models\Benefit;
 
@@ -40,7 +43,7 @@ class FrontendController extends Controller
         */
 
 
-        $menu_products = Category::orderby('priority', 'desc')->limit(6)-> get();
+        $menu_products = Category::orderby('priority', 'desc')->limit(15)-> get();
         $footer_menu_products = Category::orderby('priority', 'desc')-> get();
         $menu_ingredients = [
 
@@ -125,7 +128,17 @@ class FrontendController extends Controller
             ],
 
 
+            [
+                'title' => 'Blog',
+                'url' => '/go/blog',
+                'submenu' => [],
+            ],
 
+            [
+                'title' => 'SiteMap',
+                'url' => '/go/sitemap_html',
+                'submenu' => [],
+            ],
 
 
 
@@ -148,16 +161,24 @@ class FrontendController extends Controller
 
 public function products_featured(Request $request){
 
-$data['products_featured']=Product::where('featured', 1)->get();
+$data['products_featured']=Product::where('featured', 1)->orderby('priority', 'desc')->limit(8)->get();
 return response()->json($data);
 
 
 }
 
 
+public function product_search(Request $request){
+ $search_product = $request->q;
+
+  $data['products']=Product::where('title', "like", "%$search_product%")->where('visibility', 1)->orderby('priority', 'desc')->limit(10)->get();
+return response()->json($data);
+}
+
 public function category_featured(Request $request){
 
-    $data['category_featured']=Category::where('featured', 1)->get();
+    $data['category_featured']=Category::where('featured', 1)->where('visibility', 1)->orderby('priority', 'desc')->get();
+    $data['brand_featured'] = Category::where('brand_featured', 1)->where('brand_featured', 1)->where('visibility', 1)->orderby('brand_priority', 'desc')->get();
 return response()->json($data);
 
 }
@@ -389,6 +410,11 @@ public function order_detail(Request $request, $txn_id){
 
 
     $data['order'] = Order::where('txn_id', $txn_id)->first();
+
+    if($data['order']==null)
+    return null;
+
+    $data['payment']  = Payment::where('order_id',  $data['order']->id)->orderby('id', 'desc')->first();
     $data['shopping_cart_items'] =  $data['order']->shopping_cart_items;
     foreach( $data['shopping_cart_items'] as $shopping_cart_item )
     $shopping_cart_item['product'] =  $shopping_cart_item->product;

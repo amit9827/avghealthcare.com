@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\PhonePePaymentController;
+use App\Http\Controllers\Admin\DashboardController;
 
 
 
@@ -38,8 +39,6 @@ Route::get('/product/laravel/{product_slug}', [FrontendController::class, 'produ
 Route::get('/products_featured/laravel', [FrontendController::class, 'products_featured'])->name('products_featured');
 Route::get('/category_featured/laravel', [FrontendController::class, 'category_featured'])->name('category_featured');
 Route::get('/page/laravel/{page_slug}', [FrontendController::class, 'page_by_slug'])->name('page_by_slug');
+Route::get('/page/product_search', [FrontendController::class, 'product_search'])->name('product_search');
 
-Route::get('/images/{path}', [DashboardController::class, 'showImage'])
-     ->where('path', '.*')
-     ->name('image.show');
 

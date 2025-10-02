@@ -1,5 +1,15 @@
 <template>
     <div>
+
+        <!-- Loading state -->
+    <div v-if="loading" class="d-flex justify-content-center align-items-center py-5">
+      <div class="spinner-border text-warning" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    <div v-else>
+
+
       <div v-if="products.length" class="row mb-5">
         <div v-for="product in products" :key="product.id" class="col-md-3 col-6 product">
 
@@ -89,6 +99,7 @@
         <p>No products found.</p>
       </div>
     </div>
+    </div>
   </template>
 
 
@@ -110,6 +121,7 @@
 
     data()  {
         return {
+            loading: true,  // start as loading
             colors: [
         "rgb(203, 237, 243)", // light blue
         "rgb(255, 230, 230)", // light red
@@ -117,21 +129,31 @@
         "rgb(255, 245, 204)", // light yellow
         "rgb(230, 230, 255)", // light purple
         "rgb(255, 240, 245)"  // light pink
-      ]
+      ],
+
 
 
         }
     },
     mounted() {
-      console.log(this.products)
+        if (this.products.length>0) {
+      this.loading = false
+    }
+
     },
 
 
     watch: {
   products(newVal) {
     console.log("Products updated:", newVal)
+    if (newVal.length > 0) {
+      this.loading = false
+    }
   }
 },
+
+
+
 
 methods: {
     getpath(product_path) {
