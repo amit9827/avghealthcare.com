@@ -15,11 +15,7 @@
 
 
 
-<form action="{{ route('admin.page_store') }}" method="POST" enctype="multipart/form-data">
-    @csrf
 
-    <a class="btn btn-primary" href="{{ route('admin.page') }}">Add customer</a>
-</form>
 
 <table class="table table-striped table-full-width mt-5" >
 <tbody>

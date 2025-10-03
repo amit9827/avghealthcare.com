@@ -478,12 +478,13 @@ export default {
       },
       {
         property: 'og:image',
-        content: getpath(this.product.featured_image) ? this.getpath(this.product.featured_image) : '/default-image.jpg'
+        content: this.getpath(this.product.featured_image) ? this.getpath(this.product.featured_image) : '/default-image.jpg'
       },
       {
         property: 'og:url',
         content: window.location.href
-      }
+      },
+
     ]
   })
 },

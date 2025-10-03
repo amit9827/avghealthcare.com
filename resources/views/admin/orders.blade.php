@@ -1,7 +1,6 @@
 @extends('adminlte::page')
 
-
-@section('title', 'Dashboard')
+@section('title', 'Orders')
 
 @section('content_header')
     <h1>Orders</h1>
@@ -9,59 +8,58 @@
 
 @section('content')
 
-
-
 @include('admin.errors')
 
+<a class="btn btn-primary mb-3" href="{{ route('admin.page') }}">Add Order</a>
+
+{{-- Tabs navigation --}}
+<ul class="nav nav-tabs" id="orderTabs" role="tablist">
+
+    <li class="nav-item">
+        <a class="nav-link active" id="completed-tab" data-toggle="tab" href="#completed" role="tab">Completed</a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link" id="pending-tab" data-toggle="tab" href="#pending" role="tab">Pending</a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link " id="all-tab" data-toggle="tab" href="#all" role="tab">All</a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link" id="processing-tab" data-toggle="tab" href="#processing" role="tab">Failed</a>
+    </li>
+
+</ul>
+
+{{-- Tabs content --}}
+<div class="tab-content mt-3" id="orderTabsContent">
+
+      {{-- Completed --}}
+      <div class="tab-pane fade  show active" id="completed" role="tabpanel">
+        @include('admin.orders_table', ['orders' => $data['orders']->where('order_status', 'COMPLETED')])
+    </div>
+
+    <div class="tab-pane fade" id="pending" role="tabpanel">
+        @include('admin.orders_table', ['orders' => $data['orders']->where('order_status', 'PENDING')])
+    </div>
 
 
-<form action="{{ route('admin.page_store') }}" method="POST" enctype="multipart/form-data">
-    @csrf
-
-    <a class="btn btn-primary" href="{{ route('admin.page') }}">Add Order</a>
-</form>
-
-<table class="table table-striped table-full-width mt-5" >
-<tbody>
-    <tr>
-        <td><input type="checkbox" name="select_all"></td>
-        <td>Order</td>
-        <td>Date</td>
-        <td>Status</td>
-        <td>Total</td>
-        <td></td>
-    </tr>
+    {{-- All Orders --}}
+    <div class="tab-pane fade" id="all" role="tabpanel">
+        @include('admin.orders_table', ['orders' => $data['orders']])
+    </div>
 
 
-    @foreach ($data['orders'] as $order)
+    {{-- Processing --}}
+    <div class="tab-pane fade" id="processing" role="tabpanel">
+        @include('admin.orders_table', ['orders' => $data['orders']->where('order_status', 'FAILED')])
+    </div>
 
 
 
-
-    <tr>
-        <td><input type="checkbox" name="select_all"></td>
-
-
-        <td><a href="{{ route('admin.order_get', $order->id  ) }}">#{{ $order->id}} {{ ucwords($order->customer->name) ?? ''}}</a></td>
-        <td>{{ $order->created_at}}</td>
-        <td>{{ $order->order_status}}</td>
-        <td>{{ $order->total_amount}}</td>
-
-
-
-        <td><a href="{{ route('admin.order_delete', $order->id) }}" onclick="return confirm('Are you sure ?')"><i class="fas fa-trash"></i></a></td>
-
-
-    </tr>
-
-
-
-
-
-    @endforeach
-</tbody>
-
-</table>
+</div>
 
 @stop
 
@@ -71,6 +69,6 @@
 
 @section('js')
     <script>
-        console.log('Admin Dashboard Loaded');
+        console.log('Orders page loaded');
     </script>
 @stop

@@ -770,5 +770,14 @@ return redirect()->back()->with('success', "Order deleted");
 
 }
 
+public function customer_get(Request $request, $customer_id){
+    $data['customer'] = Customer::find($customer_id);
+    if($data['customer']==null)
+    return redirect()->back()->with('error', "Customer not found");
+
+    return view('admin.customer', compact('data'));
+
+}
+
 
 }
