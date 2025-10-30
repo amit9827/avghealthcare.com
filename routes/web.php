@@ -96,6 +96,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/order/{id}', [DashboardController::class, 'order_get'])->name('order_get');
         Route::post('/order_update/{id}', [DashboardController::class, 'order_update'])->name('order_update');
 
+        Route::get('/rating', [DashboardController::class, 'rating_new'])->name('rating_new');
+        Route::get('/ratings', [DashboardController::class, 'ratings'])->name('ratings');
+        Route::post('/ratings', [DashboardController::class, 'rating_store'])->name('rating_store');
+        Route::get('/rating/{id}', [DashboardController::class, 'rating_get'])->name('rating_get');
+        Route::get('/rating-delete/{id}', [DashboardController::class, 'rating_delete'])->name('rating_delete');
+
+
+
     });
 });
 
@@ -113,6 +121,8 @@ Route::get('/images/{path}', [DashboardController::class, 'showImage'])
      Route::get('/sitemap_html', [SitemapController::class, 'index_html'])->name('sitemap_html');
      Route::get('/sitemap_html-products/{page?}', [SitemapController::class, 'products_html'])->name('sitemap_products_html');
      Route::get('/sitemap_html-categories/{page?}', [SitemapController::class, 'categories_html'])->name('sitemap_categories_html');
+
+
 
 // Catch-all for Vue, exclude admin
 Route::get('/{any}', function () {

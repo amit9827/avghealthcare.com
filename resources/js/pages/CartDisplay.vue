@@ -303,7 +303,7 @@
             shipping_fee: this.cartStore.shipping_fee,
             payment_fee: this.cartStore.payment_fee,
             items: this.cartStore.items,
-            total_amount: this.cartTotal,
+            total_amount: this.gTotal,
             });
 
 

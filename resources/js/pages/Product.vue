@@ -345,7 +345,7 @@ Add To Cart
 
 
 <!-- ratings -->
-<ProductReview />
+<ProductReview :customer_reviews="customer_reviews"/>
 
         <!-- review card closed-->
 
@@ -407,6 +407,7 @@ export default {
       additional_product_images: [],
       additional_banner_images: [],
       benefits:[],
+      custmer_reviews:[],
       colors: [
         "rgb(203, 237, 243)", // light blue
         "rgb(255, 230, 230)", // light red
@@ -441,13 +442,15 @@ export default {
         this.subcategories = res.data.subcategories;
         this.product = res.data.product;
         this.benefits = res.data.benefits;
+        this.customer_reviews = res.data.customer_reviews;
+        console.log(this.customer_reviews);
 
         this.additional_product_images = res.data.additional_product_images;
         this.additional_banner_images = res.data.additional_banner_images;
         this.loading = false;
 
-            // ✅ Now update the head with fresh product meta
-    this.updateHead();
+        // ✅ Now update the head with fresh product meta
+        this.updateHead();
 
 
       } catch (err) {

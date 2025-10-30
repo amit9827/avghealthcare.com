@@ -20,21 +20,32 @@ class EmailController extends Controller
         $payment = $data['payment'];
 
         $to = $order->customer->email;
+        $cc = "info@avghealthcare.com";
 
         if($order==null)
         return null;
 
+        if(empty($to) || !filter_var($to, FILTER_VALIDATE_EMAIL)) {
+            return null;
+        }
+
         if(env('APP_ENV')== "staging")
-        $to = "query@webtechindia.com";
+        {
+            $to = "query@webtechindia.com";
+            $cc = "info@webtechindia.com";
+
+        }
 
 
-        $subject = "Order Confirmation - {$order->txn_id}";
+        $subject = "[avghealthcare.com] Confirmation - #Order {$order->id}";
 
         // Render Blade into HTML
         $html = view('emails.order_confirmation', compact('data'))->render();
 
-        Mail::html($html, function ($mail) use ($to, $subject) {
-            $mail->to($to)->subject($subject);
+        Mail::html($html, function ($mail) use ($to, $cc, $subject) {
+            $mail->to($to)
+            ->cc($cc)->
+            subject($subject);
         });
     }
 

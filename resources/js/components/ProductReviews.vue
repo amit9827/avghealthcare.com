@@ -1,311 +1,270 @@
 <template>
+    <div class="review-container mb-3" v-if="customer_reviews && customer_reviews.length">
+      <!-- Title -->
+      <h2 class="review-title text-center mb-3">Our Happy Customers</h2>
 
-
-<!-- ratings -->
-
-<div class="review-container mb-3 ">
-
-
-
-<!-- Title -->
-<h2 class="review-title text-center mb-3">Our Happy Customers</h2>
-
-
-<div class="row">
-    <div class="col-md-6">
-        <!-- Rating Summary -->
-        <div class="rating-summary  text-center">
-            <div class="stars">
-                <i class="fas fa-star color-custom-orange"></i>
-                <i class="fas fa-star color-custom-orange"></i>
-                <i class="fas fa-star color-custom-orange"></i>
-                <i class="fas fa-star color-custom-orange"></i>
-                <i class="fas fa-star color-custom-orange"></i>
+      <div class="row">
+        <div class="col-md-6">
+          <!-- Rating Summary -->
+          <div class="rating-summary text-center">
+            <div class="stars mb-2">
+              <i
+                v-for="n in 5"
+                :key="n"
+                class="fas fa-star"
+                :class="n <= Math.round(averageRating) ? 'color-custom-orange' : 'text-muted'"
+              ></i>
             </div>
-            <div class="rating-text">
-                4.83 out of 5 | 8325 Customer Rating
+            <div class="rating-text mb-3">
+              {{ averageRating.toFixed(2) }} out of 5 |
+              {{ customer_reviews.length }} Customer Ratings
             </div>
 
-              <!-- Write Review Button -->
-<div class="text-center">
-    <button class="btn  text-white font-bold bg-custom-orange-dark mb-5">Write A Review</button>
-</div>
-
-
+            <!-- Write Review Button -->
+            <div class="text-center">
+              <button class="btn text-white font-bold bg-custom-orange-dark mb-5"     @click="handleWriteReview"
+>
+                Write A Review
+              </button>
+            </div>
+          </div>
         </div>
-    </div>
-    <div class="col-md-6">
 
-<!-- Rating Breakdown -->
-<div class="rating-breakdown ps-3">
-    <!-- 5 Stars -->
-    <div class="rating-row row">
-        <div class="col-md-2 col-3   rating-label">5 Stars</div>
-        <div class="col-md-7 col-6    progress-wrapper">
-            <div class="progress">
-                <div class="progress-bar bg-custom-orange-dark" style="width: 83%"></div>
+        <div class="col-md-6">
+          <!-- Rating Breakdown -->
+          <div class="rating-breakdown ps-3">
+            <div
+              v-for="(percent, index) in ratingPercentages"
+              :key="index"
+              class="rating-row row align-items-center"
+            >
+              <div class="col-md-2 col-3 rating-label">{{ 5 - index }} Stars</div>
+              <div class="col-md-7 col-6 progress-wrapper">
+                <div class="progress">
+                  <div
+                    class="progress-bar bg-custom-orange-dark"
+                    :style="{ width: percent + '%' }"
+                  ></div>
+                </div>
+              </div>
+              <div class="col-3 percentage">{{ percent.toFixed(0) }}%</div>
             </div>
+          </div>
         </div>
-        <div class="col-3 percentage">83%</div>
-    </div>
+      </div>
 
-    <!-- 4 Stars -->
-    <div class="rating-row row">
-        <div class="col-md-2 col-3 rating-label">4 Stars</div>
-        <div class="col-md-7 col-6 progress-wrapper">
-            <div class="progress">
-                <div class="progress-bar bg-custom-orange-dark" style="width: 17%"></div>
+      <!-- Review Cards -->
+      <div
+        v-for="(review, index) in customer_reviews"
+        :key="review.id"
+        class="review-card"
+
+      >
+        <div class="review-divider"></div>
+
+        <div class="row g-4">
+          <!-- Left Column - Review Content -->
+          <div class="col-12 col-md-8 col-lg-9">
+            <div class="d-flex flex-column gap-2 gap-md-3">
+              <div class="star-rating">
+                <i
+                  v-for="n in 5"
+                  :key="n"
+                  class="fas fa-star"
+                  :class="n <= review.star_rating ? 'color-custom-orange' : 'text-muted'"
+                ></i>
+              </div>
+
+              <p class="review-text">{{ review.message }}</p>
             </div>
-        </div>
-        <div class="col-3 percentage">17%</div>
-    </div>
+          </div>
 
-    <!-- 3 Stars -->
-    <div class="rating-row row">
-        <div class="col-md-2 col-3 rating-label">3 Stars</div>
-        <div class="col-md-7 col-6 progress-wrapper">
-            <div class="progress">
-                <div class="progress-bar bg-custom-orange-dark" style="width: 0%"></div>
-            </div>
-        </div>
-        <div class="col-3 percentage">0%</div>
-    </div>
-
-    <!-- 2 Stars -->
-    <div class="rating-row row">
-        <div class="col-md-2 col-3 rating-label">2 Stars</div>
-        <div class="col-md-7 col-6 progress-wrapper">
-            <div class="progress">
-                <div class="progress-bar bg-custom-orange-dark" style="width: 0%"></div>
-            </div>
-        </div>
-        <div class="col-3 percentage">0%</div>
-    </div>
-
-    <!-- 1 Star -->
-    <div class="rating-row row">
-        <div class="col-md-2 col-3 rating-label">1 Star</div>
-        <div class="col-md-7 col-6 progress-wrapper">
-            <div class="progress">
-                <div class="progress-bar bg-custom-orange-dark" style="width: 0%"></div>
-            </div>
-        </div>
-        <div class="col-3 percentage">0%</div>
-    </div>
-</div>
-</div>
-
-
-</div>
-
-
-<!-- ratings closed -->
-</div>
-
-
-
-<!-- review card -->
-
-<div class="review-card">
-<!-- Top Divider -->
-<div class="review-divider"></div>
-
-<div class="row g-4">
-    <!-- Left Column - Review Content -->
-    <div class="col-12 col-md-8 col-lg-9">
-        <div class="d-flex flex-column gap-2 gap-md-3">
-            <!-- Star Rating -->
-            <div class="star-rating">
-                <i class="fas fa-star color-custom-orange"></i>
-                <i class="fas fa-star color-custom-orange"></i>
-                <i class="fas fa-star color-custom-orange"></i>
-                <i class="fas fa-star color-custom-orange"></i>
-                <i class="fas fa-star color-custom-orange"></i>
-            </div>
-
-            <!-- Review Text -->
-            <div>
-                <p class="review-text">
-                    I have used many branded products but none have given the results that AVG has given. I am very happy with the results of AVG products.
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Right Column - Meta Information -->
-    <div class="col-12 col-md-4 col-lg-3">
-        <div class="d-flex flex-column justify-content-between h-100 gap-2">
-            <!-- Date and Name -->
-            <div class="d-flex flex-column gap-1">
-                <p class="review-meta mb-0">Submitted 4 months ago</p>
-                <p class="review-meta mb-0">By Punam Aniket Mandave</p>
-            </div>
-
-            <!-- Verified Badge -->
-            <div class="verified-badge">
-                <img src="https://www.buywow.in/images/verified.svg"
-                     alt="Verified"
-                     class="verified-icon">
+          <!-- Right Column - Meta Information -->
+          <div class="col-12 col-md-4 col-lg-3">
+            <div class="d-flex flex-column justify-content-between h-100 gap-2">
+              <div class="d-flex flex-column gap-1">
+                <p class="review-meta mb-0">Submitted {{ formatDate(review.review_date) }}</p>
+                <p class="review-meta mb-0">By {{ review.name }}</p>
+                <div v-if="review.verified_buyer" class="verified-badge">
+                <img
+                  :src="getassetpath('verified.svg')"
+                  alt="Verified"
+                  class="verified-icon"
+                />
                 <p class="verified-text">VERIFIED BUYER</p>
+              </div>
+              </div>
+
+
             </div>
+          </div>
         </div>
+      </div>
     </div>
+
+    <div v-else class="text-center py-4 text-muted">
+      No reviews yet for this product.
+    </div>
+
+    <!-- Custom Popup Modal -->
+<div v-if="showModal" class="popup-overlay">
+  <div class="popup-content">
+    <p>You must be a registered buyer to write a review</p>
+    <button @click="showModal = false" class="btn btn-sm bg-custom-orange-dark text-white">
+      OK
+    </button>
+  </div>
 </div>
-</div>
-
-
-<!-- review card closed-->
 
 
 
-</template>
+  </template>
 
-<script>
-
- export default{
-    name: 'ProductReviews',
+  <script>
+  export default {
+    name: "ProductReviews",
     props: {
-      product: {
+      customer_reviews: {
         type: Array,
-        default: () => []
+        default: () => [],
+      },
+      product: {
+        type: Object,
+        default: () => ({}),
+      },
+    },
+    computed: {
+      averageRating() {
+        if (!this.customer_reviews.length) return 0;
+        const total = this.customer_reviews.reduce(
+          (sum, r) => sum + Number(r.star_rating || 0),
+          0
+        );
+        return total / this.customer_reviews.length;
+      },
+      ratingPercentages() {
+        const total = this.customer_reviews.length || 1;
+        const counts = [0, 0, 0, 0, 0];
+        this.customer_reviews.forEach((r) => {
+          const rating = parseInt(r.star_rating);
+          if (rating >= 1 && rating <= 5) counts[5 - rating]++;
+        });
+        return counts.map((c) => (c / total) * 100);
+      },
+    },
+    methods: {
+      formatDate(date) {
+        if (!date) return "";
+        const d = new Date(date);
+        return d.toLocaleDateString("en-IN", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        });
       },
 
+      getassetpath(product_path) {
+      return `..\\assets\\${product_path}`;
     },
 
-    data()  {
-        return {
-            colors: [
-        "rgb(203, 237, 243)", // light blue
-        "rgb(255, 230, 230)", // light red
-        "rgb(230, 255, 230)", // light green
-        "rgb(255, 245, 204)", // light yellow
-        "rgb(230, 230, 255)", // light purple
-        "rgb(255, 240, 245)"  // light pink
-      ]
+    handleWriteReview() {
+    // Simple browser alert
+    //alert("You must be a registered buyer to write a review");
+
+    // or, if you want a custom modal later, you can replace this with:
+     this.showModal = true;
+  },
 
 
-        }
     },
- }
-</script>
+    data() {
+      return {
+        colors: [
+          "rgb(203, 237, 243)",
+          "rgb(255, 230, 230)",
+          "rgb(230, 255, 230)",
+          "rgb(255, 245, 204)",
+          "rgb(230, 230, 255)",
+          "rgb(255, 240, 245)",
+        ],
 
-<style scoped>
+        showModal: false,
 
 
+      };
+    },
+  };
+  </script>
 
-.review-card {
-
-border-radius: 12px;
-padding: 20px;
-margin: 20px 0;
-
-}
-
-.review-divider {
-height: 0.5px;
-background-color: #343a40;
-width: 100%;
-margin-bottom: 16px;
-}
-
-.star-rating {
-display: flex;
-gap: 2px;
-margin-bottom: 12px;
-}
-
-.star-icon {
-width: 16px;
-height: 16px;
-cursor: default;
-}
-
-@media (min-width: 768px) {
-.star-icon {
+  <style scoped>
+  .review-card {
+    border-radius: 12px;
+    padding: 10px;
+    margin:  0;
+  }
+  .review-divider {
+    height: 0.5px;
+    background-color: #343a40;
+    width: 100%;
+    margin-bottom: 16px;
+  }
+  .star-rating {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 0px;
+  }
+  .review-text {
+    color: #212529;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  .review-meta {
+    color: #212529;
+    font-size: 13px;
+  }
+  .verified-badge {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .verified-icon {
     width: 20px;
     height: 20px;
-}
+  }
+  .verified-text {
+    color: #212529;
+    font-size: 12px;
+    margin:0px;
+
+  }
+  .color-custom-orange {
+    color: #ffbb38;
+  }
+  .bg-custom-orange-dark {
+    background-color: #ed7f30;
+  }
+  .text-muted {
+    color: #ccc;
+  }
+
+
+  .popup-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex; justify-content: center; align-items: center;
+  z-index: 9999;
 }
 
-.review-text {
-color: #212529;
-font-size: 14px;
-line-height: 1.4;
-margin-bottom: 0;
+.popup-content {
+  background: #fff;
+  padding: 20px 30px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
-@media (min-width: 576px) {
-.review-text {
-    font-size: 14px;
-}
-}
 
-@media (min-width: 992px) {
-.review-text {
-    font-size: 16px;
-}
-}
 
-.review-meta {
-color: #212529;
-font-size: 12px;
-margin-bottom: 4px;
-}
-
-@media (min-width: 576px) {
-.review-meta {
-    font-size: 14px;
-}
-}
-
-@media (min-width: 992px) {
-.review-meta {
-    font-size: 16px;
-}
-}
-
-.verified-badge {
-display: flex;
-align-items: center;
-gap: 4px;
-}
-
-.verified-icon {
-width: 20px;
-height: 20px;
-}
-
-@media (min-width: 768px) {
-.verified-icon {
-    width: 24px;
-    height: 24px;
-}
-}
-
-.verified-text {
-color: #212529;
-font-size: 12px;
-margin: 0;
-}
-
-@media (min-width: 576px) {
-.verified-text {
-    font-size: 14px;
-}
-}
-
-@media (min-width: 992px) {
-.verified-text {
-    font-size: 16px;
-}
-}
-
-.color-custom-orange{
-color:#ffbb38;
-}
-
-.bg-custom-orange-dark{
-background-color: #ed7f30;
-}
-
-</style>
+  </style>

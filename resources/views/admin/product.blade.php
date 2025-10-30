@@ -36,24 +36,72 @@
 
 
 
+            <div class="row">
+                <div class="col-md-4">
+                    <!-- featured_image -->
+                    <div class="form-group">
+                        <label for="featured_image">Featured image</label>
+                        @if(isset($data['product']->featured_image))
+                        <div class="mt-2">
+                            @if($data['product']->featured_image)
+                            <a href="{{ route('image.show', $data['product']->featured_image) }}">
+                                <img src="{{ route('image.show', $data['product']->featured_image) }}" alt="Featured Image" height="80">
+                            </a>
+                            <input type="checkbox" name="featured_image_delete" value="1"> <i class="nav-icon fa fa-trash text-danger"></i> (select to delete)
 
-            <!-- featured_image -->
-            <div class="form-group">
-                <label for="featured_image">Featured image</label>
-                @if(isset($data['product']->featured_image))
-                 <div class="mt-2">
-                    @if($data['product']->featured_image)
-                    <a href="{{ route('image.show', $data['product']->featured_image) }}">
-                        <img src="{{ route('image.show', $data['product']->featured_image) }}" alt="Featured Image" height="80">
-                    </a>
-                    <input type="checkbox" name="featured_image_delete" value="1"> <i class="nav-icon fa fa-trash text-danger"></i> (select to delete)
+                            @endif
+                        </div>
+                        @endif
 
-                    @endif
+                        <input type="file" name="featured_image" class="form-control" id="featured_image"  >
+                    </div>
                 </div>
-                @endif
 
-                <input type="file" name="featured_image" class="form-control" id="featured_image"  >
+                <div class="col-md-4">
+
+
+
+                      <!-- featured_image -->
+                      <div class="form-group">
+                        <label for="featured_image">Featured image (Thumbnail - 500 )</label>
+                        @if(isset($data['product']->featured_thumbnail500))
+                         <div class="mt-2">
+                            @if($data['product']->featured_thumbnail500)
+                            <a href="{{ route('image.show', $data['product']->featured_thumbnail500) }}">
+                                <img src="{{ route('image.show', $data['product']->featured_thumbnail500) }}" alt="Featured Image" height="80">
+                            </a>
+                            <input type="checkbox" name="featured_thumbnail500_delete" value="1"> <i class="nav-icon fa fa-trash text-danger"></i> (select to delete)
+
+                            @endif
+                        </div>
+                        @endif
+
+                        <input type="file" name="featured_thumbnail500" class="form-control" id="featured_thumbnail500"  >
+                    </div>
+                </div>
+                <div class="col-md-4">
+
+                      <!-- featured_image -->
+                      <div class="form-group">
+                        <label for="featured_image">Featured image (Thumbnail - 300 )</label>
+                        @if(isset($data['product']->featured_thumbnail300))
+                         <div class="mt-2">
+                            @if($data['product']->featured_thumbnail300)
+                            <a href="{{ route('image.show', $data['product']->featured_thumbnail300) }}">
+                                <img src="{{ route('image.show', $data['product']->featured_thumbnail300) }}" alt="Featured Image" height="80">
+                            </a>
+                            <input type="checkbox" name="featured_thumbnail300_delete" value="1"> <i class="nav-icon fa fa-trash text-danger"></i> (select to delete)
+
+                            @endif
+                        </div>
+                        @endif
+
+                        <input type="file" name="featured_thumbnail300" class="form-control" id="featured_thumbnail300"  >
+                    </div>
+                </div>
             </div>
+
+
 
             <!-- featured_image -->
             <div class="form-group">

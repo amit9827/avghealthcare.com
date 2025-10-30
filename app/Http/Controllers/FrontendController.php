@@ -20,6 +20,7 @@ use App\Models\Payment;
 
 use App\Models\Ingredient;
 use App\Models\Benefit;
+use App\Models\CustomerReview;
 
 use Illuminate\Validation\Rule;
 
@@ -220,7 +221,7 @@ return response()->json($data);
        $data['product'] = $product;
        $data['additional_product_images'] = $product->additional_product_images;
        $data['additional_banner_images'] = $product->additional_banner_images;
-
+       $data['customer_reviews'] = $product->reviews;
 
 
        $benefits = $product->benefits_tags;

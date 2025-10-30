@@ -27,6 +27,9 @@ class Product extends Model
     }
 
 
-
+    public function reviews()
+    {
+        return $this->hasMany(CustomerReview::class, 'product_id', 'id')->orderby('review_date', 'desc');
+    }
 
  }

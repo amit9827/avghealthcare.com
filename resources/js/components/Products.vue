@@ -21,9 +21,10 @@
 >
 
 
-          <img :src="getpath(product.featured_image)" class="product_img">
-
-
+  <img
+  :src="getpath(product.featured_thumbnail300 && product.featured_thumbnail300 !== '' ? product.featured_thumbnail300 : product.featured_image)"
+  class="product_img"
+/>
 
           <div v-if="product.benefits_tags" class="m-2 ms-0 mb-2">
           <span

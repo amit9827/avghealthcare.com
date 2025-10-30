@@ -404,6 +404,12 @@ return [
                     'url' => 'admin/benefits',
                 ],
 
+                [
+                    'text' => 'Ratings',
+                    'url' => 'admin/ratings',
+                ],
+
+
 
              ],
 

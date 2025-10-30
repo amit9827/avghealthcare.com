@@ -25,7 +25,7 @@ use App\Models\Customer;
 use App\Models\Ingredient;
 use App\Models\Benefit;
 use App\Helpers\Helper;
-
+use App\Models\CustomerReview;
 
 class DashboardController extends Controller
 {
@@ -172,9 +172,16 @@ public function showImage($path)
         'meta_description'  => 'nullable|string',
         'meta_keywords'     => 'nullable|string',
         'featured_image' => 'nullable|file',
+        'featured_thumbnail500' => 'nullable|file',
+        'featured_thumbnail300' => 'nullable|file',
         'benefit_image' => 'nullable|file',
         'banner_image' => 'nullable|file',
     ]);
+
+
+
+
+
     $validated['onsale'] = $request->input('onsale', 0);
     $validated['featured'] = $request->input('featured', 0);
     $validated['visibility'] = $request->input('visibility', 0);
@@ -235,9 +242,6 @@ if (empty($validated['slug'])) {
     }
 
 
-
-
-
     if($request->filled('featured_image_delete')) {
         $path = $request->input('featured_image_delete');
 
@@ -248,6 +252,54 @@ if (empty($validated['slug'])) {
 
         // Remove path from product
         $product->featured_image = '';
+        $product->save();
+    }
+
+
+
+    if($request->hasFile('featured_thumbnail500')) {
+        $file = $request->file('featured_thumbnail500');
+      //  $filename = time() . '_' . $file->getClientOriginalName();
+        $filename = Helper::makeSafeFilename($file->getClientOriginalName());
+
+        $path = $file->storeAs("products/{$product->id}/thumbnail500", $filename, 'public');
+        $product->featured_thumbnail500 = $path;
+    }
+
+
+    if($request->filled('featured_thumbnail500_delete')) {
+        $path = $request->input('featured_thumbnail500_delete');
+
+        // Delete file from storage
+        if(Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
+        }
+
+        // Remove path from product
+        $product->featured_thumbnail500 = '';
+        $product->save();
+    }
+
+    if($request->hasFile('featured_thumbnail300')) {
+        $file = $request->file('featured_thumbnail300');
+      //  $filename = time() . '_' . $file->getClientOriginalName();
+        $filename = Helper::makeSafeFilename($file->getClientOriginalName());
+
+        $path = $file->storeAs("products/{$product->id}/thumbnail300", $filename, 'public');
+        $product->featured_thumbnail300 = $path;
+    }
+
+
+    if($request->filled('featured_thumbnail300_delete')) {
+        $path = $request->input('featured_thumbnail300_delete');
+
+        // Delete file from storage
+        if(Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
+        }
+
+        // Remove path from product
+        $product->featured_thumbnail300 = '';
         $product->save();
     }
 
@@ -776,6 +828,110 @@ public function customer_get(Request $request, $customer_id){
     return redirect()->back()->with('error', "Customer not found");
 
     return view('admin.customer', compact('data'));
+
+}
+
+/*
+Route::get('/rating', [DashboardController::class, 'rating'])->name('rating');
+Route::get('/ratings', [DashboardController::class, 'ratings'])->name('ratings');
+Route::post('/ratings', [DashboardController::class, 'rating_store'])->name('rating_store');
+Route::get('/rating/{id}', [DashboardController::class, 'rating_get'])->name('rating_get');
+Route::post('/rating_update/{id}', [DashboardController::class, 'rating_update'])->name('rating_update');
+*/
+
+
+
+public function ratings(Request $request){
+
+    $ratings = CustomerReview::orderby('review_date', 'desc')->paginate($this->pagevalue);
+    $data['ratings'] = $ratings;
+
+    return view('admin.ratings', compact('data'));
+}
+
+
+
+public function rating_get(Request $request,  $rating_id)
+{
+    $data['rating'] = CustomerReview::find($rating_id);
+    if($data['rating']==null)
+    return redirect()->back()->with('error', "rating not found");
+
+    $data['products'] = Product::orderby('title')->get();
+    return view('admin.rating', compact('data'));
+
+
+
+}
+
+public function rating_delete(Request $request,  $rating_id)
+{
+    $data['rating'] = CustomerReview::find($rating_id);
+    if($data['rating']==null)
+    return redirect()->back()->with('error', "rating not found");
+
+    $data['rating']->delete();
+
+    return redirect()->back()->with('success', "rating deleted");
+
+
+
+
+}
+
+
+
+
+public function rating_store(Request $request)
+{
+    $rating_id = $request->rating_id;
+    // Validation (always a good idea)
+    $request->validate([
+        'product_id' => 'required|integer|exists:products,id',
+        'name' => 'nullable|string|max:255',
+        'message' => 'nullable|string',
+        'star_rating' => 'nullable|numeric|min:1|max:5',
+        'review_date' => 'nullable|date',
+        'verified_buyer' => 'nullable|boolean',
+        'approved' => 'nullable|boolean',
+    ]);
+
+    // Prepare data once
+    $data = [
+        'product_id' => $request->product_id,
+        'name' => $request->name,
+        'message' => $request->message,
+        'star_rating' => $request->star_rating,
+        'review_date' => $request->review_date,
+        'verified_buyer' => $request->verified_buyer ?? 0,
+        'approved' => $request->approved ?? 1,
+    ];
+
+    // If rating_id provided, update existing record
+    if (!empty(trim($rating_id))) {
+        $rating = CustomerReview::find($rating_id);
+
+        if (!$rating) {
+            return redirect()->back()->with('error', 'Rating not found');
+        }
+
+        $rating->update($data);
+        $message = "Rating updated successfully.";
+    }
+    else {
+        // Create new rating
+        CustomerReview::create($data);
+        $message = "New rating added successfully.";
+    }
+
+    return redirect()->route('admin.ratings')->with('success', $message);
+}
+
+
+public function rating_new(Request $request){
+    $data=array();
+    $data['products'] = Product::orderby('title')->get();
+    return view('admin.rating', compact('data'));
 
 }
 
