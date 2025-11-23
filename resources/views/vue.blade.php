@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>AVG Healthcare - From Herbal Remedies to Wellness Solutions</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -22,6 +22,24 @@ integrity="sha512-..."
 crossorigin="anonymous"
 referrerpolicy="no-referrer"
 />
+
+@verbatim
+<!-- Global Organization Schema -->
+<script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "AVG Healthcare",
+      "url": "https://www.avghealthcare.com/",
+      "logo": "https://www.avghealthcare.com/assets/logo.svg",
+      "sameAs": [
+        "https://www.facebook.com/AVGHealthcare,
+        "https://www.instagram.com/avghealthcare",
+        "https://www.youtube.com/c/AVGHealthcare"
+      ]
+    }
+    </script>
+@endverbatim
 
 <script>
     window.base_url = "{{ url('/') }}";

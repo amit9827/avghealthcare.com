@@ -168,19 +168,95 @@ methods: {
 
   </script>
 
+
+
 <script setup>
 import { useHead } from '@vueuse/head'
 
 useHead({
-  title: 'Home | AVG Healthcare',
+  title: 'Home | AVG Healthcare - Leading Ayurvedic Healthcare & Wellness Brand in India',
   meta: [
-    { name: 'description', content: 'Welcome to the Home Page of AVG Healthcare.' }
+    // 🌿 Core SEO
+    {
+      name: 'description',
+      content: 'AVG Healthcare is a trusted Ayurvedic healthcare and wellness company in India, offering innovative, high-quality, and natural health products designed to enhance holistic wellbeing and quality of life.'
+    },
+    {
+      name: 'keywords',
+      content: 'AVG Healthcare, Ayurvedic healthcare India, Ayurvedic wellness company, herbal health supplements, natural healthcare brand Chandigarh, wellness solutions, best ayurvedic company, healthcare innovation India'
+    },
+    { name: 'robots', content: 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1' },
+    { name: 'author', content: 'AVG Healthcare Pvt. Ltd.' },
+    { name: 'publisher', content: 'AVG Healthcare Pvt. Ltd.' },
+
+    // 🌍 Open Graph (Facebook, LinkedIn, WhatsApp)
+    { property: 'og:title', content: 'AVG Healthcare - Leading Ayurvedic Healthcare & Wellness Brand in India' },
+    {
+      property: 'og:description',
+      content: 'Explore innovative Ayurvedic healthcare and wellness solutions from AVG Healthcare — trusted for natural, effective, and science-backed wellness products.'
+    },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:url', content: 'https://www.avghealthcare.com/' },
+    { property: 'og:image', content: 'https://www.avghealthcare.com/images/og-image.jpg' },
+    { property: 'og:site_name', content: 'AVG Healthcare' },
+    { property: 'og:locale', content: 'en_IN' },
+
+    // 🐦 Twitter Card
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: 'AVG Healthcare - Trusted Ayurvedic & Wellness Company in India' },
+    { name: 'twitter:description', content: 'Delivering high-quality Ayurvedic healthcare and wellness products across India. Discover nature-inspired health solutions that truly work.' },
+    { name: 'twitter:image', content: 'https://www.avghealthcare.com/images/og-image.jpg' },
+    { name: 'twitter:site', content: '@avghealthcare' }
+  ],
+
+  // 🔗 Canonical URL
+  link: [
+    { rel: 'canonical', href: 'https://www.avghealthcare.com/' },
+    { rel: 'icon', href: '/favicon.ico' }
+  ],
+
+  // 🧩 JSON-LD Schema (Organization + LocalBusiness)
+  script: [
+    {
+      type: 'application/ld+json',
+      children: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "AVG Healthcare Pvt. Ltd.",
+        "url": "https://www.avghealthcare.com/",
+        "logo": "https://www.avghealthcare.com/images/logo.png",
+        "foundingDate": "2010",
+        "description": "AVG Healthcare is a trusted Ayurvedic healthcare and wellness company in India, offering innovative herbal products that promote natural health and wellness.",
+        "sameAs": [
+          "https://www.facebook.com/avghealthcare",
+          "https://www.instagram.com/avghealthcare",
+          "https://www.linkedin.com/company/avghealthcare",
+          "https://www.youtube.com/@avghealthcare"
+        ],
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "SCO 866, 1st Floor, NAC, Sector 13 (MM)",
+          "addressLocality": "Chandigarh",
+          "addressRegion": "Punjab",
+          "postalCode": "160101",
+          "addressCountry": "IN"
+        },
+        "contactPoint": [
+          {
+            "@type": "ContactPoint",
+            "telephone": "+91-9501106343",
+            "contactType": "Customer Service",
+            "areaServed": "IN",
+            "availableLanguage": ["English", "Hindi"]
+          }
+        ]
+      })
+    }
   ]
 })
 </script>
 
-
-  <style >
+<style >
 .product{
     margin-bottom:20px;
 }

@@ -118,7 +118,7 @@
         <div class="p1_heading  col-md-6 text-end" v-if="product.onsale" ><del class="text-gray-light"> ₹{{ product.regular_price}}</del> ₹{{ product.sale_price}}</div>
         <div class="p1_heading  col-md-6 text-end" v-else >₹{{ product.regular_price}}</div>
     </div>
-
+<div class="basket_discount"><h2>Basket Discount 5%</h2> ( on prepaid order exceeding 1000 Rs )</div>
 <button
 type="button"
 class="btn  btn-custom w-100 btn-warning text-white rounded-pill fw-medium  py-3 d-flex justify-content-center align-items-center gap-2 button_text"
@@ -682,6 +682,15 @@ background-color: #ed7f30;
 
 .min_50px{
     min-width:50px;
+}
+
+.basket_discount{
+    padding:10px;
+    background-color:  rgb(247 247 231);
+    margin:5px;
+    border-radius:15px;
+    margin-bottom:10px;
+    font-size: 14px;
 }
 
 

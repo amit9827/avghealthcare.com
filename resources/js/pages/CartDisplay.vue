@@ -7,7 +7,7 @@
         <div class="card mb-5">
 
         <div class="card-header">
-        <h1 class="para1_heading m-3">Shopping Cart - ref {{  cartStore.session_id  }}
+        <h1 class="para1_heading m-3">Shopping Cart
             <a @click="clear"><i class="fa fa-trash text-danger" aria-hidden="true"></i></a>
         </h1>
         </div>
@@ -139,7 +139,7 @@
        </div>
     </div>
 
-    <div class="card mb-3">
+    <div class="card mb-3 hide">
        <div class="card-header">
         Shipping Address         <button type="button" style="float:right" @click="copybilling" >Copy from Billing</button>
 
@@ -268,7 +268,8 @@
         this.errorMessage = ""; // reset
 
         const billing = this.cartStore.address;
-        const shipping = this.cartStore.shipping_address;
+       // const shipping = this.cartStore.shipping_address;
+        const shipping = this.cartStore.address;
 
               // Cart validation
               if (this.cartStore.items.length === 0) {
@@ -284,13 +285,13 @@
             return;
         }
 
-        // Shipping validation
+        /* Shipping validation
         if (!shipping.name || !shipping.address || !shipping.town || !shipping.pin_code ||
             !shipping.state || !shipping.phone || !shipping.email) {
             this.errorMessage = "⚠️ Please complete all required Shipping Address fields.";
             return;
         }
-
+*/
 
 
 
@@ -368,5 +369,9 @@ this.fetchMinOrder();
     width: 100px;
     height:auto;
 
+  }
+
+  .hide{
+    display: none;
   }
   </style>
