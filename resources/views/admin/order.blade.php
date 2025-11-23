@@ -94,6 +94,7 @@
 
             <p>Shipping Amount: <strong>{{ $data['order']->shipping_fee }}</strong></p>
             <p>Payment Fee: <strong>{{ $data['order']->payment_fee }}</strong></p>
+            <p>Basket Discount: <strong>{{ $data['order']->basket_discount }}</strong></p>
             <h4>Total Amount: {{ $data['order']->total_amount }}</h4>
 
             <div class="form-group">
