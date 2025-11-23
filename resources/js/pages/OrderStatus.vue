@@ -70,6 +70,7 @@
                 <p><strong>Payment Mode:</strong> {{ payment.payment_mode }}</p>
                 <p><strong>Payment Status:</strong> {{ payment.status }}</p>
                 <p><strong>Delivery Status:</strong> {{ order.dispatch_status }}</p>
+                <p><strong>Basket Discount (if any):</strong> {{ order.basket_discount }}</p>
                 <p><strong>Total:</strong> {{ order.total_amount }}</p>
                 <p><strong>Date:</strong> {{ order.created_at }}</p>
               </div>

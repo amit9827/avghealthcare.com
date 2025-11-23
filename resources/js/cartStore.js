@@ -35,7 +35,8 @@ items: [], // { product, quantity }
 
   shipping_fee:0,
   payment_fee:0,
-
+  payment_method:"PhonePe",
+  basket_discount: 0,
 
 })
 

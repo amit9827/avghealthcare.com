@@ -89,14 +89,45 @@
     </tr>
 
 
-    <tr class="fee">
-  <th>Payment </th>
+
+<tr class="fee">
+  <th>Payment</th>
   <td data-title="COD Fee" class="text-end">
-    <select name="payment_method" v-model="payment_method" @change="setPaymentFee" class="form-control">
-      <option value="PhonePe">Online - PhonePe</option>
-      <option value="COD">Cash on Delivery + ₹{{ CODFee }}</option>
-    </select>
+
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="radio"
+        id="payment_phonepe"
+        value="PhonePe"
+        v-model="payment_method"
+        @change="setPaymentFee"
+      >
+      <label class="form-check-label" for="payment_phonepe">
+        Online – PhonePe
+      </label>
+    </div>
+
+    <div class="form-check mt-1">
+      <input
+        class="form-check-input"
+        type="radio"
+        id="payment_cod"
+        value="COD"
+        v-model="payment_method"
+        @change="setPaymentFee"
+      >
+      <label class="form-check-label" for="payment_cod">
+        Cash on Delivery + ₹{{ CODFee }}
+      </label>
+    </div>
+
   </td>
+</tr>
+
+<tr v-if="basket_discount > 0" class="fee text-success">
+  <th>Basket Discount (Prepaid)</th>
+  <td class="text-end"> - ₹{{ basket_discount.toFixed(2) }}</td>
 </tr>
 
 
@@ -187,7 +218,6 @@
         min_order_amount:0,
         CODFee:60,
         payment_fee:0,
-        payment_method:"PhonePe",
         errorMessage: "",   // 🔴 for showing validation errors
       }
     },
@@ -198,6 +228,39 @@
 
 
     computed: {
+
+
+        payment_method: {
+            get() {
+            // fallback to PhonePe if somehow empty
+            return this.cartStore.payment_method || 'PhonePe';
+            },
+            set(value) {
+            this.cartStore.payment_method = value;
+            }
+        },
+
+
+        basket_discount() {
+  // reset if not PhonePe
+  if (this.payment_method !== "PhonePe") {
+    this.cartStore.basket_discount = 0;
+    return 0;
+  }
+
+  // Only qualify if total > 1000
+  if (this.cartTotal > 1000) {
+    const discountValue = this.cartTotal * 0.05;
+    this.cartStore.basket_discount = discountValue;
+    return discountValue;
+  }
+
+  this.cartStore.basket_discount = 0;
+  return 0;
+},
+
+
+
 
         // compute item count reactively
         itemCount() {
@@ -231,26 +294,32 @@
                 this.cartStore.payment_fee = this.payment_fee;
 
                 if(this.cartTotal >0)
-                return this.cartTotal + this.shippingFee + this.payment_fee;
+                return this.cartTotal + this.shippingFee + this.payment_fee - this.basket_discount;
 
                 this.cartStore.shipping_fee = 0;
                 this.cartStore.payment_fee = 0;
                 return 0;
             },
 
-            setPaymentFee(){
 
-                if(this.payment_method=="PhonePe")
-                this.payment_fee = 0;
-
-                if(this.payment_method=="COD")
-                this.payment_fee = this.CODFee;
-            }
 
 
     },
 
     methods: {
+
+        setPaymentFee(){
+
+if(this.payment_method=="PhonePe")
+this.payment_fee = 0;
+
+if(this.payment_method=="COD")
+this.payment_fee = this.CODFee;
+
+ // 🔥 Force basket discount reset/recalculation
+ this.cartStore.basket_discount = 0;
+  this.basket_discount; // triggers computed recalculation
+},
 
       remove(id) {
         mutations.removeFromCart(id)
@@ -305,6 +374,7 @@
             payment_fee: this.cartStore.payment_fee,
             items: this.cartStore.items,
             total_amount: this.gTotal,
+            basket_discount:this.basket_discount,
             });
 
 

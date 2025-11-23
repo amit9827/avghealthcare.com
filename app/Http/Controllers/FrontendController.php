@@ -374,6 +374,7 @@ public function checkout(Request $request)
     $order->txn_id = "COD-".time();
     $order->shipping_fee = $request->shipping_fee;
     $order->payment_fee = $request->payment_fee;
+    $order->basket_discount = -1*$request->basket_discount;
     $order->save();
 
     $data['order_saved']=1;
